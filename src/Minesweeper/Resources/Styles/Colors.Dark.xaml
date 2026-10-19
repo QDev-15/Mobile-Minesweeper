@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Dò Mìn, dark theme. Exact same key set as Colors.Light.xaml: see that file's own comment for how
+         the swap works. Not a mechanical "darken everything" pass: CellRevealed and the Number set in
+         particular needed real re-tuning, not just inversion, to stay legible (see their own comments). -->
+    <Color x:Key="Primary">#5B8CF2</Color>
+    <Color x:Key="Accent">#F5B95C</Color>
+    <Color x:Key="Danger">#E57373</Color>
+
+    <Color x:Key="MilkBackground">#15181D</Color>
+    <Color x:Key="SurfaceTonal">#1E232B</Color>
+    <Color x:Key="HairLine">#2B313B</Color>
+    <Color x:Key="InkSoft">#A89C8D</Color>
+    <Color x:Key="OffBlack">#F0EDE6</Color>
+
+    <!-- CellHidden lightened from the light theme's value: against a near-black MilkBackground, the
+         original navy read almost the same as "off", losing the hidden/background separation that gives
+         the board its shape. CellRevealed flips to a dark warm-gray (not CellHidden's navy hue, not the
+         page background's exact value) so all three stay visually distinct at a glance. -->
+    <Color x:Key="CellHidden">#46588A</Color>
+    <Color x:Key="CellHiddenPressed">#36446B</Color>
+    <Color x:Key="CellRevealed">#262B35</Color>
+    <Color x:Key="CellMine">#E05555</Color>
+
+    <!-- Classic Minesweeper number colors (1-8), re-tuned for CellRevealed's dark surface. 1-6 are
+         lightened versions of the light theme's hues (same identity, enough luminance to read on dark);
+         7 and 8 are NOT simple lightened versions: the light theme deliberately uses near-black/muted-dark
+         for them (ink-colored "7" and "8" on a pale cell), which would be invisible on a dark cell, so they
+         invert to a near-white and a soft warm-gray instead, matching OffBlack/InkSoft's own light-on-dark
+         role for this theme. -->
+    <Color x:Key="Number1">#7FA6FF</Color>
+    <Color x:Key="Number2">#4FCB8A</Color>
+    <Color x:Key="Number3">#FF7A7A</Color>
+    <Color x:Key="Number4">#B497E8</Color>
+    <Color x:Key="Number5">#D99A68</Color>
+    <Color x:Key="Number6">#5FE0E0</Color>
+    <Color x:Key="Number7">#EDE9E1</Color>
+    <Color x:Key="Number8">#A89C8D</Color>
+
+    <Color x:Key="White">White</Color>
+    <Color x:Key="Black">Black</Color>
+
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}" />
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource Accent}" />
+    <SolidColorBrush x:Key="MilkBackgroundBrush" Color="{StaticResource MilkBackground}" />
+    <SolidColorBrush x:Key="SurfaceTonalBrush" Color="{StaticResource SurfaceTonal}" />
+    <SolidColorBrush x:Key="HairLineBrush" Color="{StaticResource HairLine}" />
+    <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}" />
+    <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource Black}" />
+</ResourceDictionary>

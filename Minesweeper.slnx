@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AdsService.Core/AdsService.Core.csproj" />
+    <Project Path="src/AdsService.LevelPlay/AdsService.LevelPlay.csproj" />
+    <Project Path="src/Minesweeper.Core/Minesweeper.Core.csproj" />
+    <Project Path="src/Minesweeper/Minesweeper.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Minesweeper.Core.Tests/Minesweeper.Core.Tests.csproj" />
+  </Folder>
+</Solution>

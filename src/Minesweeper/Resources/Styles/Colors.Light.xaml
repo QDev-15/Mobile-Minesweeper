@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Dò Mìn, light theme. Same key set as Colors.Dark.xaml, unchanged from the original Colors.xaml so
+         every existing page keeps working untouched: App.xaml.cs swaps which of the two files is merged
+         based on Application.Current.RequestedTheme, so {StaticResource X} and
+         Application.Current.Resources["X"] in C# both become theme-correct for free. -->
+    <Color x:Key="Primary">#2F6FED</Color>
+    <Color x:Key="Accent">#F2A93C</Color>
+    <Color x:Key="Danger">#D64545</Color>
+
+    <Color x:Key="MilkBackground">#F4F1EA</Color>
+    <Color x:Key="SurfaceTonal">#FFFFFF</Color>
+    <Color x:Key="HairLine">#E2DCCF</Color>
+    <Color x:Key="InkSoft">#6B6258</Color>
+    <Color x:Key="OffBlack">#1F2430</Color>
+
+    <!-- Board cells: a hidden cell is a slightly raised navy tile, a revealed one drops to a flat warm
+         surface: that contrast IS the board's basic readability, tuned deliberately per theme. -->
+    <Color x:Key="CellHidden">#3A4A6B</Color>
+    <Color x:Key="CellHiddenPressed">#2E3C58</Color>
+    <Color x:Key="CellRevealed">#E8E3D8</Color>
+    <Color x:Key="CellMine">#D64545</Color>
+
+    <!-- Classic Minesweeper number colors (1-8): the one place this app matches convention on purpose.
+         Tuned for legibility on CellRevealed's light surface; Colors.Dark.xaml re-tunes the same 8 keys for
+         a dark surface, where 7 and 8 especially would otherwise vanish (they are near-black here). -->
+    <Color x:Key="Number1">#2F6FED</Color>
+    <Color x:Key="Number2">#2E8B57</Color>
+    <Color x:Key="Number3">#D64545</Color>
+    <Color x:Key="Number4">#5B3FA0</Color>
+    <Color x:Key="Number5">#A0522D</Color>
+    <Color x:Key="Number6">#2AA3A3</Color>
+    <Color x:Key="Number7">#1F2430</Color>
+    <Color x:Key="Number8">#6B6258</Color>
+
+    <Color x:Key="White">White</Color>
+    <Color x:Key="Black">Black</Color>
+
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}" />
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource Accent}" />
+    <SolidColorBrush x:Key="MilkBackgroundBrush" Color="{StaticResource MilkBackground}" />
+    <SolidColorBrush x:Key="SurfaceTonalBrush" Color="{StaticResource SurfaceTonal}" />
+    <SolidColorBrush x:Key="HairLineBrush" Color="{StaticResource HairLine}" />
+    <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}" />
+    <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource Black}" />
+</ResourceDictionary>

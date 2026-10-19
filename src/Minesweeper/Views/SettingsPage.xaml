@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Minesweeper.Views.SettingsPage"
+             Title="Cài đặt"
+             BackgroundColor="{StaticResource MilkBackground}"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <Style x:Key="Section" TargetType="Label">
+            <Setter Property="FontSize" Value="12.5" />
+            <Setter Property="FontFamily" Value="OpenSansSemibold" />
+            <Setter Property="Margin" Value="20,18,20,6" />
+            <Setter Property="TextColor" Value="{StaticResource Primary}" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*" Padding="6,8">
+            <Button Grid.Column="0" Text="‹" FontSize="26" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
+            <Label Grid.Column="1" Text="Cài đặt" FontSize="19" FontFamily="OpenSansSemibold" VerticalOptions="Center" Margin="6,0,0,0" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="0,0,0,24">
+                <Label Text="GÓI PRO" Style="{StaticResource Section}" />
+                <Border Style="{StaticResource Card}" Margin="14,0">
+                    <VerticalStackLayout Spacing="8">
+                        <Label x:Name="LicenseLabel" FontFamily="OpenSansSemibold" FontSize="15" />
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <Button Text="Mua Pro" Clicked="OnBuyClicked" Style="{StaticResource PrimaryButton}" FontSize="13" HeightRequest="42" />
+                            <Button Grid.Column="1" Text="Khôi phục giao dịch" Clicked="OnRestoreClicked" BackgroundColor="Transparent"
+                                    BorderWidth="1" BorderColor="{StaticResource Primary}" TextColor="{StaticResource Primary}"
+                                    FontSize="12" HeightRequest="42" CornerRadius="21" />
+                        </Grid>
+                        <ActivityIndicator x:Name="Busy" IsRunning="False" IsVisible="False" Color="{StaticResource Primary}" />
+                        <Label Style="{StaticResource Hint}" Text="• Không còn quảng cáo" />
+                        <Label Style="{StaticResource Hint}" Text="• Gợi ý (Hint) không giới hạn" />
+                        <Label Style="{StaticResource Hint}" Text="• Mua một lần, dùng vĩnh viễn" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Label Text="ỨNG DỤNG" Style="{StaticResource Section}" />
+                <Border Style="{StaticResource Card}" Margin="14,0">
+                    <Grid ColumnDefinitions="*,Auto" Padding="0,4">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnAboutTapped" />
+                        </Grid.GestureRecognizers>
+                        <Label Text="Thông tin ứng dụng" VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="›" FontSize="20" TextColor="{StaticResource InkSoft}" VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

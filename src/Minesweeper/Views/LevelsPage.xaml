@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:Minesweeper.Views"
+             x:Class="Minesweeper.Views.LevelsPage"
+             BackgroundColor="{StaticResource MilkBackground}"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*">
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*" Padding="6,8">
+            <Button Grid.Column="0" Text="‹" FontSize="26" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
+            <Label Grid.Column="1" Text="Tutorial — 100 màn" FontSize="19" FontFamily="OpenSansSemibold" VerticalOptions="Center" Margin="6,0,0,0" />
+        </Grid>
+
+        <CollectionView x:Name="LevelsCollection" Grid.Row="1" Margin="14,4,14,14">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="5" HorizontalItemSpacing="8" VerticalItemSpacing="8" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="views:LevelItem">
+                    <Border BackgroundColor="{StaticResource SurfaceTonal}" Stroke="{StaticResource HairLine}" StrokeThickness="1"
+                            StrokeShape="RoundRectangle 10" Padding="0" HeightRequest="64" Opacity="{Binding CardOpacity}">
+                        <Border.Triggers>
+                            <DataTrigger TargetType="Border" Binding="{Binding IsNext}" Value="True">
+                                <Setter Property="Stroke" Value="{StaticResource Accent}" />
+                                <Setter Property="StrokeThickness" Value="2.5" />
+                            </DataTrigger>
+                        </Border.Triggers>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnLevelTapped" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="2">
+                            <Label Text="{Binding NumberText}" FontFamily="OpenSansSemibold" FontSize="16" HorizontalOptions="Center" />
+                            <Label Text="{Binding StarsText}" FontSize="10" TextColor="{StaticResource Accent}" HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

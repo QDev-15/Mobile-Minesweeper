@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="456" height="456" viewBox="0 0 456 456" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <!-- flag on a pole, planted on a grid cell: the classic Minesweeper "flagged" mark -->
+    <rect x="186" y="326" width="104" height="34" rx="7" fill="#FFFFFF" />
+    <rect x="228" y="108" width="12" height="226" rx="6" fill="#FFFFFF" />
+    <path d="M240 118 L344 160 L240 202 Z" fill="#F2A93C" />
+</svg>

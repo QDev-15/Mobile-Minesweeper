@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ads="clr-namespace:AdsService;assembly=AdsService"
+             x:Class="Minesweeper.Views.HomePage"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" Padding="20,24,12,8">
+            <Label Grid.Column="0" Text="Dò Mìn" FontSize="28" FontFamily="OpenSansSemibold" TextColor="{StaticResource OffBlack}" />
+            <Button Grid.Column="1" Text="ℹ" FontSize="20" Style="{StaticResource IconButton}" Clicked="OnAboutClicked" />
+            <Button Grid.Column="2" Text="⚙" FontSize="20" Style="{StaticResource IconButton}" Clicked="OnSettingsClicked" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20,8" Spacing="14">
+
+                <Border x:Name="ResumeCard" Style="{StaticResource Card}" BackgroundColor="{StaticResource Accent}" IsVisible="False">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Ván đang chơi dở" FontFamily="OpenSansSemibold" FontSize="16" TextColor="{StaticResource OffBlack}" />
+                            <Label x:Name="ResumeDetailLabel" FontSize="12.5" TextColor="{StaticResource OffBlack}" Opacity="0.75" />
+                        </VerticalStackLayout>
+                        <Button Grid.Column="1" Text="Tiếp tục" Clicked="OnResumeClicked" BackgroundColor="{StaticResource OffBlack}"
+                                TextColor="White" FontFamily="OpenSansSemibold" CornerRadius="20" WidthRequest="100" HeightRequest="40" VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <Border Style="{StaticResource Card}" BackgroundColor="{StaticResource Primary}">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Thử thách hôm nay" FontFamily="OpenSansSemibold" FontSize="17" TextColor="White" />
+                        <Label x:Name="DailyDateLabel" FontSize="13" TextColor="#E0E8FF" />
+                        <Label Text="Bàn giống nhau cho mọi người, giải được 100% bằng suy luận -- không phải đoán." FontSize="12.5" TextColor="#E0E8FF" />
+                        <Button Text="Chơi ngay" Clicked="OnDailyChallengeClicked" BackgroundColor="White" TextColor="{StaticResource Primary}"
+                                FontFamily="OpenSansSemibold" CornerRadius="20" HeightRequest="42" Margin="0,6,0,0" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Style="{StaticResource Card}">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnTutorialTapped" />
+                        </Grid.GestureRecognizers>
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Tutorial — 100 màn" FontFamily="OpenSansSemibold" FontSize="16" />
+                            <Label x:Name="TutorialProgressLabel" FontSize="12.5" TextColor="{StaticResource InkSoft}" />
+                        </VerticalStackLayout>
+                        <Label Grid.Column="1" Text="›" FontSize="24" TextColor="{StaticResource InkSoft}" VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <Label Text="CHƠI THƯỜNG" FontSize="12.5" FontFamily="OpenSansSemibold" TextColor="{StaticResource Primary}" Margin="4,10,0,0" />
+
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="4">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Không đoán mù (No-guess)" FontFamily="OpenSansSemibold" FontSize="15" VerticalOptions="Center" />
+                            <Switch x:Name="NoGuessSwitch" Grid.Column="1" OnColor="{StaticResource Primary}" />
+                        </Grid>
+                        <Label Text="Mọi bàn chơi đều giải được bằng logic thuần, không bao giờ ép đoán 50/50." Style="{StaticResource Hint}" FontSize="12" TextColor="{StaticResource InkSoft}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border x:Name="EasyCard" Style="{StaticResource Card}">
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                        <Label Text="Dễ" FontFamily="OpenSansSemibold" FontSize="16" />
+                        <Label x:Name="EasyBestLabel" Grid.Row="1" FontSize="12" TextColor="{StaticResource InkSoft}" />
+                        <Button Grid.Column="1" Grid.RowSpan="2" Text="Chơi" Style="{StaticResource PrimaryButton}" WidthRequest="84" HeightRequest="38"
+                                Clicked="OnEasyClicked" VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <Border x:Name="MediumCard" Style="{StaticResource Card}">
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                        <Label Text="Vừa" FontFamily="OpenSansSemibold" FontSize="16" />
+                        <Label x:Name="MediumBestLabel" Grid.Row="1" FontSize="12" TextColor="{StaticResource InkSoft}" />
+                        <Button Grid.Column="1" Grid.RowSpan="2" Text="Chơi" Style="{StaticResource PrimaryButton}" WidthRequest="84" HeightRequest="38"
+                                Clicked="OnMediumClicked" VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <Border x:Name="HardCard" Style="{StaticResource Card}">
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                        <Label Text="Khó" FontFamily="OpenSansSemibold" FontSize="16" />
+                        <Label x:Name="HardBestLabel" Grid.Row="1" FontSize="12" TextColor="{StaticResource InkSoft}" />
+                        <Button Grid.Column="1" Grid.RowSpan="2" Text="Chơi" Style="{StaticResource PrimaryButton}" WidthRequest="84" HeightRequest="38"
+                                Clicked="OnHardClicked" VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <ads:AdBannerSurface x:Name="Banner" Grid.Row="2" />
+    </Grid>
+</ContentPage>

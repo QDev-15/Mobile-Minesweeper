@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Platform-neutral game logic (board generation, No-guess solver, game state). No MAUI / Android
+       references, so it is unit-testable on the PC: same split as PdfReader.Core / DocScanner.Core in the
+       sibling repos. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Minesweeper.Core</RootNamespace>
+  </PropertyGroup>
+
+</Project>

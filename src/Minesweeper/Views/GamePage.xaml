@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ads="clr-namespace:AdsService;assembly=AdsService"
+             x:Class="Minesweeper.Views.GamePage"
+             BackgroundColor="{StaticResource MilkBackground}"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*,Auto,Auto">
+
+        <!-- Top bar: back, mine counter, timer, hint, restart. -->
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto,Auto,Auto" Padding="10,10" ColumnSpacing="8">
+            <Button Grid.Column="0" Text="‹" FontSize="26" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
+
+            <HorizontalStackLayout Grid.Column="1" Spacing="16" HorizontalOptions="Center">
+                <Label Text="🚩" FontSize="16" VerticalOptions="Center" />
+                <Label x:Name="MineCountLabel" FontFamily="OpenSansSemibold" FontSize="18" VerticalOptions="Center" />
+                <Label Text="⏱" FontSize="16" VerticalOptions="Center" Margin="12,0,0,0" />
+                <Label x:Name="TimerLabel" FontFamily="OpenSansSemibold" FontSize="18" VerticalOptions="Center" Text="0:00" />
+            </HorizontalStackLayout>
+
+            <Button Grid.Column="2" Text="💡" FontSize="18" Style="{StaticResource IconButton}" Clicked="OnHintClicked" />
+            <Button Grid.Column="3" Text="⟲" FontSize="20" Style="{StaticResource IconButton}" Clicked="OnRestartClicked" />
+        </Grid>
+
+        <!-- Board. -->
+        <ScrollView Grid.Row="1" Orientation="Both" HorizontalOptions="Center" VerticalOptions="Center">
+            <Grid x:Name="BoardHost" Padding="10" />
+        </ScrollView>
+
+        <!-- Flag-mode toggle: the touch-friendly stand-in for Minesweeper's right-click (plan section 5). -->
+        <Grid Grid.Row="2" Padding="14,6" ColumnDefinitions="*,*" ColumnSpacing="10">
+            <Button x:Name="RevealModeButton" Grid.Column="0" Text="Mở ô" Clicked="OnRevealModeClicked" CornerRadius="20" HeightRequest="44" FontFamily="OpenSansSemibold" />
+            <Button x:Name="FlagModeButton" Grid.Column="1" Text="🚩 Cắm cờ" Clicked="OnFlagModeClicked" CornerRadius="20" HeightRequest="44" FontFamily="OpenSansSemibold" />
+        </Grid>
+
+        <ads:AdBannerSurface x:Name="Banner" Grid.Row="3" />
+
+        <!-- Win/lose overlay. -->
+        <Grid x:Name="ResultOverlay" Grid.RowSpan="4" BackgroundColor="#CC15181D" IsVisible="False">
+            <Border Style="{StaticResource Card}" HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="280" Padding="24">
+                <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label x:Name="ResultTitleLabel" FontSize="22" FontFamily="OpenSansSemibold" HorizontalOptions="Center" />
+                    <Label x:Name="StarsLabel" FontSize="30" TextColor="{StaticResource Accent}" HorizontalOptions="Center" IsVisible="False" />
+                    <Label x:Name="ResultDetailLabel" FontSize="14" TextColor="{StaticResource InkSoft}" HorizontalOptions="Center" />
+                    <Button x:Name="NextLevelButton" Text="Màn tiếp theo" Style="{StaticResource PrimaryButton}" Clicked="OnNextLevelClicked" Margin="0,8,0,0" IsVisible="False" />
+                    <Button Text="Chơi lại" Style="{StaticResource PrimaryButton}" Clicked="OnPlayAgainClicked" Margin="0,8,0,0" />
+                    <Button Text="Về trang chủ" BackgroundColor="Transparent" TextColor="{StaticResource Primary}" Clicked="OnBackClicked" />
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>
