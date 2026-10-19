@@ -18,9 +18,15 @@ public partial class LevelsPage : ContentPage
 		base.OnAppearing();
 		int unlocked = _levels.UnlockedLevel;
 		var items = new List<LevelItem>(LevelCatalog.MaxLevel);
+		int totalStars = 0;
 		for (int n = LevelCatalog.MinLevel; n <= LevelCatalog.MaxLevel; n++)
-			items.Add(new LevelItem { Number = n, Unlocked = n <= unlocked, Stars = _levels.StarsFor(n), IsNext = n == unlocked });
+		{
+			int stars = _levels.StarsFor(n);
+			totalStars += stars;
+			items.Add(new LevelItem { Number = n, Unlocked = n <= unlocked, Stars = stars, IsNext = n == unlocked });
+		}
 		LevelsCollection.ItemsSource = items;
+		StatsLabel.Text = $"Đã mở {unlocked}/{LevelCatalog.MaxLevel} · {totalStars}★";
 	}
 
 	private async void OnLevelTapped(object? sender, EventArgs e)

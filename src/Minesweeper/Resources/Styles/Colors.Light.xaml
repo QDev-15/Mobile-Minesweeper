@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Minesweeper.ColorsLight">
 
-    <!-- Dò Mìn, light theme. Same key set as Colors.Dark.xaml, unchanged from the original Colors.xaml so
-         every existing page keeps working untouched: App.xaml.cs swaps which of the two files is merged
-         based on Application.Current.RequestedTheme, so {StaticResource X} and
-         Application.Current.Resources["X"] in C# both become theme-correct for free. -->
+    <!-- Dò Mìn, light theme. Same key set as Colors.Dark.xaml — App.xaml.cs swaps which of the two files
+         is merged based on Application.Current.RequestedTheme, so {DynamicResource X} and
+         Application.Current.Resources["X"] in C# both become theme-correct for free.
+         2026-10-19 "trắng sữa" palette refresh: richer/warmer cream (was #F4F1EA, flatter/cooler),
+         PrimarySoft/AccentSoft added as tonal (~12-15%) tints for large surfaces (Daily Challenge card,
+         Resume card) so Primary/Accent themselves stay reserved for things you act on (buttons, links) —
+         large fills being soft instead of saturated reads calmer, closer to what the owner asked for after
+         rejecting the flatter original. Primary/Accent/Danger/number colors kept as-is: the complaint was
+         about flatness and the background tone, not the brand hues themselves. -->
     <Color x:Key="Primary">#2F6FED</Color>
+    <Color x:Key="PrimarySoft">#E3EBFD</Color>
     <Color x:Key="Accent">#F2A93C</Color>
+    <Color x:Key="AccentSoft">#FCEBD2</Color>
     <Color x:Key="Danger">#D64545</Color>
 
-    <Color x:Key="MilkBackground">#F4F1EA</Color>
-    <Color x:Key="SurfaceTonal">#FFFFFF</Color>
-    <Color x:Key="HairLine">#E2DCCF</Color>
-    <Color x:Key="InkSoft">#6B6258</Color>
-    <Color x:Key="OffBlack">#1F2430</Color>
+    <Color x:Key="MilkBackground">#F7F1E6</Color>
+    <Color x:Key="SurfaceTonal">#FFFDF9</Color>
+    <Color x:Key="HairLine">#E9DFCB</Color>
+    <Color x:Key="InkSoft">#8C8072</Color>
+    <Color x:Key="OffBlack">#2B2420</Color>
 
     <!-- Board cells: a hidden cell is a slightly raised navy tile, a revealed one drops to a flat warm
          surface: that contrast IS the board's basic readability, tuned deliberately per theme. -->

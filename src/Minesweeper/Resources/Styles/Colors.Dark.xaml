@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Minesweeper.ColorsDark">
 
     <!-- Dò Mìn, dark theme. Exact same key set as Colors.Light.xaml: see that file's own comment for how
          the swap works. Not a mechanical "darken everything" pass: CellRevealed and the Number set in
          particular needed real re-tuning, not just inversion, to stay legible (see their own comments). -->
+    <!-- PrimarySoft/AccentSoft added 2026-10-19 alongside the light theme's own "trắng sữa" refresh, for
+         the same large-surface-stays-tonal reasoning (see Colors.Light.xaml's own comment) — dark-mode
+         tonal tints, not just inverted light values. -->
     <Color x:Key="Primary">#5B8CF2</Color>
+    <Color x:Key="PrimarySoft">#22304F</Color>
     <Color x:Key="Accent">#F5B95C</Color>
+    <Color x:Key="AccentSoft">#3A2F1C</Color>
     <Color x:Key="Danger">#E57373</Color>
 
     <Color x:Key="MilkBackground">#15181D</Color>

@@ -43,6 +43,10 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 				fonts.AddFont("MaterialIcons-Regular.ttf", "Icons");
+				// Variable font (single file, no separate weight files published upstream for this family) —
+				// renders at its default instance; "trắng sữa" redesign 2026-10-19 uses it for Display/Title
+				// role text (wordmark, page titles, big numerals), OFL-licensed (Resources/Fonts/Fraunces-OFL.txt).
+				fonts.AddFont("Fraunces-Variable.ttf", "Fraunces");
 			});
 
 		builder.Services.AddSingleton<GameStatsStore>();

@@ -26,6 +26,11 @@ public partial class GamePage : ContentPage
 	private GameEngine? _engine;
 	private Border[,]? _cellBorders;
 	private Label[,]? _cellLabels;
+	// What RefreshAllCells last painted each cell as; compared against engine.StateAt on the next call so only
+	// a cell that is NEWLY Revealed/Flagged this pass gets the pop animation below, not one that was already
+	// sitting open/flagged from an earlier call (e.g. the periodic timer tick never touches this, but a second
+	// Reveal elsewhere on the board re-runs the whole grid and must not replay the pop on untouched cells).
+	private CellState?[,]? _priorCellState;
 	private bool _boardStarted; // true once the first reveal has happened (mines are placed)
 	private bool _flagMode;
 	private bool _loaded;
@@ -127,7 +132,8 @@ public partial class GamePage : ContentPage
 		_saves.Clear(); // a fresh board replaces whatever was saved for the previous one
 		_boardStarted = false;
 		_engine = null;
-		ResultOverlay.IsVisible = false;
+		DailyBadge.IsVisible = _isDaily;
+		ShowPlayingControls();
 		StopTimer();
 		_elapsedSeconds = 0;
 		TimerLabel.Text = "0:00";
@@ -168,6 +174,7 @@ public partial class GamePage : ContentPage
 			: _isDaily ? DailyChallenge.Difficulty
 			: Difficulty.For(_level);
 
+		DailyBadge.IsVisible = _isDaily;
 		SetFlagMode(false);
 		BuildEmptyBoard();
 		_engine = SavedGameStore.ToEngine(save);
@@ -177,7 +184,7 @@ public partial class GamePage : ContentPage
 		RefreshAllCells();
 
 		if (_engine.Status == GameStatus.Playing) StartTimer();
-		else ResultOverlay.IsVisible = false; // a saved game is never kept once Won/Lost (see HandleGameEndIfNeeded)
+		else ShowPlayingControls(); // a saved game is never kept once Won/Lost (see HandleGameEndIfNeeded) -- defensive only
 	}
 
 	private void BuildEmptyBoard()
@@ -193,6 +200,7 @@ public partial class GamePage : ContentPage
 
 		_cellBorders = new Border[_difficulty.Width, _difficulty.Height];
 		_cellLabels = new Label[_difficulty.Width, _difficulty.Height];
+		_priorCellState = new CellState?[_difficulty.Width, _difficulty.Height];
 
 		for (int x = 0; x < _difficulty.Width; x++)
 		{
@@ -257,8 +265,6 @@ public partial class GamePage : ContentPage
 
 	private void OnCellPrimaryTap(int x, int y)
 	{
-		if (ResultOverlay.IsVisible) return;
-
 		if (!_boardStarted)
 		{
 			StartGameFrom(x, y);
@@ -283,7 +289,7 @@ public partial class GamePage : ContentPage
 
 	private void OnCellLongPress(int x, int y)
 	{
-		if (ResultOverlay.IsVisible || !_boardStarted) return;
+		if (!_boardStarted) return;
 		if (_engine is not { Status: GameStatus.Playing } engine) return;
 		engine.ToggleFlag(x, y);
 		RefreshAllCells();
@@ -317,11 +323,18 @@ public partial class GamePage : ContentPage
 
 	private void RefreshAllCells()
 	{
-		if (_engine is not { } engine || _cellBorders == null || _cellLabels == null) return;
+		if (_engine is not { } engine || _cellBorders == null || _cellLabels == null || _priorCellState == null) return;
 
 		var hiddenColor = (Color)Application.Current!.Resources["CellHidden"];
 		var revealedColor = (Color)Application.Current.Resources["CellRevealed"];
 		var mineColor = (Color)Application.Current.Resources["CellMine"];
+
+		// Cells that just transitioned into Revealed/Flagged this pass get a quick pop (ScaleTo+FadeTo in
+		// AnimatePoppedCellsAsync below). Collected rather than started inline so a single flood-fill reveal
+		// -- which can touch the whole board at once on Hard -- is counted first; past PopAnimationCap, the
+		// pop is skipped and cells just snap straight to their final look, trading the flourish for guaranteed
+		// smooth frame pacing on a big reveal (there's no device here to verify many-cells-at-once GPU cost).
+		List<Border> justAppeared = [];
 
 		for (int x = 0; x < engine.Width; x++)
 		{
@@ -330,6 +343,7 @@ public partial class GamePage : ContentPage
 				Border border = _cellBorders[x, y];
 				Label label = _cellLabels[x, y];
 				CellState state = engine.StateAt(x, y);
+				bool isNewlyShown = state != _priorCellState[x, y] && state is CellState.Revealed or CellState.Flagged;
 
 				switch (state)
 				{
@@ -341,8 +355,9 @@ public partial class GamePage : ContentPage
 					case CellState.Flagged:
 						border.BackgroundColor = hiddenColor;
 						border.Shadow = HiddenShadow;
-						label.Text = "🚩";
-						label.TextColor = Colors.White;
+						label.FontFamily = "Icons"; // Material glyph (Views/Icons.cs) -- no font-icon exists for a mine, that one case stays the 💣 emoji below
+						label.Text = Icons.Flag;
+						label.TextColor = (Color)Application.Current!.Resources["Accent"];
 						break;
 					case CellState.Revealed:
 						int number = engine.NumberAt(x, y);
@@ -350,20 +365,54 @@ public partial class GamePage : ContentPage
 						if (number == -1)
 						{
 							border.BackgroundColor = mineColor;
+							label.FontFamily = "OpenSansSemibold"; // emoji renders regardless of FontFamily; this just resets it for the next cell that reuses this Label as a number
 							label.Text = "💣";
 						}
 						else
 						{
 							border.BackgroundColor = revealedColor;
+							label.FontFamily = "OpenSansSemibold";
 							label.Text = number > 0 ? number.ToString() : string.Empty;
 							label.TextColor = NumberColor(number);
 						}
 						break;
 				}
+
+				if (isNewlyShown)
+				{
+					// Set synchronously now, before the pop/skip decision below is even made, so the cell
+					// never flashes at its resting scale/opacity for one frame first.
+					border.Scale = CellPopStartScale;
+					border.Opacity = 0;
+					justAppeared.Add(border);
+				}
+				_priorCellState[x, y] = state;
+			}
+		}
+
+		if (justAppeared.Count > 0)
+		{
+			if (justAppeared.Count <= PopAnimationCap)
+			{
+				foreach (Border border in justAppeared) _ = AnimateCellPopAsync(border);
+			}
+			else
+			{
+				foreach (Border border in justAppeared) { border.Scale = 1; border.Opacity = 1; }
 			}
 		}
 
 		MineCountLabel.Text = engine.MinesRemaining.ToString();
+	}
+
+	private const double CellPopStartScale = 0.8;
+	private const int PopAnimationCap = 60;
+
+	private static async Task AnimateCellPopAsync(Border border)
+	{
+		await Task.WhenAll(
+			border.ScaleToAsync(1, 140, Easing.CubicOut),
+			border.FadeToAsync(1, 110, Easing.CubicOut));
 	}
 
 	private static Color NumberColor(int number) => number switch
@@ -401,6 +450,26 @@ public partial class GamePage : ContentPage
 
 	// ===== Game end =====
 
+	// Round-end state: board stays fully visible and frozen (OnCellPrimaryTap/OnCellLongPress already bail
+	// out once _engine.Status != Playing, nothing extra needed there), ResultBanner replaces the flag
+	// toggle in the same row, and Hint/Restart hide -- the top bar's own back button is the only control
+	// left, per the owner's "chỉ có một button là back" direction (2026-10-19).
+	private void ShowResultBanner()
+	{
+		FlagToggleRow.IsVisible = false;
+		HintButton.IsVisible = false;
+		RestartButton.IsVisible = false;
+		ResultBanner.IsVisible = true;
+	}
+
+	private void ShowPlayingControls()
+	{
+		ResultBanner.IsVisible = false;
+		FlagToggleRow.IsVisible = true;
+		HintButton.IsVisible = true;
+		RestartButton.IsVisible = true;
+	}
+
 	private void HandleGameEndIfNeeded()
 	{
 		if (_engine is not { } engine || engine.Status == GameStatus.Playing) return;
@@ -420,13 +489,11 @@ public partial class GamePage : ContentPage
 				StarsLabel.Text = new string('★', stars) + new string('☆', 3 - stars);
 				StarsLabel.IsVisible = true;
 				ResultDetailLabel.Text = $"Màn {_levelNumber} · {_elapsedSeconds / 60}:{_elapsedSeconds % 60:00}";
-				NextLevelButton.IsVisible = _levelNumber < LevelCatalog.MaxLevel;
 			}
 			else
 			{
 				bool isRecord = !_isDaily && _stats.RecordWin(_level, _elapsedSeconds);
 				StarsLabel.IsVisible = false;
-				NextLevelButton.IsVisible = false;
 				ResultDetailLabel.Text = isRecord
 					? $"Kỷ lục mới: {_elapsedSeconds / 60}:{_elapsedSeconds % 60:00}"
 					: $"Thời gian: {_elapsedSeconds / 60}:{_elapsedSeconds % 60:00}";
@@ -435,12 +502,11 @@ public partial class GamePage : ContentPage
 		else
 		{
 			ResultTitleLabel.Text = "Trúng mìn rồi!";
-			ResultDetailLabel.Text = "Bấm \"Chơi lại\" để thử bàn mới.";
+			ResultDetailLabel.Text = $"Thời gian: {_elapsedSeconds / 60}:{_elapsedSeconds % 60:00}";
 			StarsLabel.IsVisible = false;
-			NextLevelButton.IsVisible = false;
 		}
 
-		ResultOverlay.IsVisible = true;
+		ShowResultBanner();
 	}
 
 	// ===== Toolbar =====
@@ -460,16 +526,6 @@ public partial class GamePage : ContentPage
 	{
 		bool confirm = await DisplayAlertAsync("Chơi lại?", "Bàn hiện tại sẽ mất.", "Chơi lại", "Huỷ");
 		if (confirm) StartNewBoard();
-	}
-
-	private void OnPlayAgainClicked(object? sender, EventArgs e) => StartNewBoard();
-
-	private void OnNextLevelClicked(object? sender, EventArgs e)
-	{
-		if (_levelNumber <= 0 || _levelNumber >= LevelCatalog.MaxLevel) return;
-		_levelNumber++;
-		_difficulty = LevelCatalog.DifficultyFor(_levelNumber);
-		StartNewBoard();
 	}
 
 	private void OnRevealModeClicked(object? sender, EventArgs e) => SetFlagMode(false);

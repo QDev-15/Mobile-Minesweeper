@@ -5,13 +5,16 @@
 > [MINESWEEPER-PLAN.md](MINESWEEPER-PLAN.md) — file này chỉ ghi **trạng thái hiện tại** + việc dở dang, không
 > lặp lại nội dung plan.
 
-## ⚠️ Chưa có git
+## Git + keystore: đã có (cập nhật 2026-10-19)
 
-Thư mục này **chưa `git init`**, chưa có remote. Nếu "máy khác" không dùng chung ổ đĩa/sync, cần:
-- `git init` + tạo remote (GitHub) rồi `git push`, hoặc
-- copy thủ công cả thư mục `Mobile-Minesweeper/` (nhớ loại trừ `**/obj/`, `**/bin/` — nặng và tự build lại được).
+Repo đã `git init` + có remote (`git status` báo "up to date with origin/master"). `src/Minesweeper/release/`
+đã có keystore riêng (`minesweeper-upload.keystore`, alias `minesweeper-upload`) + `Signing.props` — xem
+`KEYSTORE-README.md` ở gốc repo cho mật khẩu/fingerprint/cách tạo lại nếu cần. Thư mục `release/` vẫn bị
+gitignore (pattern `[Rr]elease/`) nên mật khẩu không lên git, nhưng **không còn là việc cần làm nữa**.
 
-`src/Minesweeper/release/` (keystore + `Signing.props`) **chưa tồn tại** — xem mục "Việc cần làm tiếp" bên dưới.
+`Minesweeper.csproj` có target `CopyReleaseAabWithVersion` (owner tự thêm, copy từ DocScanner.csproj) tự
+copy `.aab` + `mapping.txt` vào `release\Minesweeper-<version>-<code>\` sau mỗi lần publish Release aab —
+không cần copy tay nữa.
 
 ## Trạng thái: đã xong, đã test thật trên máy Samsung SM-N975F
 
@@ -51,33 +54,48 @@ Thư mục này **chưa `git init`**, chưa có remote. Nếu "máy khác" khôn
     Reveal/Flag kịp chạy xong).
   - LevelsPage: ô khóa mờ hẳn đi (`Opacity` qua binding, không cần converter), viền màu accent nổi bật cho
     đúng 1 ô là "màn nên chơi tiếp theo" (`DataTrigger`).
-  - **CHƯA XÁC NHẬN BẰNG MẮT TRÊN MÁY THẬT** — build Release đã chạy xong (`EXITCODE=0`, cài lên máy
-    `RF8M81MKLTA` thành công), nhưng phiên làm việc bị ngắt khi đang chờ mở khóa máy/máy mất kết nối USB,
-    **trước khi chụp được ảnh xác nhận dark mode hiển thị đúng**. Đây là việc đầu tiên cần làm lại.
+  - **Đã xác nhận bằng mắt trên máy thật (2026-10-19)**, sau khi vá **2 bug crash thật** phát hiện đúng lúc
+    verify (trước đó chỉ build+install thành công, chưa từng bấm mở app nên 2 bug này chưa ai thấy):
+    1. `Styles.xaml` dùng `{StaticResource Primary/SurfaceTonal/InkSoft/OffBlack/MilkBackground}` — nhưng
+       `App.xaml` merge `Styles.xaml` ngay trong XAML tĩnh (lúc `InitializeComponent()`), còn dictionary màu
+       chỉ được merge **sau đó** trong code (`ApplyColorTheme`, chạy sau `InitializeComponent()` trong
+       constructor của `App`). `StaticResource` tra cứu ngay lúc parse XAML → luôn throw
+       `XamlParseException: StaticResource not found for key Primary`, crash ngay app chưa kịp mở màn hình
+       nào. **Đã sửa**: đổi 5 chỗ trong `Styles.xaml` sang `{DynamicResource ...}` (tra cứu trễ, tự cập nhật
+       khi dictionary đổi — cũng là điều kiện cần để theme đổi sống được, xem việc 1 bên dưới).
+    2. `App.xaml.cs`'s `ApplyColorTheme` tạo dictionary bằng `new ResourceDictionary { Source = new
+       Uri(...) }` — MAUI **chỉ cho set `ResourceDictionary.Source` từ XAML**, set bằng code luôn throw
+       `InvalidOperationException: Source can only be set from XAML.`. Bug này **crash 100% mọi lần mở app**
+       (không phải tình huống hiếm), nghĩa là tính năng dark-mode-merge-theo-code chưa từng chạy được dù
+       trước đó ghi "đã xong". **Đã sửa**: thêm `x:Class="Minesweeper.ColorsLight"` /
+       `"Minesweeper.ColorsDark"` vào `Colors.Light.xaml`/`Colors.Dark.xaml` + code-behind
+       (`Colors.Light.xaml.cs`/`Colors.Dark.xaml.cs`, class rỗng chỉ gọi `InitializeComponent()`),
+       `ApplyColorTheme` giờ `new ColorsLight()`/`new ColorsDark()` thay vì set `Source`.
+    - Verify: build Debug (`dotnet build -t:Run`) + build Release (publish → bundletool build-apks/install-apks
+      qua adb WiFi) đều cài và mở được trên máy Samsung SM-N975F, không crash, dark mode hiển thị đúng màu
+      Primary/nền (xem HomePage/SettingsPage lúc verify). **Bài học**: build sạch (`EXITCODE=0`) + cài thành
+      công KHÔNG đồng nghĩa app mở được — 2 bug trên đều qua build/install trót lọt, chỉ lộ ra khi thật sự
+      bấm mở app / xem logcat `-b crash`. Luôn mở app + check `adb logcat -d -b crash` sau khi cài, đừng dừng
+      lại ở "build xong, cài xong".
 
 ## Việc cần làm tiếp (theo thứ tự ưu tiên)
 
-1. **Xác nhận trực quan bản thiết kế mới trên máy thật** — chưa từng thấy dark mode/shadow/LevelsPage mới
-   chạy thật, chỉ mới build sạch + cài thành công. Cắm máy, mở app (cả chế độ Light lẫn Dark trong Cài đặt
-   hệ thống Android), chụp HomePage/GamePage/LevelsPage, đối chiếu với ý đồ thiết kế ghi trong code comment.
-   Nếu có máy đổi theme được, thử đổi theme TRONG LÚC app đang mở để test `RequestedThemeChanged` thật sự
-   chạy (chưa test được path này).
-2. **Test nút "Tiếp tục" (resume) bằng tay thật** — logic đã có unit test (`Restore_ReproducesExactState`)
+1. **Test nút "Tiếp tục" (resume) bằng tay thật** — logic đã có unit test (`Restore_ReproducesExactState`)
    nhưng chưa từng tự tay bấm thành công nút này trên máy (luôn bị cản bởi 1 overlay/video nổi từ app khác
    lúc test qua `adb input tap`). Cần xác nhận bằng ngón tay thật, không qua adb.
-3. **LevelPlay chưa có app/ad unit thật** — `LevelPlayConfig.cs` vẫn là `REPLACE_ME_*`. App chạy bình
+   - Còn 1 việc liên quan dark mode chưa test: đổi theme Light/Dark TRONG LÚC app đang mở, xem
+     `RequestedThemeChanged` + `{DynamicResource}` mới sửa có tự cập nhật màu sống không (logic đã đúng về
+     lý thuyết sau khi sửa 2 bug crash ở trên, nhưng chưa tự tay đổi theme live để xác nhận).
+2. **LevelPlay chưa có app/ad unit thật** — `LevelPlayConfig.cs` vẫn là `REPLACE_ME_*`. App chạy bình
    thường (không crash, SDK chỉ đơn giản không load được ads), nhưng cần tạo app mới trên LevelPlay dashboard
    trước khi phát hành thật. Theo đúng pattern PdfReader/DocScanner: AppKey riêng, không dùng chung.
-4. **Chưa có keystore** — `src/Minesweeper/release/` trống. Theo đúng quy trình đã làm cho PdfReader
-   (xem `../Mobile-Pdf-reader/KEYSTORE-README.md` làm mẫu): tạo keystore mới riêng cho Minesweeper, viết
-   `Signing.props`. **Không dùng chung keystore với PdfReader/DocScanner.**
-5. **Play Billing Pro product ID** — `LicenseService.ProProductId = "minesweeper_pro_remove_ads"` là
+3. **Play Billing Pro product ID** — `LicenseService.ProProductId = "minesweeper_pro_remove_ads"` là
    placeholder, cần tạo product thật trên Play Console trước khi build bản Pro thật.
-6. **`LevelStars` par-time chưa tune bằng người chơi thật** — công thức hiện tại (~2.5 ô an toàn/giây, sàn
+4. **`LevelStars` par-time chưa tune bằng người chơi thật** — công thức hiện tại (~2.5 ô an toàn/giây, sàn
    15s) là heuristic đầu tiên, ghi rõ trong code comment là cần chỉnh lại sau khi có dữ liệu người chơi thật.
-7. **Privacy Policy / store listing** — chưa làm cho Minesweeper (đã làm mẫu cho PdfReader, có thể tái dùng
+5. **Privacy Policy / store listing** — chưa làm cho Minesweeper (đã làm mẫu cho PdfReader, có thể tái dùng
    cấu trúc, đổi nội dung).
-8. (Tuỳ chọn, không chặn) — long-press hiện ra **2 lá cờ cùng lúc** khi test bằng `adb shell input swipe`
+6. (Tuỳ chọn, không chặn) — long-press hiện ra **2 lá cờ cùng lúc** khi test bằng `adb shell input swipe`
    mô phỏng giữ ngón tay — nghi là do công cụ test (`adb`) mô phỏng không chuẩn, không phải bug thật (chưa
    tự tay test lại để xác nhận 100%). Nếu tự tay test thấy đúng là bug thật (2 ô bị cắm cờ từ 1 lần giữ
    ngón tay), cần debug lại `TouchBehavior.LongPressCommand` trong `GamePage.xaml.cs`.

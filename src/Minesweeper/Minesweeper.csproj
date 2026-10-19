@@ -53,7 +53,41 @@
 	<!-- Release signing (Google Play upload key): keystore + passwords are NOT in this file. A new, separate
 	     keystore (not PdfReader's/DocScanner's) must be created before any Release/Play build. -->
 	<Import Project="release\Signing.props" Condition="'$(Configuration)' == 'Release' AND Exists('release\Signing.props')" />
-
+<!-- dotnet publish's own output already lands the signed bundle in bin\Release\net10.0-android\publish\,
+	     named "<ApplicationId>-Signed.aab"; easy to lose track of across several builds (Dev/Pro ads, with/
+	     without ads, different days) since every one overwrites the same generic name in a folder buried under
+	     bin\. Also copies it to release\ (the same gitignored folder Signing.props + the upload keystore already
+	     live in, see .gitignore's "[Rr]elease/" rule, so this can never end up committed) with the app's own
+	     display version + version code baked into the file name, so old builds just sit there named for what
+	     they are instead of being overwritten. Does not delete/replace dotnet publish's own copy, only adds this
+	     one; only fires for a Release .aab build (Signing.props is what actually sets AndroidPackageFormat=aab). -->
+	<Target Name="CopyReleaseAabWithVersion" AfterTargets="Publish"
+	        Condition="'$(Configuration)' == 'Release' AND '$(AndroidPackageFormat)' == 'aab'">
+		<ItemGroup>
+			<_SignedAab Include="$(PublishDir)*-Signed.aab" />
+		</ItemGroup>
+		<!-- One folder per build, release\Minesweeper-<version>-<code>\, holding the bundle and the R8 mapping.txt of that
+		     exact build (every build makes a different mapping; keep the pair together). The mapping is also inside the
+		     .aab itself (BUNDLE-METADATA), so Play needs no separate upload; this copy is for manual upload / archive. -->
+		<PropertyGroup>
+			<_ReleaseName>Minesweeper-$(ApplicationDisplayVersion)-$(ApplicationVersion)</_ReleaseName>
+			<_ReleaseDir>release\$(_ReleaseName)\</_ReleaseDir>
+			<_ReleaseMapping>$(OutputPath)mapping.txt</_ReleaseMapping>
+		</PropertyGroup>
+		<!-- Warn when the build was NOT obfuscated (SDK older than 36.1.118 injects -dontobfuscate): such an AAB would keep
+		     Play's "Obfuscation" below 25%. -->
+		<ReadLinesFromFile File="$(IntermediateOutputPath)proguard\proguard_xamarin.cfg" Condition="Exists('$(IntermediateOutputPath)proguard\proguard_xamarin.cfg')">
+			<Output TaskParameter="Lines" ItemName="_ProguardXamarinLine" />
+		</ReadLinesFromFile>
+		<ItemGroup>
+			<_NoObfuscationLine Include="@(_ProguardXamarinLine)" Condition="'%(Identity)' == '-dontobfuscate'" />
+		</ItemGroup>
+		<Warning Condition="'@(_NoObfuscationLine)' != ''" Text="This build is NOT obfuscated (SDK without AndroidR8ObfuscationMode). Use build-release.ps1 for any AAB that goes to Google Play." />
+		<MakeDir Directories="$(_ReleaseDir)" Condition="'@(_SignedAab)' != ''" />
+		<Copy SourceFiles="@(_SignedAab)" DestinationFiles="$(_ReleaseDir)$(_ReleaseName).aab" Condition="'@(_SignedAab)' != ''" />
+		<Copy SourceFiles="$(_ReleaseMapping)" DestinationFiles="$(_ReleaseDir)mapping.txt" Condition="'@(_SignedAab)' != '' AND Exists('$(_ReleaseMapping)')" />
+		<Message Importance="high" Condition="'@(_SignedAab)' != ''" Text="Release build copied to $(_ReleaseDir) (aab + mapping.txt)" />
+	</Target>
 	<ItemGroup>
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#1B2A4A" />
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#F4F1EA" BaseSize="128,128" />

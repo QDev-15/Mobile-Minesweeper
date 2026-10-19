@@ -1,4 +1,5 @@
 using Minesweeper.Core;
+using Minesweeper.Core.Licensing;
 using Minesweeper.Services;
 
 namespace Minesweeper.Views;
@@ -8,18 +9,21 @@ public partial class HomePage : ContentPage
 	private readonly GameStatsStore _stats;
 	private readonly SavedGameStore _saves;
 	private readonly LevelProgressStore _levels;
+	private readonly ILicenseService _license;
 
-	public HomePage(GameStatsStore stats, SavedGameStore saves, LevelProgressStore levels)
+	public HomePage(GameStatsStore stats, SavedGameStore saves, LevelProgressStore levels, ILicenseService license)
 	{
 		InitializeComponent();
 		_stats = stats;
 		_saves = saves;
 		_levels = levels;
+		_license = license;
 	}
 
 	protected override void OnAppearing()
 	{
 		base.OnAppearing();
+		ProBadge.IsVisible = !_license.State.IsPro;
 		DailyDateLabel.Text = DateTime.Now.ToString("dddd, dd/MM/yyyy");
 		EasyBestLabel.Text = BestTimeText(DifficultyLevel.Easy);
 		MediumBestLabel.Text = BestTimeText(DifficultyLevel.Medium);
@@ -75,4 +79,5 @@ public partial class HomePage : ContentPage
 
 	private async void OnSettingsClicked(object? sender, EventArgs e) => await Shell.Current.GoToAsync(nameof(SettingsPage));
 	private async void OnAboutClicked(object? sender, EventArgs e) => await Shell.Current.GoToAsync(nameof(AboutPage));
+	private async void OnProBadgeClicked(object? sender, EventArgs e) => await Shell.Current.GoToAsync(nameof(SettingsPage));
 }

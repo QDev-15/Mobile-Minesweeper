@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:Minesweeper.Views"
+             x:Class="Minesweeper.Views.PrivacyPolicyPage"
+             Title="Chính sách quyền riêng tư"
+             BackgroundColor="{StaticResource MilkBackground}"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <Style x:Key="PolicyHeading" TargetType="Label">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontFamily" Value="OpenSansSemibold" />
+            <Setter Property="Margin" Value="0,18,0,6" />
+        </Style>
+        <Style x:Key="PolicyBody" TargetType="Label">
+            <Setter Property="FontSize" Value="13.5" />
+            <Setter Property="LineHeight" Value="1.4" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*" Padding="6,8">
+            <Button Grid.Column="0" Text="{x:Static views:Icons.ArrowBack}" FontSize="22" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
+            <Label Grid.Column="1" Text="Chính sách quyền riêng tư" Style="{StaticResource TitleText}" FontSize="17" VerticalOptions="Center" Margin="6,0,0,0" LineBreakMode="TailTruncation" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20,4,20,28">
+                <Label x:Name="UpdatedLabel" Style="{StaticResource Hint}" />
+
+                <Label Text="Tổng quan" Style="{StaticResource PolicyHeading}" />
+                <Label Style="{StaticResource PolicyBody}" Text="Dò Mìn là trò chơi Minesweeper chơi hoàn toàn trên máy của bạn. Ứng dụng không yêu cầu tài khoản, không yêu cầu đăng nhập. Tài liệu này giải thích những dữ liệu ít ỏi mà ứng dụng, cùng các dịch vụ bên thứ ba nó dùng (quảng cáo, thanh toán), có thể truy cập." />
+
+                <Label Text="Thông tin chúng tôi thu thập trực tiếp" Style="{StaticResource PolicyHeading}" />
+                <Label Style="{StaticResource PolicyBody}" Text="Không có máy chủ nào của chúng tôi nhận tiến trình chơi hay thông tin cá nhân của bạn. Mọi thứ — màn đã mở, số sao, thời gian kỷ lục, ván đang chơi dở, cài đặt No-guess — chỉ lưu cục bộ trên máy (bộ nhớ riêng của ứng dụng). Dữ liệu này mất khi gỡ ứng dụng hoặc xoá dữ liệu ứng dụng trong Cài đặt Android, và chúng tôi không có bản sao nào." />
+
+                <Label Text="Thông tin do bên thứ ba thu thập" Style="{StaticResource PolicyHeading}" />
+                <Label Style="{StaticResource PolicyBody}" Text="Dò Mìn dùng một số SDK bên thứ ba để hiện quảng cáo và xử lý giao dịch mua Pro. Các dịch vụ này có thể thu thập dữ liệu theo chính sách riêng của họ:" />
+                <VerticalStackLayout Spacing="10" Margin="0,8,0,0">
+                    <Border Style="{StaticResource Card}">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Unity LevelPlay (ironSource) và các mạng quảng cáo liên kết" FontFamily="OpenSansSemibold" FontSize="13" />
+                            <Label Style="{StaticResource Hint}" Text="Hiện banner/quảng cáo xen kẽ cho bản miễn phí. Có thể thu thập: Mã quảng cáo (Advertising ID), thông tin thiết bị/hệ điều hành, vị trí gần đúng (qua IP), hoạt động dùng app liên quan đến quảng cáo." />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Style="{StaticResource Card}">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Google Play Billing" FontFamily="OpenSansSemibold" FontSize="13" />
+                            <Label Style="{StaticResource Hint}" Text="Xử lý giao dịch mua Pro (một lần, bỏ quảng cáo). Thông tin thanh toán do Google xử lý toàn bộ; chúng tôi chỉ nhận xác nhận đã mua thành công." />
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+                <Label Style="{StaticResource PolicyBody}" Margin="0,10,0,0" Text="Chúng tôi không kiểm soát cách các bên này dùng dữ liệu sau khi thu thập. Bạn có thể xem chính sách của họ:" />
+                <Label Style="{StaticResource PolicyBody}" Text="• Unity (LevelPlay/ironSource): unity.com/legal/privacy-policy" />
+                <Label Style="{StaticResource PolicyBody}" Text="• Google: policies.google.com/privacy" />
+
+                <Label Text="Quyền truy cập ứng dụng yêu cầu" Style="{StaticResource PolicyHeading}" />
+                <Border Style="{StaticResource Card}">
+                    <Label Style="{StaticResource PolicyBody}" Text="Internet &amp; trạng thái mạng — để tải quảng cáo và xử lý mua Pro. Mã quảng cáo (Advertising ID) — bắt buộc từ Android 13 để quảng cáo hoạt động đúng, dùng cho việc nhắm/đo lường quảng cáo. Ứng dụng KHÔNG yêu cầu camera, micro, danh bạ hay vị trí chính xác." />
+                </Border>
+
+                <Label Text="Trẻ em" Style="{StaticResource PolicyHeading}" />
+                <Label Style="{StaticResource PolicyBody}" Text="Dò Mìn không hướng tới trẻ em dưới 13 tuổi và chúng tôi không cố ý thu thập thông tin cá nhân từ trẻ em. Quảng cáo hiển thị tuân theo cài đặt nội dung quảng cáo có sẵn trên Google Play." />
+
+                <Label Text="Lưu trữ &amp; xoá dữ liệu" Style="{StaticResource PolicyHeading}" />
+                <Label Style="{StaticResource PolicyBody}" Text="Vì dữ liệu chỉ nằm trên máy bạn, bạn tự kiểm soát việc này: gỡ ứng dụng hoặc xoá dữ liệu ứng dụng trong Cài đặt Android sẽ xoá sạch mọi thứ app đã lưu. Không có tài khoản hay bản sao trên máy chủ để chúng tôi xoá thay bạn." />
+
+                <Label Text="Thay đổi chính sách" Style="{StaticResource PolicyHeading}" />
+                <Label Style="{StaticResource PolicyBody}" Text="Nếu chính sách này thay đổi, bản cập nhật sẽ hiện ngay tại trang này trong ứng dụng với ngày cập nhật mới. Tiếp tục dùng ứng dụng sau khi có thay đổi nghĩa là bạn chấp nhận chính sách mới." />
+
+                <Label Text="Liên hệ" Style="{StaticResource PolicyHeading}" />
+                <Label Style="{StaticResource PolicyBody}" Text="Câu hỏi về chính sách này hoặc cách Dò Mìn xử lý dữ liệu, gửi về: nguyenquynhvp.ictu@gmail.com" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

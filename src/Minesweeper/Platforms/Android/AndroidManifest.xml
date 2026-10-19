@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-	<application android:allowBackup="false" android:icon="@mipmap/appicon" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true">
+	<!-- Marks the app as a game at the OS level: android:appCategory is the current, non-deprecated signal
+	     (ApplicationInfo.CATEGORY_GAME), android:isGame is the older one — GameManager.java (AOSP) accepts
+	     either. Together these are what Samsung's Game Launcher / other OEM "gaming hub" features and
+	     Android's own category-based grouping (Digital Wellbeing, storage/data usage by category) key off of
+	     at the manifest level. Note: Samsung's own support docs say automatic Game Launcher detection is
+	     mainly driven by the Play Store listing's app category ("Games > Puzzle"), which is chosen separately
+	     in Play Console when setting up the store listing, not by this manifest flag alone — both need to be
+	     set for reliable gaming-hub placement. -->
+	<application android:allowBackup="false" android:icon="@mipmap/appicon" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true"
+	             android:isGame="true" android:appCategory="game">
 
 		<!-- Mandatory regardless of which ad network is actually active (LevelPlay here, see
 		     MauiProgram.cs): AdsService.Core depends on the Google Mobile Ads SDK's manifest-declared

@@ -8,8 +8,11 @@
 
     <Grid RowDefinitions="Auto,*">
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*" Padding="6,8">
-            <Button Grid.Column="0" Text="‹" FontSize="26" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
-            <Label Grid.Column="1" Text="Tutorial — 100 màn" FontSize="19" FontFamily="OpenSansSemibold" VerticalOptions="Center" Margin="6,0,0,0" />
+            <Button Grid.Column="0" Text="{x:Static views:Icons.ArrowBack}" FontSize="22" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
+            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center" Margin="6,0,0,0">
+                <Label Text="Tutorial — 100 màn" Style="{StaticResource TitleText}" FontSize="19" />
+                <Label x:Name="StatsLabel" Style="{StaticResource Hint}" />
+            </VerticalStackLayout>
         </Grid>
 
         <CollectionView x:Name="LevelsCollection" Grid.Row="1" Margin="14,4,14,14">
@@ -18,8 +21,11 @@
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="views:LevelItem">
-                    <Border BackgroundColor="{StaticResource SurfaceTonal}" Stroke="{StaticResource HairLine}" StrokeThickness="1"
-                            StrokeShape="RoundRectangle 10" Padding="0" HeightRequest="64" Opacity="{Binding CardOpacity}">
+                    <Border BackgroundColor="{StaticResource SurfaceTonal}" Stroke="Transparent" StrokeThickness="1"
+                            StrokeShape="RoundRectangle 12" Padding="0" HeightRequest="64" Opacity="{Binding CardOpacity}">
+                        <Border.Shadow>
+                            <Shadow Brush="Black" Opacity="0.08" Radius="10" Offset="0,3" />
+                        </Border.Shadow>
                         <Border.Triggers>
                             <DataTrigger TargetType="Border" Binding="{Binding IsNext}" Value="True">
                                 <Setter Property="Stroke" Value="{StaticResource Accent}" />

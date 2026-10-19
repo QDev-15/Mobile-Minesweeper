@@ -2,52 +2,65 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ads="clr-namespace:AdsService;assembly=AdsService"
+             xmlns:views="clr-namespace:Minesweeper.Views"
              x:Class="Minesweeper.Views.GamePage"
              BackgroundColor="{StaticResource MilkBackground}"
              Shell.NavBarIsVisible="False">
 
     <Grid RowDefinitions="Auto,*,Auto,Auto">
 
-        <!-- Top bar: back, mine counter, timer, hint, restart. -->
+        <!-- Top bar: back, mine counter, timer, hint, restart. Hint/restart hide once the round ends (see
+             ResultBanner below) — the end-of-round moment is meant to be look-only + a single way out. -->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto,Auto,Auto" Padding="10,10" ColumnSpacing="8">
-            <Button Grid.Column="0" Text="‹" FontSize="26" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
+            <Button Grid.Column="0" Text="{x:Static views:Icons.ArrowBack}" FontSize="22" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
 
-            <HorizontalStackLayout Grid.Column="1" Spacing="16" HorizontalOptions="Center">
-                <Label Text="🚩" FontSize="16" VerticalOptions="Center" />
-                <Label x:Name="MineCountLabel" FontFamily="OpenSansSemibold" FontSize="18" VerticalOptions="Center" />
-                <Label Text="⏱" FontSize="16" VerticalOptions="Center" Margin="12,0,0,0" />
-                <Label x:Name="TimerLabel" FontFamily="OpenSansSemibold" FontSize="18" VerticalOptions="Center" Text="0:00" />
-            </HorizontalStackLayout>
+            <VerticalStackLayout Grid.Column="1" Spacing="2" HorizontalOptions="Center">
+                <HorizontalStackLayout Spacing="6" HorizontalOptions="Center">
+                    <Label Text="{x:Static views:Icons.Flag}" FontFamily="Icons" FontSize="16" TextColor="{StaticResource Accent}" VerticalOptions="Center" />
+                    <Label x:Name="MineCountLabel" Style="{StaticResource TitleText}" FontSize="17" VerticalOptions="Center" />
+                    <Label x:Name="TimerLabel" Style="{StaticResource TitleText}" FontSize="17" VerticalOptions="Center" Text="0:00" Margin="14,0,0,0" />
+                </HorizontalStackLayout>
+                <!-- Daily-mode badge (design spec §3.2): nothing else on this page distinguishes a Daily
+                     Challenge board from an ordinary Medium game once play starts, so this small pill is
+                     the only cue — shown/hidden from code-behind via _isDaily, same idea as HomePage's own
+                     "HÔM NAY" badge on its Daily card. Sits in Row 0's own Auto height, so it never
+                     overlaps the board below. -->
+                <Label x:Name="DailyBadge" Text="Thử thách hôm nay" FontFamily="OpenSansSemibold" FontSize="10"
+                       TextColor="{StaticResource OffBlack}" BackgroundColor="{StaticResource Accent}"
+                       Padding="8,2" HorizontalOptions="Center" IsVisible="False" />
+            </VerticalStackLayout>
 
-            <Button Grid.Column="2" Text="💡" FontSize="18" Style="{StaticResource IconButton}" Clicked="OnHintClicked" />
-            <Button Grid.Column="3" Text="⟲" FontSize="20" Style="{StaticResource IconButton}" Clicked="OnRestartClicked" />
+            <Button x:Name="HintButton" Grid.Column="2" Text="{x:Static views:Icons.LightbulbOutline}" FontSize="18" Style="{StaticResource IconButton}" Clicked="OnHintClicked" />
+            <Button x:Name="RestartButton" Grid.Column="3" Text="{x:Static views:Icons.RestartAlt}" FontSize="18" Style="{StaticResource IconButton}" Clicked="OnRestartClicked" />
         </Grid>
 
-        <!-- Board. -->
+        <!-- Board: stays fully visible (no scrim/popup on top of it) once the round ends, so the player can
+             look back at the finished board — RefreshAllCells reveals every mine on a loss the same way it
+             always did, this just stops hiding that result behind a modal. -->
         <ScrollView Grid.Row="1" Orientation="Both" HorizontalOptions="Center" VerticalOptions="Center">
             <Grid x:Name="BoardHost" Padding="10" />
         </ScrollView>
 
-        <!-- Flag-mode toggle: the touch-friendly stand-in for Minesweeper's right-click (plan section 5). -->
-        <Grid Grid.Row="2" Padding="14,6" ColumnDefinitions="*,*" ColumnSpacing="10">
+        <!-- Flag-mode toggle: the touch-friendly stand-in for Minesweeper's right-click (plan section 5).
+             Swapped for ResultBanner once the round ends — flagging/opening is meaningless on a finished
+             board, so there is nothing left to toggle between. -->
+        <Grid x:Name="FlagToggleRow" Grid.Row="2" Padding="14,6" ColumnDefinitions="*,*" ColumnSpacing="10">
             <Button x:Name="RevealModeButton" Grid.Column="0" Text="Mở ô" Clicked="OnRevealModeClicked" CornerRadius="20" HeightRequest="44" FontFamily="OpenSansSemibold" />
-            <Button x:Name="FlagModeButton" Grid.Column="1" Text="🚩 Cắm cờ" Clicked="OnFlagModeClicked" CornerRadius="20" HeightRequest="44" FontFamily="OpenSansSemibold" />
+            <Button x:Name="FlagModeButton" Grid.Column="1" Text="Cắm cờ" Clicked="OnFlagModeClicked" CornerRadius="20" HeightRequest="44" FontFamily="OpenSansSemibold" />
         </Grid>
+
+        <!-- Result banner: replaces the old scrim+popup. Sits in the same row as the flag toggle (never
+             covers the board), shows the outcome, and offers no action of its own — the top bar's own "‹"
+             back button (always present, see above) is the one and only way out of this screen while it is
+             showing, per the owner's explicit "chỉ có một button là back" direction (2026-10-19). -->
+        <Border x:Name="ResultBanner" Grid.Row="2" Style="{StaticResource Card}" Margin="14,4" IsVisible="False">
+            <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                <Label x:Name="ResultTitleLabel" Style="{StaticResource TitleText}" FontSize="18" HorizontalOptions="Center" />
+                <Label x:Name="StarsLabel" FontSize="20" TextColor="{StaticResource Accent}" HorizontalOptions="Center" IsVisible="False" />
+                <Label x:Name="ResultDetailLabel" FontSize="13" TextColor="{StaticResource InkSoft}" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Border>
 
         <ads:AdBannerSurface x:Name="Banner" Grid.Row="3" />
-
-        <!-- Win/lose overlay. -->
-        <Grid x:Name="ResultOverlay" Grid.RowSpan="4" BackgroundColor="#CC15181D" IsVisible="False">
-            <Border Style="{StaticResource Card}" HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="280" Padding="24">
-                <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                    <Label x:Name="ResultTitleLabel" FontSize="22" FontFamily="OpenSansSemibold" HorizontalOptions="Center" />
-                    <Label x:Name="StarsLabel" FontSize="30" TextColor="{StaticResource Accent}" HorizontalOptions="Center" IsVisible="False" />
-                    <Label x:Name="ResultDetailLabel" FontSize="14" TextColor="{StaticResource InkSoft}" HorizontalOptions="Center" />
-                    <Button x:Name="NextLevelButton" Text="Màn tiếp theo" Style="{StaticResource PrimaryButton}" Clicked="OnNextLevelClicked" Margin="0,8,0,0" IsVisible="False" />
-                    <Button Text="Chơi lại" Style="{StaticResource PrimaryButton}" Clicked="OnPlayAgainClicked" Margin="0,8,0,0" />
-                    <Button Text="Về trang chủ" BackgroundColor="Transparent" TextColor="{StaticResource Primary}" Clicked="OnBackClicked" />
-                </VerticalStackLayout>
-            </Border>
-        </Grid>
     </Grid>
 </ContentPage>

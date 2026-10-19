@@ -3,8 +3,16 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
+    <!-- DynamicResource, not StaticResource, for every color key below: App.xaml merges this dictionary
+         itself (see App.xaml's MergedDictionaries) BEFORE App.xaml.cs's constructor body runs
+         ApplyColorTheme to merge Colors.Light.xaml/Colors.Dark.xaml, so at the moment this file's own
+         XAML is parsed, no color dictionary is merged yet. StaticResource resolves immediately at parse
+         time and throws XamlParseException ("StaticResource not found for key Primary") the instant it
+         can't find the key — crashed the app on every launch until this was caught (2026-10-19).
+         DynamicResource resolves lazily and re-resolves whenever the merged dictionaries change, which
+         also means these styles now correctly follow a live theme switch (RequestedThemeChanged). -->
     <Style x:Key="PrimaryButton" TargetType="Button">
-        <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource Primary}" />
         <Setter Property="TextColor" Value="White" />
         <Setter Property="FontFamily" Value="OpenSansSemibold" />
         <Setter Property="FontSize" Value="15" />
@@ -12,31 +20,55 @@
         <Setter Property="HeightRequest" Value="46" />
     </Style>
 
+    <!-- Soft shadow instead of a flat/bordered card (2026-10-19 "trắng sữa" palette refresh): depth comes
+         from a single soft drop shadow, not a stroke, so cards read as lifted surfaces on the warmer
+         MilkBackground rather than flat tinted rectangles. -->
     <Style x:Key="Card" TargetType="Border">
-        <Setter Property="BackgroundColor" Value="{StaticResource SurfaceTonal}" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource SurfaceTonal}" />
         <Setter Property="Stroke" Value="Transparent" />
-        <Setter Property="StrokeShape" Value="RoundRectangle 16" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 18" />
         <Setter Property="Padding" Value="16,12" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="Black" Opacity="0.10" Radius="16" Offset="0,5" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Fraunces display type (2026-10-19 "trắng sữa" refresh): wordmark, page titles, big numerals (HUD
+         timer/mine-counter, result overlay title). Body text stays OpenSans; Fraunces used with
+         restraint, per the design spec, not everywhere. -->
+    <Style x:Key="DisplayText" TargetType="Label">
+        <Setter Property="FontFamily" Value="Fraunces" />
+        <Setter Property="FontSize" Value="27" />
+    </Style>
+
+    <Style x:Key="TitleText" TargetType="Label">
+        <Setter Property="FontFamily" Value="Fraunces" />
+        <Setter Property="FontSize" Value="19" />
     </Style>
 
     <Style x:Key="Hint" TargetType="Label">
         <Setter Property="FontSize" Value="12" />
-        <Setter Property="TextColor" Value="{StaticResource InkSoft}" />
+        <Setter Property="TextColor" Value="{DynamicResource InkSoft}" />
     </Style>
 
+    <!-- FontFamily defaults to the Material "Icons" glyph font (see Views/Icons.cs) — every icon button
+         across the app now renders a real vector glyph instead of an emoji/Unicode symbol character. -->
     <Style x:Key="IconButton" TargetType="Button">
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="TextColor" Value="{StaticResource OffBlack}" />
+        <Setter Property="TextColor" Value="{DynamicResource OffBlack}" />
+        <Setter Property="FontFamily" Value="Icons" />
         <Setter Property="WidthRequest" Value="40" />
         <Setter Property="HeightRequest" Value="40" />
     </Style>
 
     <Style TargetType="Label">
         <Setter Property="FontFamily" Value="OpenSansRegular" />
-        <Setter Property="TextColor" Value="{StaticResource OffBlack}" />
+        <Setter Property="TextColor" Value="{DynamicResource OffBlack}" />
     </Style>
 
     <Style TargetType="Page" ApplyToDerivedTypes="True">
-        <Setter Property="BackgroundColor" Value="{StaticResource MilkBackground}" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource MilkBackground}" />
     </Style>
 </ResourceDictionary>
