@@ -12,18 +12,29 @@ public static class NoGuessSolver
 
     /// <summary>One pass of pure logical deduction over what is currently visible: the basic rule (a
     /// number's remaining mine count, after subtracting its flagged neighbors, tells you whether its hidden
-    /// neighbors are all safe or all mines) plus subset elimination between two overlapping constraints
-    /// (A ⊆ B ⟹ B\A has exactly Remaining(B) - Remaining(A) mines). Returns everything this single pass can
-    /// prove; callers loop it (each newly revealed/flagged cell can unlock further passes).</summary>
-    public static Deduction DeduceOnePass(CellState[,] state, Func<int, int, int> numberAt, int width, int height)
+    /// neighbors are all safe or all mines), subset elimination between two overlapping constraints
+    /// (A ⊆ B ⟹ B\A has exactly Remaining(B) - Remaining(A) mines), and -- when <paramref name="totalMines"/>
+    /// is given -- the whole-board "mines còn lại" rule (the Hướng dẫn chơi's section 4: if every mine not yet
+    /// flagged is accounted for, every other hidden cell on the WHOLE board is safe, and if the hidden cells
+    /// remaining exactly equal the mines remaining, they are all mines). <paramref name="totalMines"/>
+    /// defaults to -1 ("unknown"), which skips that whole-board rule entirely -- existing callers/tests that
+    /// only care about the local+subset rules (and have no board-wide mine count to give) are unaffected.
+    /// Returns everything this single pass can prove; callers loop it (each newly revealed/flagged cell can
+    /// unlock further passes).</summary>
+    public static Deduction DeduceOnePass(CellState[,] state, Func<int, int, int> numberAt, int width, int height, int totalMines = -1)
     {
         var safe = new HashSet<(int, int)>();
         var mines = new HashSet<(int, int)>();
 
         var constraints = new List<(HashSet<(int, int)> Cells, int Remaining)>();
+        int flaggedTotal = 0;
+        var hiddenCells = new List<(int, int)>();
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)
             {
+                if (state[x, y] == CellState.Flagged) flaggedTotal++;
+                else if (state[x, y] == CellState.Hidden) hiddenCells.Add((x, y));
+
                 if (state[x, y] != CellState.Revealed) continue;
                 int number = numberAt(x, y);
                 if (number <= 0) continue;
@@ -59,6 +70,13 @@ public static class NoGuessSolver
                 }
         }
 
+        if (totalMines >= 0 && hiddenCells.Count > 0)
+        {
+            int minesRemaining = totalMines - flaggedTotal;
+            if (minesRemaining <= 0) foreach (var c in hiddenCells) safe.Add(c);
+            else if (minesRemaining == hiddenCells.Count) foreach (var c in hiddenCells) mines.Add(c);
+        }
+
         return new Deduction([.. safe], [.. mines]);
     }
 
@@ -68,12 +86,13 @@ public static class NoGuessSolver
     public static bool IsFullySolvable(Board board, int firstX, int firstY)
     {
         var state = new CellState[board.Width, board.Height];
-        int totalSafeCells = board.Width * board.Height - board.MineCount();
+        int mineCount = board.MineCount();
+        int totalSafeCells = board.Width * board.Height - mineCount;
         int revealedCount = RevealFlood(board, state, firstX, firstY);
 
         while (revealedCount < totalSafeCells)
         {
-            Deduction d = DeduceOnePass(state, board.AdjacentMines, board.Width, board.Height);
+            Deduction d = DeduceOnePass(state, board.AdjacentMines, board.Width, board.Height, mineCount);
             if (d.Safe.Count == 0 && d.Mines.Count == 0) return false; // stuck: this board would force a guess here
 
             foreach (var (x, y) in d.Mines)

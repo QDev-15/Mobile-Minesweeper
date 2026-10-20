@@ -4,7 +4,7 @@
              xmlns:views="clr-namespace:Minesweeper.Views"
              x:Class="Minesweeper.Views.PrivacyPolicyPage"
              Title="Chính sách quyền riêng tư"
-             BackgroundColor="{StaticResource MilkBackground}"
+             BackgroundColor="{DynamicResource MilkBackground}"
              Shell.NavBarIsVisible="False">
 
     <ContentPage.Resources>

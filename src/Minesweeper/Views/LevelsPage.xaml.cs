@@ -6,6 +6,7 @@ namespace Minesweeper.Views;
 public partial class LevelsPage : ContentPage
 {
 	private readonly LevelProgressStore _levels;
+	private readonly ActionGuard _nav = new();
 
 	public LevelsPage(LevelProgressStore levels)
 	{
@@ -32,8 +33,15 @@ public partial class LevelsPage : ContentPage
 	private async void OnLevelTapped(object? sender, EventArgs e)
 	{
 		if (sender is not BindableObject { BindingContext: LevelItem item } || !item.Unlocked) return;
-		await Shell.Current.GoToAsync($"{nameof(GamePage)}?level={item.Number}");
+		if (!_nav.TryEnter(sender as View)) return;
+		try { await Shell.Current.GoToAsync($"{nameof(GamePage)}?level={item.Number}"); }
+		finally { _nav.Exit(sender as View); }
 	}
 
-	private async void OnBackClicked(object? sender, EventArgs e) => await Shell.Current.GoToAsync("..");
+	private async void OnBackClicked(object? sender, EventArgs e)
+	{
+		if (!_nav.TryEnter(sender as View)) return;
+		try { await Shell.Current.GoToAsync(".."); }
+		finally { _nav.Exit(sender as View); }
+	}
 }

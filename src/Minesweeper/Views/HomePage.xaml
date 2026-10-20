@@ -8,43 +8,63 @@
 
     <Grid RowDefinitions="Auto,*,Auto">
 
-        <!-- Right padding 12->20 (2026-10-19): the rightmost header button (Settings) rendered with its
-             glyph ink clipped to a sliver regardless of font/codepoint (tried MaterialIcons settings/tune
-             and the plain Unicode gear char, all three identically clipped) while the Info button one
-             position to its left, same row, same style, rendered fine — points at the device's own rounded
-             top-right screen corner clipping content sitting flush against it (Samsung Note10+), not a font
-             bug. More right padding keeps the last button clear of that corner. -->
+        <!-- Right padding 12->20->44 (2026-10-19, same day): turned out NOT to be the fix, moving the whole
+             button via more Grid padding left its clipped glyph pixel-for-identical, proving this was never
+             about screen position. The first two padding attempts also shipped WHILE Icons.HelpOutline/Tune
+             happened to be empty strings (see Icons.cs's own comment), so neither was ever actually visually
+             verified until now. Real cause, found once the glyphs were visible to compare: help_outline and
+             tune specifically self-clip on their own right edge inside a 40dp IconButton at FontSize 20,
+             while ArrowBack (FontSize 22, same 40dp IconButton, GamePage/SettingsPage/LevelsPage/AboutPage/
+             PrivacyPolicyPage) and every other glyph in this app render fully intact at that same button
+             size, so it is specific to these 2 glyphs' own metrics in MaterialIcons-Regular.ttf, not the
+             button or the corner. Fix: smaller FontSize for just these two. -->
         <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto,Auto" Padding="20,24,20,8">
-            <Label Grid.Column="0" Text="Dò Mìn" Style="{StaticResource DisplayText}" TextColor="{StaticResource OffBlack}" />
+            <Label Grid.Column="0" Text="Dò Mìn" Style="{StaticResource DisplayText}" TextColor="{DynamicResource OffBlack}" />
             <Button x:Name="ProBadge" Grid.Column="1" Text="PRO" FontSize="11" FontFamily="OpenSansSemibold" TextColor="White"
-                    BackgroundColor="{StaticResource Accent}" CornerRadius="14" Padding="12,0" HeightRequest="28"
+                    BackgroundColor="{DynamicResource Accent}" CornerRadius="14" Padding="12,0" HeightRequest="28"
                     VerticalOptions="Center" Margin="0,0,6,0" Clicked="OnProBadgeClicked" />
-            <Button Grid.Column="2" Text="{x:Static views:Icons.HelpOutline}" FontSize="20" Style="{StaticResource IconButton}" Clicked="OnAboutClicked" />
-            <Button Grid.Column="3" Text="{x:Static views:Icons.Tune}" FontSize="20" Style="{StaticResource IconButton}" Clicked="OnSettingsClicked" />
+            <!-- FontSize 18 + a 46dp box, not the shared IconButton style's default 40dp (owner's direction,
+                 2026-10-20: these read too small at 16sp): HelpOutline/Tune specifically self-clip past about
+                 a 0.4 ratio of glyph size to box size in this font (confirmed on a real device, see Icons.cs's
+                 Event comment for the same glyph-specific issue on a different icon). Every other IconButton
+                 in the app stays at the default 40dp box and is unaffected. -->
+            <Button Grid.Column="2" Text="{x:Static views:Icons.HelpOutline}" FontSize="18" Style="{StaticResource IconButton}"
+                    WidthRequest="46" HeightRequest="46" Clicked="OnAboutClicked" />
+            <Button Grid.Column="3" Text="{x:Static views:Icons.Tune}" FontSize="18" Style="{StaticResource IconButton}"
+                    WidthRequest="46" HeightRequest="46" Clicked="OnSettingsClicked" />
         </Grid>
 
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="20,8" Spacing="14">
 
-                <Border x:Name="ResumeCard" Style="{StaticResource Card}" BackgroundColor="{StaticResource PrimarySoft}" IsVisible="False">
+                <Border x:Name="ResumeCard" Style="{StaticResource Card}" BackgroundColor="{DynamicResource PrimarySoft}" IsVisible="False">
                     <Grid ColumnDefinitions="*,Auto">
                         <VerticalStackLayout Spacing="2">
-                            <Label Text="Ván đang chơi dở" FontFamily="OpenSansSemibold" FontSize="16" TextColor="{StaticResource OffBlack}" />
-                            <Label x:Name="ResumeDetailLabel" FontSize="12.5" TextColor="{StaticResource OffBlack}" Opacity="0.75" />
+                            <Label Text="Ván đang chơi dở" FontFamily="OpenSansSemibold" FontSize="16" TextColor="{DynamicResource OffBlack}" />
+                            <Label x:Name="ResumeDetailLabel" FontSize="12.5" TextColor="{DynamicResource OffBlack}" Opacity="0.75" />
                         </VerticalStackLayout>
-                        <Button Grid.Column="1" Text="Tiếp tục" Clicked="OnResumeClicked" BackgroundColor="{StaticResource OffBlack}"
+                        <Button Grid.Column="1" Text="Tiếp tục" Clicked="OnResumeClicked" BackgroundColor="{DynamicResource OffBlack}"
                                 TextColor="White" FontFamily="OpenSansSemibold" CornerRadius="20" WidthRequest="100" HeightRequest="40" VerticalOptions="Center" />
                     </Grid>
                 </Border>
 
-                <Border Style="{StaticResource Card}" BackgroundColor="{StaticResource Primary}">
+                <Border Style="{StaticResource Card}" BackgroundColor="{DynamicResource Primary}">
                     <VerticalStackLayout Spacing="6">
-                        <Label Text="HÔM NAY" FontFamily="OpenSansSemibold" FontSize="10.5" TextColor="White" Opacity="0.85"
-                               BackgroundColor="#33FFFFFF" Padding="9,3" HorizontalOptions="Start" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0" Text="HÔM NAY" FontFamily="OpenSansSemibold" FontSize="10.5" TextColor="White" Opacity="0.85"
+                                   BackgroundColor="#33FFFFFF" Padding="9,3" HorizontalOptions="Start" VerticalOptions="Center" />
+                            <!-- Opens DailyCalendarPage (owner's direction, 2026-10-20: "thử thách hôm nay" should
+                                 really be "thử thách mỗi ngày", with a calendar of past days behind it), kept as a
+                                 separate button from "Chơi ngay" below so tapping it never accidentally starts a
+                                 game. -->
+                            <Button Grid.Column="1" Text="{x:Static views:Icons.Event}" FontSize="20" TextColor="White"
+                                    BackgroundColor="Transparent" WidthRequest="38" HeightRequest="38" Padding="0"
+                                    VerticalOptions="Center" Clicked="OnDailyCalendarClicked" />
+                        </Grid>
                         <Label Text="Thử thách hôm nay" Style="{StaticResource TitleText}" TextColor="White" />
                         <Label x:Name="DailyDateLabel" FontSize="13" TextColor="#E0E8FF" />
                         <Label Text="Bàn giống nhau cho mọi người, giải được 100% bằng suy luận — không phải đoán." FontSize="12.5" TextColor="#E0E8FF" />
-                        <Button Text="Chơi ngay" Clicked="OnDailyChallengeClicked" BackgroundColor="White" TextColor="{StaticResource Primary}"
+                        <Button Text="Chơi ngay" Clicked="OnDailyChallengeClicked" BackgroundColor="White" TextColor="{DynamicResource Primary}"
                                 FontFamily="OpenSansSemibold" CornerRadius="20" HeightRequest="42" Margin="0,6,0,0" />
                     </VerticalStackLayout>
                 </Border>
@@ -56,28 +76,28 @@
                         </Grid.GestureRecognizers>
                         <VerticalStackLayout Spacing="2">
                             <Label Text="Tutorial — 100 màn" FontFamily="OpenSansSemibold" FontSize="16" />
-                            <Label x:Name="TutorialProgressLabel" FontSize="12.5" TextColor="{StaticResource InkSoft}" />
+                            <Label x:Name="TutorialProgressLabel" FontSize="12.5" TextColor="{DynamicResource InkSoft}" />
                         </VerticalStackLayout>
-                        <Label Grid.Column="1" Text="{x:Static views:Icons.ChevronRight}" FontFamily="Icons" FontSize="20" TextColor="{StaticResource InkSoft}" VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="{x:Static views:Icons.ChevronRight}" FontFamily="Icons" FontSize="20" TextColor="{DynamicResource InkSoft}" VerticalOptions="Center" />
                     </Grid>
                 </Border>
 
-                <Label Text="CHƠI THƯỜNG" FontSize="12.5" FontFamily="OpenSansSemibold" TextColor="{StaticResource Primary}" Margin="4,10,0,0" />
+                <Label Text="CHƠI THƯỜNG" FontSize="12.5" FontFamily="OpenSansSemibold" TextColor="{DynamicResource Primary}" Margin="4,10,0,0" />
 
                 <Border Style="{StaticResource Card}">
                     <VerticalStackLayout Spacing="4">
                         <Grid ColumnDefinitions="*,Auto">
                             <Label Text="Không đoán mù (No-guess)" FontFamily="OpenSansSemibold" FontSize="15" VerticalOptions="Center" />
-                            <Switch x:Name="NoGuessSwitch" Grid.Column="1" OnColor="{StaticResource Primary}" />
+                            <Switch x:Name="NoGuessSwitch" Grid.Column="1" OnColor="{DynamicResource Primary}" />
                         </Grid>
-                        <Label Text="Mọi bàn chơi đều giải được bằng logic thuần, không bao giờ ép đoán 50/50." Style="{StaticResource Hint}" FontSize="12" TextColor="{StaticResource InkSoft}" />
+                        <Label Text="Mọi bàn chơi đều giải được bằng logic thuần, không bao giờ ép đoán 50/50." Style="{StaticResource Hint}" FontSize="12" TextColor="{DynamicResource InkSoft}" />
                     </VerticalStackLayout>
                 </Border>
 
                 <Border x:Name="EasyCard" Style="{StaticResource Card}">
                     <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
                         <Label Text="Dễ" FontFamily="OpenSansSemibold" FontSize="16" />
-                        <Label x:Name="EasyBestLabel" Grid.Row="1" FontSize="12" TextColor="{StaticResource InkSoft}" />
+                        <Label x:Name="EasyBestLabel" Grid.Row="1" FontSize="12" TextColor="{DynamicResource InkSoft}" />
                         <Button Grid.Column="1" Grid.RowSpan="2" Text="Chơi" Style="{StaticResource PrimaryButton}" WidthRequest="84" HeightRequest="38"
                                 Clicked="OnEasyClicked" VerticalOptions="Center" />
                     </Grid>
@@ -86,7 +106,7 @@
                 <Border x:Name="MediumCard" Style="{StaticResource Card}">
                     <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
                         <Label Text="Vừa" FontFamily="OpenSansSemibold" FontSize="16" />
-                        <Label x:Name="MediumBestLabel" Grid.Row="1" FontSize="12" TextColor="{StaticResource InkSoft}" />
+                        <Label x:Name="MediumBestLabel" Grid.Row="1" FontSize="12" TextColor="{DynamicResource InkSoft}" />
                         <Button Grid.Column="1" Grid.RowSpan="2" Text="Chơi" Style="{StaticResource PrimaryButton}" WidthRequest="84" HeightRequest="38"
                                 Clicked="OnMediumClicked" VerticalOptions="Center" />
                     </Grid>
@@ -95,7 +115,7 @@
                 <Border x:Name="HardCard" Style="{StaticResource Card}">
                     <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
                         <Label Text="Khó" FontFamily="OpenSansSemibold" FontSize="16" />
-                        <Label x:Name="HardBestLabel" Grid.Row="1" FontSize="12" TextColor="{StaticResource InkSoft}" />
+                        <Label x:Name="HardBestLabel" Grid.Row="1" FontSize="12" TextColor="{DynamicResource InkSoft}" />
                         <Button Grid.Column="1" Grid.RowSpan="2" Text="Chơi" Style="{StaticResource PrimaryButton}" WidthRequest="84" HeightRequest="38"
                                 Clicked="OnHardClicked" VerticalOptions="Center" />
                     </Grid>

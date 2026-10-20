@@ -114,7 +114,7 @@ public sealed class GameEngine
     public (int X, int Y)? FindHint()
     {
         if (Status != GameStatus.Playing) return null;
-        var d = NoGuessSolver.DeduceOnePass(_state, _board.AdjacentMines, Width, Height);
+        var d = NoGuessSolver.DeduceOnePass(_state, _board.AdjacentMines, Width, Height, MineCount);
         return d.Safe.Count > 0 ? d.Safe[0] : null;
     }
 

@@ -4,7 +4,7 @@
              xmlns:ads="clr-namespace:AdsService;assembly=AdsService"
              xmlns:views="clr-namespace:Minesweeper.Views"
              x:Class="Minesweeper.Views.GamePage"
-             BackgroundColor="{StaticResource MilkBackground}"
+             BackgroundColor="{DynamicResource MilkBackground}"
              Shell.NavBarIsVisible="False">
 
     <Grid RowDefinitions="Auto,*,Auto,Auto">
@@ -16,7 +16,7 @@
 
             <VerticalStackLayout Grid.Column="1" Spacing="2" HorizontalOptions="Center">
                 <HorizontalStackLayout Spacing="6" HorizontalOptions="Center">
-                    <Label Text="{x:Static views:Icons.Flag}" FontFamily="Icons" FontSize="16" TextColor="{StaticResource Accent}" VerticalOptions="Center" />
+                    <Label Text="{x:Static views:Icons.Flag}" FontFamily="Icons" FontSize="16" TextColor="{DynamicResource Accent}" VerticalOptions="Center" />
                     <Label x:Name="MineCountLabel" Style="{StaticResource TitleText}" FontSize="17" VerticalOptions="Center" />
                     <Label x:Name="TimerLabel" Style="{StaticResource TitleText}" FontSize="17" VerticalOptions="Center" Text="0:00" Margin="14,0,0,0" />
                 </HorizontalStackLayout>
@@ -26,7 +26,7 @@
                      "HÔM NAY" badge on its Daily card. Sits in Row 0's own Auto height, so it never
                      overlaps the board below. -->
                 <Label x:Name="DailyBadge" Text="Thử thách hôm nay" FontFamily="OpenSansSemibold" FontSize="10"
-                       TextColor="{StaticResource OffBlack}" BackgroundColor="{StaticResource Accent}"
+                       TextColor="{DynamicResource OffBlack}" BackgroundColor="{DynamicResource Accent}"
                        Padding="8,2" HorizontalOptions="Center" IsVisible="False" />
             </VerticalStackLayout>
 
@@ -36,10 +36,28 @@
 
         <!-- Board: stays fully visible (no scrim/popup on top of it) once the round ends, so the player can
              look back at the finished board — RefreshAllCells reveals every mine on a loss the same way it
-             always did, this just stops hiding that result behind a modal. -->
-        <ScrollView Grid.Row="1" Orientation="Both" HorizontalOptions="Center" VerticalOptions="Center">
-            <Grid x:Name="BoardHost" Padding="10" />
-        </ScrollView>
+             always did, this just stops hiding that result behind a modal.
+
+             No ScrollView any more (owner's direction, 2026-10-20: the board must NEVER need scrolling to be
+             seen in full). BoardArea fills this whole row; BuildEmptyBoard measures its actual pixel size and
+             computes a cell size from it (Width/Height both constrained, a 10px margin baked into the sum),
+             so BoardHost always lands at or under BoardArea's size and just sits centered inside it. -->
+        <Grid x:Name="BoardArea" Grid.Row="1" HorizontalOptions="Fill" VerticalOptions="Fill">
+            <Grid x:Name="BoardHost" HorizontalOptions="Center" VerticalOptions="Center" />
+            <!-- No-guess board generation (always on for the Daily Challenge, optional otherwise) can take a
+                 real moment on a slow device, and was running synchronously on the UI thread with nothing
+                 shown for it, which read as the app freezing (owner's report, 2026-10-20). It now runs on a
+                 background thread (StartGameFromAsync/LoadDailyBoardAsync) while this scrim sits on top of
+                 BoardHost in the same Grid cell: it both gives real loading feedback and, just by being a
+                 later, opaque sibling in the same cell, blocks taps from reaching the still-Hidden cells
+                 underneath until a real board exists under them. -->
+            <Grid x:Name="BoardLoadingOverlay" IsVisible="False" BackgroundColor="{DynamicResource MilkBackground}" Opacity="0.94">
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                    <ActivityIndicator x:Name="BoardLoadingSpinner" Color="{DynamicResource Primary}" WidthRequest="42" HeightRequest="42" />
+                    <Label Text="Đang tạo bàn chơi…" Style="{StaticResource Hint}" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Grid>
+        </Grid>
 
         <!-- Flag-mode toggle: the touch-friendly stand-in for Minesweeper's right-click (plan section 5).
              Swapped for ResultBanner once the round ends — flagging/opening is meaningless on a finished
@@ -56,8 +74,8 @@
         <Border x:Name="ResultBanner" Grid.Row="2" Style="{StaticResource Card}" Margin="14,4" IsVisible="False">
             <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
                 <Label x:Name="ResultTitleLabel" Style="{StaticResource TitleText}" FontSize="18" HorizontalOptions="Center" />
-                <Label x:Name="StarsLabel" FontSize="20" TextColor="{StaticResource Accent}" HorizontalOptions="Center" IsVisible="False" />
-                <Label x:Name="ResultDetailLabel" FontSize="13" TextColor="{StaticResource InkSoft}" HorizontalOptions="Center" />
+                <Label x:Name="StarsLabel" FontSize="20" TextColor="{DynamicResource Accent}" HorizontalOptions="Center" IsVisible="False" />
+                <Label x:Name="ResultDetailLabel" FontSize="13" TextColor="{DynamicResource InkSoft}" HorizontalOptions="Center" />
             </VerticalStackLayout>
         </Border>
 

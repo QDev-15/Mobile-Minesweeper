@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:Minesweeper.Views"
+             x:Class="Minesweeper.Views.DailyCalendarPage"
+             BackgroundColor="{DynamicResource MilkBackground}"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*">
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*" Padding="6,8">
+            <Button Grid.Column="0" Text="{x:Static views:Icons.ArrowBack}" FontSize="22" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
+            <Label Grid.Column="1" Text="Lịch thử thách hằng ngày" Style="{StaticResource TitleText}" FontSize="17" VerticalOptions="Center" Margin="6,0,0,0" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16,4,16,24" Spacing="14">
+
+                <!-- Month navigator: NextMonthButton.IsEnabled is turned off in code-behind once _currentMonth
+                     reaches the real calendar month, since there is no Daily Challenge board for a future date. -->
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Button Grid.Column="0" x:Name="PrevMonthButton" Text="{x:Static views:Icons.ChevronLeft}" FontSize="20"
+                            Style="{StaticResource IconButton}" Clicked="OnPrevMonthClicked" />
+                    <Label Grid.Column="1" x:Name="MonthLabel" Style="{StaticResource TitleText}" FontSize="17"
+                           HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Button Grid.Column="2" x:Name="NextMonthButton" Text="{x:Static views:Icons.ChevronRight}" FontSize="20"
+                            Style="{StaticResource IconButton}" Clicked="OnNextMonthClicked" />
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*,*,*,*,*,*">
+                    <Label Grid.Column="0" Text="T2" Style="{StaticResource Hint}" HorizontalOptions="Center" />
+                    <Label Grid.Column="1" Text="T3" Style="{StaticResource Hint}" HorizontalOptions="Center" />
+                    <Label Grid.Column="2" Text="T4" Style="{StaticResource Hint}" HorizontalOptions="Center" />
+                    <Label Grid.Column="3" Text="T5" Style="{StaticResource Hint}" HorizontalOptions="Center" />
+                    <Label Grid.Column="4" Text="T6" Style="{StaticResource Hint}" HorizontalOptions="Center" />
+                    <Label Grid.Column="5" Text="T7" Style="{StaticResource Hint}" HorizontalOptions="Center" />
+                    <Label Grid.Column="6" Text="CN" Style="{StaticResource Hint}" HorizontalOptions="Center" />
+                </Grid>
+
+                <CollectionView x:Name="DaysCollection">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="7" HorizontalItemSpacing="5" VerticalItemSpacing="5" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="views:CalendarDayItem">
+                            <Border BackgroundColor="{DynamicResource SurfaceTonal}" Stroke="Transparent" StrokeThickness="2"
+                                    StrokeShape="RoundRectangle 10" Padding="0" HeightRequest="52">
+                                <Border.Triggers>
+                                    <DataTrigger TargetType="Border" Binding="{Binding IsBlank}" Value="True">
+                                        <Setter Property="BackgroundColor" Value="Transparent" />
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Border" Binding="{Binding IsToday}" Value="True">
+                                        <Setter Property="Stroke" Value="{DynamicResource Accent}" />
+                                    </DataTrigger>
+                                </Border.Triggers>
+                                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="2">
+                                    <Label Text="{Binding DayText}" FontFamily="OpenSansSemibold" FontSize="14" HorizontalOptions="Center" />
+                                    <Label Text="{x:Static views:Icons.CheckCircle}" FontFamily="Icons" FontSize="11" TextColor="#3FAE5C"
+                                           HorizontalOptions="Center" IsVisible="{Binding IsCompleted}" />
+                                    <Label Text="{x:Static views:Icons.FiberManualRecord}" FontFamily="Icons" FontSize="9" TextColor="{DynamicResource Danger}"
+                                           HorizontalOptions="Center" IsVisible="{Binding IsMissed}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="{x:Static views:Icons.CheckCircle}" FontFamily="Icons" FontSize="16" TextColor="#3FAE5C" VerticalOptions="Center" />
+                            <Label Text="Đã hoàn thành thử thách ngày đó" VerticalOptions="Center" FontSize="13.5" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="{x:Static views:Icons.FiberManualRecord}" FontFamily="Icons" FontSize="12" TextColor="{DynamicResource Danger}" VerticalOptions="Center" />
+                            <Label Text="Chưa hoàn thành" VerticalOptions="Center" FontSize="13.5" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

@@ -9,6 +9,7 @@ public partial class AppShell : Shell
 		InitializeComponent();
 		Routing.RegisterRoute(nameof(GamePage), typeof(GamePage));
 		Routing.RegisterRoute(nameof(LevelsPage), typeof(LevelsPage));
+		Routing.RegisterRoute(nameof(DailyCalendarPage), typeof(DailyCalendarPage));
 		Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
 		Routing.RegisterRoute(nameof(AboutPage), typeof(AboutPage));
 		Routing.RegisterRoute(nameof(PrivacyPolicyPage), typeof(PrivacyPolicyPage));
