@@ -21,7 +21,7 @@
 
 		<!-- Versions. Bump ApplicationVersion (Android versionCode) on every build going to a device or to Play. -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-		<ApplicationVersion>1</ApplicationVersion>
+		<ApplicationVersion>2</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">26.0</SupportedOSPlatformVersion>
 
@@ -36,7 +36,10 @@
 		<DefineConstants Condition="'$(AdsMode)' == 'Pro'">$(DefineConstants);ADS_MODE_PRO</DefineConstants>
 
 		<!-- Ads kill switch for a Play Console testing build, same meaning as PdfReader/DocScanner's own
-		     AdsEnabled: dotnet publish ... -p:AdsEnabled=false. -->
+		     AdsEnabled: 
+			 dotnet publish Minesweeper -f net10.0-android -c Release -p:AndroidPackageFormat=aab -p:AdsMode=Pro -p:AdsEnabled=true
+			 dotnet publish Minesweeper -f net10.0-android -c Release -p:AndroidPackageFormat=aab -p:AdsMode=Dev -p:AdsEnabled=true
+			 dotnet publish Minesweeper -f net10.0-android -c Release -p:AndroidPackageFormat=aab -p:AdsMode=Dev -p:AdsEnabled=false -->
 		<AdsEnabled Condition="'$(AdsEnabled)' == ''">true</AdsEnabled>
 		<DefineConstants Condition="'$(AdsEnabled)' == 'false'">$(DefineConstants);ADS_DISABLED</DefineConstants>
 	</PropertyGroup>
