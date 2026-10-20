@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Minesweeper.Core.Licensing;
 using Minesweeper.Services;
 using Minesweeper.Views;
+using Plugin.Maui.Audio;
 
 namespace Minesweeper;
 
@@ -26,6 +27,8 @@ public static class MauiProgram
 			// long-press in stock MAUI (no built-in LongPressGestureRecognizer) -- used on each board cell
 			// for "long-press to flag" (GamePage.xaml.cs).
 			.UseMauiCommunityToolkit()
+			// Plugin.Maui.Audio: registers IAudioManager for SoundService (gameplay sound effects).
+			.AddAudio()
 			.UseLevelPlayAds(new LevelPlayOptions(
 				AppKey: LevelPlayConfig.AppKey,
 				BannerAdUnitId: useTestAds ? LevelPlayConfig.BannerAdUnitId : RealAdsConfig.BannerAdUnitId,
@@ -53,6 +56,8 @@ public static class MauiProgram
 		builder.Services.AddSingleton<SavedGameStore>();
 		builder.Services.AddSingleton<LevelProgressStore>();
 		builder.Services.AddSingleton<ILicenseService, LicenseService>();
+		builder.Services.AddSingleton<ISoundService, SoundService>();
+		builder.Services.AddSingleton<DailyProgressStore>();
 		// Fully qualified: the "AdsService" namespace (the ads library) and this app's own
 		// "Minesweeper.Services.AdsService" class share a name, so unqualified "AdsService" here is ambiguous.
 		builder.Services.AddSingleton<IAdsService, Minesweeper.Services.AdsService>();
@@ -60,6 +65,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<HomePage>();
 		builder.Services.AddTransient<GamePage>();
 		builder.Services.AddTransient<LevelsPage>();
+		builder.Services.AddTransient<DailyCalendarPage>();
 		builder.Services.AddTransient<SettingsPage>();
 		builder.Services.AddTransient<AboutPage>();
 

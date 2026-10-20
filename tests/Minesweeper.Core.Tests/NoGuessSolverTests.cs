@@ -82,6 +82,43 @@ public class NoGuessSolverTests
         Assert.Empty(d.Safe);
     }
 
+    [Fact]
+    public void TotalMinesRemainingIsZero_EveryOtherHiddenCellIsSafe()
+    {
+        // Hướng dẫn chơi section 4's "dùng tổng số mìn còn lại": every mine on this W x H = 16-cell board is
+        // already flagged (totalMines=3, 3 flags placed), so every OTHER hidden cell -- even ones nowhere
+        // near a revealed number -- must be safe. (1,1) stays Revealed/"0" purely so numberAt has a harmless
+        // default; nothing here depends on it.
+        var state = EmptyState();
+        state[0, 0] = CellState.Flagged;
+        state[3, 3] = CellState.Flagged;
+        state[3, 0] = CellState.Flagged;
+        state[1, 1] = CellState.Hidden; // far from every flag, unresolvable by any local/subset rule alone
+
+        var d = NoGuessSolver.DeduceOnePass(state, (_, _) => 0, W, H, totalMines: 3);
+
+        Assert.Contains((1, 1), d.Safe);
+        Assert.Empty(d.Mines);
+    }
+
+    [Fact]
+    public void TotalMinesRemainingEqualsHiddenCount_AllRemainingHiddenAreMines()
+    {
+        // 16 cells, 1 flagged already, 1 revealed/safe-known, leaving 14 Hidden -- if totalMines=15, exactly
+        // 14 mines remain for exactly 14 hidden cells, so all 14 must be mines (even though no single
+        // revealed number touches most of them).
+        var state = EmptyState();
+        state[0, 0] = CellState.Flagged;
+        state[3, 3] = CellState.Revealed;
+
+        var d = NoGuessSolver.DeduceOnePass(state, (_, _) => 0, W, H, totalMines: 15);
+
+        Assert.Equal(14, d.Mines.Count);
+        Assert.DoesNotContain((0, 0), d.Mines); // already flagged, not Hidden -- not part of the hidden set at all
+        Assert.DoesNotContain((3, 3), d.Mines); // already revealed/safe
+        Assert.Empty(d.Safe);
+    }
+
     private static IEnumerable<(int, int)> Around(int x, int y)
     {
         for (int dx = -1; dx <= 1; dx++)

@@ -1,10 +1,12 @@
 using Minesweeper.Core.Licensing;
+using Minesweeper.Services;
 
 namespace Minesweeper.Views;
 
 public partial class SettingsPage : ContentPage
 {
 	private readonly ILicenseService _license;
+	private readonly ActionGuard _nav = new();
 
 	public SettingsPage(ILicenseService license)
 	{
@@ -58,36 +60,66 @@ public partial class SettingsPage : ContentPage
 
 	private async void OnBuyClicked(object? sender, EventArgs e)
 	{
-		Busy.IsVisible = true;
-		Busy.IsRunning = true;
-		PurchaseOutcome outcome = await _license.PurchaseProAsync();
-		Busy.IsRunning = false;
-		Busy.IsVisible = false;
-		Refresh();
+		// _nav, not just Busy: Busy is a spinner the player can still see and tap straight through (it does
+		// not block input), so without this a slow network plus an impatient second tap could fire a SECOND
+		// PurchaseProAsync while the first is still in flight (owner's report, 2026-10-20).
+		if (!_nav.TryEnter(sender as View)) return;
+		try
+		{
+			Busy.IsVisible = true;
+			Busy.IsRunning = true;
+			PurchaseOutcome outcome = await _license.PurchaseProAsync();
+			Busy.IsRunning = false;
+			Busy.IsVisible = false;
+			Refresh();
 
-		if (outcome == PurchaseOutcome.Error)
-			await DisplayAlertAsync("Lỗi", _license.LastError ?? "Không thể mua lúc này.", "OK");
+			if (outcome == PurchaseOutcome.Error)
+				await DisplayAlertAsync("Lỗi", _license.LastError ?? "Không thể mua lúc này.", "OK");
+		}
+		finally { _nav.Exit(sender as View); }
 	}
 
 	private async void OnRestoreClicked(object? sender, EventArgs e)
 	{
-		Busy.IsVisible = true;
-		Busy.IsRunning = true;
-		PurchaseOutcome outcome = await _license.RestoreAsync();
-		Busy.IsRunning = false;
-		Busy.IsVisible = false;
-		Refresh();
-
-		string message = outcome switch
+		if (!_nav.TryEnter(sender as View)) return;
+		try
 		{
-			PurchaseOutcome.AlreadyOwned or PurchaseOutcome.Purchased => "Đã khôi phục gói Pro.",
-			PurchaseOutcome.Error => _license.LastError ?? "Không khôi phục được.",
-			_ => "Không tìm thấy giao dịch Pro nào trước đó.",
-		};
-		await DisplayAlertAsync("Khôi phục", message, "OK");
+			Busy.IsVisible = true;
+			Busy.IsRunning = true;
+			PurchaseOutcome outcome = await _license.RestoreAsync();
+			Busy.IsRunning = false;
+			Busy.IsVisible = false;
+			Refresh();
+
+			string message = outcome switch
+			{
+				PurchaseOutcome.AlreadyOwned or PurchaseOutcome.Purchased => "Đã khôi phục gói Pro.",
+				PurchaseOutcome.Error => _license.LastError ?? "Không khôi phục được.",
+				_ => "Không tìm thấy giao dịch Pro nào trước đó.",
+			};
+			await DisplayAlertAsync("Khôi phục", message, "OK");
+		}
+		finally { _nav.Exit(sender as View); }
 	}
 
-	private async void OnAboutTapped(object? sender, EventArgs e) => await Shell.Current.GoToAsync(nameof(AboutPage));
-	private async void OnPrivacyPolicyTapped(object? sender, EventArgs e) => await Shell.Current.GoToAsync(nameof(PrivacyPolicyPage));
-	private async void OnBackClicked(object? sender, EventArgs e) => await Shell.Current.GoToAsync("..");
+	private async void OnAboutTapped(object? sender, EventArgs e)
+	{
+		if (!_nav.TryEnter(sender as View)) return;
+		try { await Shell.Current.GoToAsync(nameof(AboutPage)); }
+		finally { _nav.Exit(sender as View); }
+	}
+
+	private async void OnPrivacyPolicyTapped(object? sender, EventArgs e)
+	{
+		if (!_nav.TryEnter(sender as View)) return;
+		try { await Shell.Current.GoToAsync(nameof(PrivacyPolicyPage)); }
+		finally { _nav.Exit(sender as View); }
+	}
+
+	private async void OnBackClicked(object? sender, EventArgs e)
+	{
+		if (!_nav.TryEnter(sender as View)) return;
+		try { await Shell.Current.GoToAsync(".."); }
+		finally { _nav.Exit(sender as View); }
+	}
 }

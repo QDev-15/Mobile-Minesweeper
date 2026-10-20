@@ -5,8 +5,8 @@ namespace Minesweeper;
 /// DocScanner's own RealAdsConfig.cs.</summary>
 public static class RealAdsConfig
 {
-    public const string BannerAdUnitId = "REPLACE_ME_BANNER";
-    public const string InterstitialAdUnitId = "REPLACE_ME_INTERSTITIAL";
+    public const string BannerAdUnitId = "koeimrjl20oc3nf4";
+    public const string InterstitialAdUnitId = "pzsdsskowseuj9no";
 
     public static bool HasRealIds => !BannerAdUnitId.Contains("REPLACE_ME") && !InterstitialAdUnitId.Contains("REPLACE_ME");
 }

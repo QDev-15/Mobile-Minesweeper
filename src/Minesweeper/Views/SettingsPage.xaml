@@ -4,7 +4,7 @@
              xmlns:views="clr-namespace:Minesweeper.Views"
              x:Class="Minesweeper.Views.SettingsPage"
              Title="Cài đặt"
-             BackgroundColor="{StaticResource MilkBackground}"
+             BackgroundColor="{DynamicResource MilkBackground}"
              Shell.NavBarIsVisible="False">
 
     <ContentPage.Resources>
@@ -12,7 +12,7 @@
             <Setter Property="FontSize" Value="12.5" />
             <Setter Property="FontFamily" Value="OpenSansSemibold" />
             <Setter Property="Margin" Value="20,18,20,6" />
-            <Setter Property="TextColor" Value="{StaticResource Primary}" />
+            <Setter Property="TextColor" Value="{DynamicResource Primary}" />
         </Style>
     </ContentPage.Resources>
 
@@ -31,10 +31,10 @@
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                             <Button Text="Mua Pro" Clicked="OnBuyClicked" Style="{StaticResource PrimaryButton}" FontSize="13" HeightRequest="42" />
                             <Button Grid.Column="1" Text="Khôi phục giao dịch" Clicked="OnRestoreClicked" BackgroundColor="Transparent"
-                                    BorderWidth="1" BorderColor="{StaticResource Primary}" TextColor="{StaticResource Primary}"
+                                    BorderWidth="1" BorderColor="{DynamicResource Primary}" TextColor="{DynamicResource Primary}"
                                     FontSize="12" HeightRequest="42" CornerRadius="21" />
                         </Grid>
-                        <ActivityIndicator x:Name="Busy" IsRunning="False" IsVisible="False" Color="{StaticResource Primary}" />
+                        <ActivityIndicator x:Name="Busy" IsRunning="False" IsVisible="False" Color="{DynamicResource Primary}" />
                         <Label Style="{StaticResource Hint}" Text="• Không còn quảng cáo" />
                         <Label Style="{StaticResource Hint}" Text="• Gợi ý (Hint) không giới hạn" />
                         <Label Style="{StaticResource Hint}" Text="• Mua một lần, dùng vĩnh viễn" />
@@ -66,15 +66,15 @@
                                 <Label Text="Thông tin ứng dụng" />
                                 <Label x:Name="VersionCaptionLabel" Style="{StaticResource Hint}" />
                             </VerticalStackLayout>
-                            <Label Grid.Column="1" Text="{x:Static views:Icons.ChevronRight}" FontFamily="Icons" FontSize="18" TextColor="{StaticResource InkSoft}" VerticalOptions="Center" />
+                            <Label Grid.Column="1" Text="{x:Static views:Icons.ChevronRight}" FontFamily="Icons" FontSize="18" TextColor="{DynamicResource InkSoft}" VerticalOptions="Center" />
                         </Grid>
-                        <BoxView HeightRequest="1" BackgroundColor="{StaticResource HairLine}" Margin="0,10" />
+                        <BoxView HeightRequest="1" BackgroundColor="{DynamicResource HairLine}" Margin="0,10" />
                         <Grid ColumnDefinitions="*,Auto" Padding="0,4">
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnPrivacyPolicyTapped" />
                             </Grid.GestureRecognizers>
                             <Label Text="Chính sách quyền riêng tư" VerticalOptions="Center" />
-                            <Label Grid.Column="1" Text="{x:Static views:Icons.ChevronRight}" FontFamily="Icons" FontSize="18" TextColor="{StaticResource InkSoft}" VerticalOptions="Center" />
+                            <Label Grid.Column="1" Text="{x:Static views:Icons.ChevronRight}" FontFamily="Icons" FontSize="18" TextColor="{DynamicResource InkSoft}" VerticalOptions="Center" />
                         </Grid>
                     </VerticalStackLayout>
                 </Border>

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:views="clr-namespace:Minesweeper.Views"
              x:Class="Minesweeper.Views.LevelsPage"
-             BackgroundColor="{StaticResource MilkBackground}"
+             BackgroundColor="{DynamicResource MilkBackground}"
              Shell.NavBarIsVisible="False">
 
     <Grid RowDefinitions="Auto,*">
@@ -15,29 +15,68 @@
             </VerticalStackLayout>
         </Grid>
 
+        <!-- Span 4 (was 5) + taller tiles (was 64) per the owner's "100 màn hiển thị ô rộng hơn để rõ hơn"
+             direction (2026-10-20): fewer, bigger columns reads clearer across 100 tiles than more, smaller
+             ones, and the 3-star row below the number needs the extra height to stay legible. -->
         <CollectionView x:Name="LevelsCollection" Grid.Row="1" Margin="14,4,14,14">
             <CollectionView.ItemsLayout>
-                <GridItemsLayout Orientation="Vertical" Span="5" HorizontalItemSpacing="8" VerticalItemSpacing="8" />
+                <GridItemsLayout Orientation="Vertical" Span="4" HorizontalItemSpacing="9" VerticalItemSpacing="9" />
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="views:LevelItem">
-                    <Border BackgroundColor="{StaticResource SurfaceTonal}" Stroke="Transparent" StrokeThickness="1"
-                            StrokeShape="RoundRectangle 12" Padding="0" HeightRequest="64" Opacity="{Binding CardOpacity}">
+                    <Border BackgroundColor="{DynamicResource SurfaceTonal}" Stroke="Transparent" StrokeThickness="1"
+                            StrokeShape="RoundRectangle 14" Padding="0" HeightRequest="78" Opacity="{Binding CardOpacity}">
                         <Border.Shadow>
                             <Shadow Brush="Black" Opacity="0.08" Radius="10" Offset="0,3" />
                         </Border.Shadow>
                         <Border.Triggers>
                             <DataTrigger TargetType="Border" Binding="{Binding IsNext}" Value="True">
-                                <Setter Property="Stroke" Value="{StaticResource Accent}" />
+                                <Setter Property="Stroke" Value="{DynamicResource Accent}" />
                                 <Setter Property="StrokeThickness" Value="2.5" />
                             </DataTrigger>
                         </Border.Triggers>
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnLevelTapped" />
                         </Border.GestureRecognizers>
-                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="2">
-                            <Label Text="{Binding NumberText}" FontFamily="OpenSansSemibold" FontSize="16" HorizontalOptions="Center" />
-                            <Label Text="{Binding StarsText}" FontSize="10" TextColor="{StaticResource Accent}" HorizontalOptions="Center" />
+                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
+                            <!-- Number when unlocked; the Icons.Lock glyph (so it needs the Icons font instead
+                                 of the default) when not — see LevelItem.NumberText. -->
+                            <Label Text="{Binding NumberText}" FontFamily="OpenSansSemibold" FontSize="19" HorizontalOptions="Center">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding Unlocked}" Value="False">
+                                        <Setter Property="FontFamily" Value="Icons" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                            <!-- Always 3 stars (owner's direction: a not-yet-played tile, locked or not,
+                                 defaults to 3 GRAY stars so the max achievable is obvious up front; each one
+                                 that is actually earned swaps to the filled gold star). -->
+                            <HorizontalStackLayout Spacing="2" HorizontalOptions="Center">
+                                <Label Text="{x:Static views:Icons.StarBorder}" FontFamily="Icons" FontSize="10" TextColor="{DynamicResource InkSoft}">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding Star1}" Value="True">
+                                            <Setter Property="Text" Value="{x:Static views:Icons.Star}" />
+                                            <Setter Property="TextColor" Value="{DynamicResource Accent}" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                                <Label Text="{x:Static views:Icons.StarBorder}" FontFamily="Icons" FontSize="10" TextColor="{DynamicResource InkSoft}">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding Star2}" Value="True">
+                                            <Setter Property="Text" Value="{x:Static views:Icons.Star}" />
+                                            <Setter Property="TextColor" Value="{DynamicResource Accent}" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                                <Label Text="{x:Static views:Icons.StarBorder}" FontFamily="Icons" FontSize="10" TextColor="{DynamicResource InkSoft}">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding Star3}" Value="True">
+                                            <Setter Property="Text" Value="{x:Static views:Icons.Star}" />
+                                            <Setter Property="TextColor" Value="{DynamicResource Accent}" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </HorizontalStackLayout>
                         </VerticalStackLayout>
                     </Border>
                 </DataTemplate>

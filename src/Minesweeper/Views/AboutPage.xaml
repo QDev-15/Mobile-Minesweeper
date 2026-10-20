@@ -4,7 +4,7 @@
              xmlns:views="clr-namespace:Minesweeper.Views"
              x:Class="Minesweeper.Views.AboutPage"
              Title="Giới thiệu"
-             BackgroundColor="{StaticResource MilkBackground}"
+             BackgroundColor="{DynamicResource MilkBackground}"
              Shell.NavBarIsVisible="False">
 
     <Grid RowDefinitions="Auto,*">
@@ -16,7 +16,7 @@
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="20" Spacing="10">
                 <Label Text="Dò Mìn" Style="{StaticResource DisplayText}" FontSize="24" />
-                <Label x:Name="VersionLabel" TextColor="{StaticResource InkSoft}" />
+                <Label x:Name="VersionLabel" TextColor="{DynamicResource InkSoft}" />
                 <Label Text="Minesweeper cổ điển với 2 điểm khác: chế độ Không đoán mù (mọi bàn giải được bằng logic thuần) và Thử thách hôm nay (bàn giống nhau cho mọi người mỗi ngày)." Margin="0,10,0,0" />
                 <Label Text="Phát triển bởi Nguyễn Hữu Quỳnh." Margin="0,10,0,0" />
             </VerticalStackLayout>

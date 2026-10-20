@@ -15,6 +15,13 @@ public partial class GamePage : ContentPage
 	private readonly IAdsService _ads;
 	private readonly SavedGameStore _saves;
 	private readonly LevelProgressStore _levels;
+	private readonly ISoundService _sound;
+	private readonly DailyProgressStore _dailyProgress;
+	private readonly ActionGuard _nav = new();
+	// Separate from _nav: _nav is held across OnRestartClicked's confirm dialog + its own call into
+	// StartNewBoard, so if board generation used _nav too, a Daily restart would deadlock against itself
+	// (TryEnter already held, by the very call that is trying to start the new board it guards).
+	private readonly ActionGuard _boardGen = new();
 
 	private DifficultyLevel _level = DifficultyLevel.Easy;
 	private bool _noGuess;
@@ -40,7 +47,7 @@ public partial class GamePage : ContentPage
 
 	// Shared instance: a Shadow is a reference type and MAUI is fine with the same one assigned to many
 	// Border.Shadow properties, so this avoids one allocation per cell per refresh on a 480-cell Hard board.
-	private static readonly Shadow HiddenShadow = new() { Brush = Colors.Black, Opacity = 0.28f, Radius = 3, Offset = new Point(0, 1.5) };
+	private static readonly Shadow HiddenShadow = new() { Brush = Colors.Black, Opacity = 0.32f, Radius = 5, Offset = new Point(0, 2.5) };
 
 	public string DifficultyParam
 	{
@@ -67,13 +74,39 @@ public partial class GamePage : ContentPage
 		set => int.TryParse(Uri.UnescapeDataString(value), out _levelNumber);
 	}
 
-	public GamePage(GameStatsStore stats, IAdsService ads, SavedGameStore saves, LevelProgressStore levels)
+	public GamePage(GameStatsStore stats, IAdsService ads, SavedGameStore saves, LevelProgressStore levels, ISoundService sound, DailyProgressStore dailyProgress)
 	{
 		InitializeComponent();
 		_stats = stats;
 		_ads = ads;
 		_saves = saves;
 		_levels = levels;
+		_sound = sound;
+		_dailyProgress = dailyProgress;
+		BoardArea.SizeChanged += OnBoardAreaSizeChanged;
+	}
+
+	// ===== Board sizing =====
+
+	// BoardArea.Width/Height read -1 (not yet measured) for a little while after OnAppearing first runs --
+	// Shell's page-transition means the layout pass that gives BoardArea its real pixel size lands AFTER
+	// OnAppearing returns, not before. StartNewBoard/ResumeFrom route everything that depends on a real cell
+	// size through this instead of calling it directly, so the board gets built against BoardArea's actual
+	// measured size (whatever that turns out to be) rather than a guess.
+	private Action? _pendingBoardSetup;
+
+	private void RunWhenBoardAreaSized(Action action)
+	{
+		if (BoardArea.Width > 0 && BoardArea.Height > 0) { action(); return; }
+		_pendingBoardSetup = action;
+	}
+
+	private void OnBoardAreaSizeChanged(object? sender, EventArgs e)
+	{
+		if (_pendingBoardSetup is not { } action) return;
+		if (BoardArea.Width <= 0 || BoardArea.Height <= 0) return;
+		_pendingBoardSetup = null;
+		action();
 	}
 
 	protected override void OnAppearing()
@@ -117,10 +150,18 @@ public partial class GamePage : ContentPage
 	{
 		if (IsMidGame())
 		{
-			_ = ConfirmAndLeaveAsync();
+			// Shares _nav with OnBackClicked (below): a hardware-back mashed alongside the on-screen back
+			// button must not show the leave-confirm dialog twice or race two GoToAsync(".." ) pops.
+			if (_nav.TryEnter()) _ = LeaveAndExitGuardAsync();
 			return true;
 		}
 		return base.OnBackButtonPressed();
+	}
+
+	private async Task LeaveAndExitGuardAsync()
+	{
+		try { await ConfirmAndLeaveAsync(); }
+		finally { _nav.Exit(); }
 	}
 
 	private bool IsMidGame() => _boardStarted && _engine is { Status: GameStatus.Playing };
@@ -139,11 +180,23 @@ public partial class GamePage : ContentPage
 		TimerLabel.Text = "0:00";
 		MineCountLabel.Text = _difficulty.MineCount.ToString();
 
-		BuildEmptyBoard();
-
-		if (_isDaily)
+		RunWhenBoardAreaSized(() =>
 		{
-			Board? board = DailyChallenge.BoardFor(DateOnly.FromDateTime(DateTime.UtcNow));
+			BuildEmptyBoard();
+			if (_isDaily && _boardGen.TryEnter()) _ = LoadDailyBoardAsync();
+		});
+	}
+
+	// The Daily Challenge is always No-guess (DailyChallenge.BoardFor), so this always pays the same
+	// potentially-slow generation cost as StartGameFromAsync, and for the same reason runs off the UI thread
+	// behind the same loading scrim rather than blocking the page that just navigated in.
+	private async Task LoadDailyBoardAsync()
+	{
+		ShowBoardLoading(true);
+		try
+		{
+			DateOnly date = DateOnly.FromDateTime(DateTime.UtcNow);
+			Board? board = await Task.Run(() => DailyChallenge.BoardFor(date));
 			if (board == null)
 			{
 				// Astronomically unlikely (plan section 3.3) -- fall back to a normal Medium game rather
@@ -159,6 +212,11 @@ public partial class GamePage : ContentPage
 				RefreshAllCells();
 				StartTimer();
 			}
+		}
+		finally
+		{
+			ShowBoardLoading(false);
+			_boardGen.Exit();
 		}
 	}
 
@@ -176,16 +234,31 @@ public partial class GamePage : ContentPage
 
 		DailyBadge.IsVisible = _isDaily;
 		SetFlagMode(false);
-		BuildEmptyBoard();
-		_engine = SavedGameStore.ToEngine(save);
-		_boardStarted = true;
-		_elapsedSeconds = save.ElapsedSeconds;
-		TimerLabel.Text = $"{_elapsedSeconds / 60}:{_elapsedSeconds % 60:00}";
-		RefreshAllCells();
 
-		if (_engine.Status == GameStatus.Playing) StartTimer();
-		else ShowPlayingControls(); // a saved game is never kept once Won/Lost (see HandleGameEndIfNeeded) -- defensive only
+		RunWhenBoardAreaSized(() =>
+		{
+			BuildEmptyBoard();
+			_engine = SavedGameStore.ToEngine(save);
+			_boardStarted = true;
+			_elapsedSeconds = save.ElapsedSeconds;
+			TimerLabel.Text = $"{_elapsedSeconds / 60}:{_elapsedSeconds % 60:00}";
+			RefreshAllCells();
+
+			if (_engine.Status == GameStatus.Playing) StartTimer();
+			else ShowPlayingControls(); // a saved game is never kept once Won/Lost (see HandleGameEndIfNeeded) -- defensive only
+		});
 	}
+
+	// Hard floor only (never the design target): guarantees availableWidth/Height and the final cell size can
+	// never divide out to zero/negative even in a pathological measurement. BoardAreaMargin is the "margin
+	// 10px về 4 cạnh" the owner asked for -- taken out of the available space BEFORE dividing by Width/Height,
+	// not added as XAML Padding afterwards, or a board sized to exactly fill the screen would overflow it by
+	// the padding amount. BoardCellMaxSize keeps Easy/Medium compact and "classic-sized" rather than stretching
+	// -- Hard's own raw size very rarely reaches it on a real phone, so Hard still ends up ~filling the screen
+	// per the "ở loại khó thì full width/height" direction, without a separate Hard-only code path.
+	private const double BoardCellMinSize = 4;
+	private const double BoardCellMaxSize = 42;
+	private const double BoardAreaMargin = 10;
 
 	private void BuildEmptyBoard()
 	{
@@ -193,7 +266,12 @@ public partial class GamePage : ContentPage
 		BoardHost.RowDefinitions.Clear();
 		BoardHost.ColumnDefinitions.Clear();
 
-		double cellSize = _difficulty.Width > 20 ? 26 : 38;
+		double availableWidth = Math.Max(1, BoardArea.Width - BoardAreaMargin * 2);
+		double availableHeight = Math.Max(1, BoardArea.Height - BoardAreaMargin * 2);
+		double cellSize = Math.Clamp(
+			Math.Min(availableWidth / _difficulty.Width, availableHeight / _difficulty.Height),
+			BoardCellMinSize, BoardCellMaxSize);
+		double fontSize = Math.Clamp(cellSize * 0.42, 9, 17);
 
 		for (int x = 0; x < _difficulty.Width; x++) BoardHost.ColumnDefinitions.Add(new ColumnDefinition(cellSize));
 		for (int y = 0; y < _difficulty.Height; y++) BoardHost.RowDefinitions.Add(new RowDefinition(cellSize));
@@ -201,6 +279,14 @@ public partial class GamePage : ContentPage
 		_cellBorders = new Border[_difficulty.Width, _difficulty.Height];
 		_cellLabels = new Label[_difficulty.Width, _difficulty.Height];
 		_priorCellState = new CellState?[_difficulty.Width, _difficulty.Height];
+
+		// Deliberately BackgroundColor, not a gradient Background Brush: CommunityToolkit's TouchBehavior
+		// (below) only ever writes PressedBackgroundColor into .BackgroundColor (confirmed by inspecting
+		// GestureManager in the installed package, 2026-10-20 -- it has no Brush-aware counterpart), and a
+		// non-null Border.Background Brush always wins over BackgroundColor when both are set. A gradient
+		// fill here would render fine at rest but silently swallow the press-flash every time -- the "raised"
+		// look instead comes from HiddenRaisedStroke + HiddenShadow below, which don't touch either property.
+		Color hiddenColor = (Color)Application.Current!.Resources["CellHidden"];
 
 		for (int x = 0; x < _difficulty.Width; x++)
 		{
@@ -211,19 +297,21 @@ public partial class GamePage : ContentPage
 					HorizontalOptions = LayoutOptions.Center,
 					VerticalOptions = LayoutOptions.Center,
 					FontFamily = "OpenSansSemibold",
-					FontSize = _difficulty.Width > 20 ? 12 : 15,
+					FontSize = fontSize,
 				};
 				var border = new Border
 				{
-					BackgroundColor = (Color)Application.Current!.Resources["CellHidden"],
-					Stroke = (Color)Application.Current.Resources["MilkBackground"],
-					StrokeThickness = 1,
-					StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 3 },
+					BackgroundColor = hiddenColor,
+					Stroke = hiddenColor.AddLuminosity(0.22f),
+					StrokeThickness = 1.5,
+					StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 6 },
 					Content = label,
 					Padding = 0,
-					// A subtle raised-tile shadow, visible while hidden; RefreshAllCells turns it off the
-					// moment a cell is revealed so the board reads as "this one is now flat/open" at a
-					// glance, not just by its color changing.
+					// A beveled-highlight edge (Stroke, above) + a stronger drop shadow (below) stand in for a
+					// real raised-button bevel (owner's direction, 2026-10-20: a hidden cell should read as a
+					// physical, raised tile, not a flat sharp-cornered square) -- RefreshAllCells turns the
+					// shadow off the moment a cell is revealed so the board reads as "this one is now flat/
+					// open" at a glance, not just by its color changing.
 					Shadow = HiddenShadow,
 				};
 
@@ -263,11 +351,13 @@ public partial class GamePage : ContentPage
 	private (int X, int Y)? _lastTapCell;
 	private DateTime _lastTapUtc;
 
-	private void OnCellPrimaryTap(int x, int y)
+	private async void OnCellPrimaryTap(int x, int y)
 	{
 		if (!_boardStarted)
 		{
-			StartGameFrom(x, y);
+			if (!_boardGen.TryEnter()) return; // already generating (first tap, or the Daily board still loading) -- ignore extra taps instead of starting a second generation
+			try { await StartGameFromAsync(x, y); }
+			finally { _boardGen.Exit(); }
 			return;
 		}
 
@@ -278,9 +368,11 @@ public partial class GamePage : ContentPage
 		_lastTapCell = isChord ? null : (x, y); // reset on chord so a 3rd quick tap starts fresh, not another chord
 		_lastTapUtc = now;
 
+		bool isFlagAction = !isChord && _flagMode;
 		if (isChord) engine.Chord(x, y);
 		else if (_flagMode) engine.ToggleFlag(x, y);
 		else engine.Reveal(x, y);
+		PlayActionFeedback(engine, isFlagAction);
 
 		RefreshAllCells();
 		HandleGameEndIfNeeded();
@@ -292,23 +384,52 @@ public partial class GamePage : ContentPage
 		if (!_boardStarted) return;
 		if (_engine is not { Status: GameStatus.Playing } engine) return;
 		engine.ToggleFlag(x, y);
+		PlayActionFeedback(engine, isFlagAction: true);
 		RefreshAllCells();
 		SaveProgressIfPlaying();
 	}
 
-	private void StartGameFrom(int firstX, int firstY)
+	// Reveal/flag/chord tick -- skipped on a loss (HandleGameEndIfNeeded's own explosion sound + strong
+	// buzz takes over instead, so the player never hears a cheerful pop layered under the mine going off).
+	// Still plays alongside a win (a quick pop right under the win fanfare reads fine, unlike a pop under an
+	// explosion), so only GameStatus.Lost is excluded here.
+	private void PlayActionFeedback(GameEngine engine, bool isFlagAction)
 	{
-		Board board = _noGuess
-			? BoardGenerator.GenerateNoGuess(_difficulty, firstX, firstY, Random.Shared) ?? BoardGenerator.Generate(_difficulty, firstX, firstY, Random.Shared)
-			: BoardGenerator.Generate(_difficulty, firstX, firstY, Random.Shared);
+		if (engine.Status == GameStatus.Lost) return;
+		if (isFlagAction) _sound.PlayFlag();
+		else _sound.PlayReveal();
+		HapticFeedback.Default.Perform(HapticFeedbackType.Click);
+	}
 
-		_engine = new GameEngine(board);
-		_boardStarted = true;
-		_engine.Reveal(firstX, firstY);
-		RefreshAllCells();
-		StartTimer();
-		HandleGameEndIfNeeded();
-		SaveProgressIfPlaying();
+	private async Task StartGameFromAsync(int firstX, int firstY)
+	{
+		ShowBoardLoading(true);
+		try
+		{
+			// Task.Run, not a direct call: No-guess generation can retry board layouts up to 400 times (each a
+			// full solve simulation) before giving up, real CPU time on a slow device -- off the UI thread so
+			// the tap that triggered it doesn't read as the app hanging (owner's report, 2026-10-20).
+			Difficulty difficulty = _difficulty;
+			bool noGuess = _noGuess;
+			Board board = await Task.Run(() => noGuess
+				? BoardGenerator.GenerateNoGuess(difficulty, firstX, firstY, Random.Shared) ?? BoardGenerator.Generate(difficulty, firstX, firstY, Random.Shared)
+				: BoardGenerator.Generate(difficulty, firstX, firstY, Random.Shared));
+
+			_engine = new GameEngine(board);
+			_boardStarted = true;
+			_engine.Reveal(firstX, firstY);
+			RefreshAllCells();
+			StartTimer();
+			HandleGameEndIfNeeded();
+			SaveProgressIfPlaying();
+		}
+		finally { ShowBoardLoading(false); }
+	}
+
+	private void ShowBoardLoading(bool loading)
+	{
+		BoardLoadingOverlay.IsVisible = loading;
+		BoardLoadingSpinner.IsRunning = loading;
 	}
 
 	// ===== Save/resume =====
@@ -325,7 +446,11 @@ public partial class GamePage : ContentPage
 	{
 		if (_engine is not { } engine || _cellBorders == null || _cellLabels == null || _priorCellState == null) return;
 
-		var hiddenColor = (Color)Application.Current!.Resources["CellHidden"];
+		// See BuildEmptyBoard's comment on why this is BackgroundColor + Stroke, not a Background Brush:
+		// TouchBehavior's PressedBackgroundColor only ever writes BackgroundColor, which a non-null Background
+		// Brush would otherwise always render over.
+		Color hiddenColor = (Color)Application.Current!.Resources["CellHidden"];
+		Color hiddenStroke = hiddenColor.AddLuminosity(0.22f);
 		var revealedColor = (Color)Application.Current.Resources["CellRevealed"];
 		var mineColor = (Color)Application.Current.Resources["CellMine"];
 
@@ -349,11 +474,13 @@ public partial class GamePage : ContentPage
 				{
 					case CellState.Hidden:
 						border.BackgroundColor = hiddenColor;
+						border.Stroke = hiddenStroke;
 						border.Shadow = HiddenShadow;
 						label.Text = string.Empty;
 						break;
 					case CellState.Flagged:
 						border.BackgroundColor = hiddenColor;
+						border.Stroke = hiddenStroke;
 						border.Shadow = HiddenShadow;
 						label.FontFamily = "Icons"; // Material glyph (Views/Icons.cs) -- no font-icon exists for a mine, that one case stays the 💣 emoji below
 						label.Text = Icons.Flag;
@@ -361,6 +488,7 @@ public partial class GamePage : ContentPage
 						break;
 					case CellState.Revealed:
 						int number = engine.NumberAt(x, y);
+						border.Stroke = (Color)Application.Current!.Resources["MilkBackground"]; // flat/sunken, not raised: back to the plain grid-line stroke BuildEmptyBoard no longer sets, since a revealed cell has no bevel
 						border.Shadow = null!; // flat the instant it opens: null is valid at runtime to clear a Border's shadow, just not reflected in its (non-nullable) property type
 						if (number == -1)
 						{
@@ -408,11 +536,27 @@ public partial class GamePage : ContentPage
 	private const double CellPopStartScale = 0.8;
 	private const int PopAnimationCap = 60;
 
-	private static async Task AnimateCellPopAsync(Border border)
+	// A single combined Animation (not two independent ScaleToAsync/FadeToAsync calls via Task.WhenAll) --
+	// found on a real device, 2026-10-20: two concurrent ...ToAsync calls on the SAME view intermittently left
+	// Opacity stuck near 0 (cell content nearly invisible, permanently, not just mid-animation), on this MAUI
+	// build (10.0.90). Animation.Add lets both properties share one Commit/one ticker instead of two competing
+	// ones, and the `finished` callback is a hard safety net: whatever the interpolation did, Scale/Opacity
+	// are forced to their real resting values the moment it ends, so this can never leave a cell stuck faded.
+	private static Task AnimateCellPopAsync(Border border)
 	{
-		await Task.WhenAll(
-			border.ScaleToAsync(1, 140, Easing.CubicOut),
-			border.FadeToAsync(1, 110, Easing.CubicOut));
+		var tcs = new TaskCompletionSource();
+		double startScale = border.Scale;
+		double startOpacity = border.Opacity;
+		var animation = new Animation();
+		animation.Add(0, 1, new Animation(v => border.Scale = v, startScale, 1));
+		animation.Add(0, 1, new Animation(v => border.Opacity = v, startOpacity, 1));
+		animation.Commit(border, "CellPop", length: 140, easing: Easing.CubicOut, finished: (_, _) =>
+		{
+			border.Scale = 1;
+			border.Opacity = 1;
+			tcs.TrySetResult();
+		});
+		return tcs.Task;
 	}
 
 	private static Color NumberColor(int number) => number switch
@@ -480,6 +624,7 @@ public partial class GamePage : ContentPage
 
 		if (engine.Status == GameStatus.Won)
 		{
+			_sound.PlayWin();
 			ResultTitleLabel.Text = "Bạn đã thắng!";
 
 			if (_levelNumber > 0)
@@ -493,6 +638,7 @@ public partial class GamePage : ContentPage
 			else
 			{
 				bool isRecord = !_isDaily && _stats.RecordWin(_level, _elapsedSeconds);
+				if (_isDaily) _dailyProgress.MarkCompleted(DateOnly.FromDateTime(DateTime.UtcNow));
 				StarsLabel.IsVisible = false;
 				ResultDetailLabel.Text = isRecord
 					? $"Kỷ lục mới: {_elapsedSeconds / 60}:{_elapsedSeconds % 60:00}"
@@ -501,6 +647,8 @@ public partial class GamePage : ContentPage
 		}
 		else
 		{
+			_sound.PlayExplosion();
+			if (Vibration.Default.IsSupported) Vibration.Default.Vibrate(TimeSpan.FromMilliseconds(300));
 			ResultTitleLabel.Text = "Trúng mìn rồi!";
 			ResultDetailLabel.Text = $"Thời gian: {_elapsedSeconds / 60}:{_elapsedSeconds % 60:00}";
 			StarsLabel.IsVisible = false;
@@ -520,12 +668,18 @@ public partial class GamePage : ContentPage
 		Border border = _cellBorders[cell.X, cell.Y];
 		border.Stroke = (Color)Application.Current!.Resources["Accent"];
 		border.StrokeThickness = 3;
+		_sound.PlayHint();
 	}
 
 	private async void OnRestartClicked(object? sender, EventArgs e)
 	{
-		bool confirm = await DisplayAlertAsync("Chơi lại?", "Bàn hiện tại sẽ mất.", "Chơi lại", "Huỷ");
-		if (confirm) StartNewBoard();
+		if (!_nav.TryEnter(sender as View)) return;
+		try
+		{
+			bool confirm = await DisplayAlertAsync("Chơi lại?", "Bàn hiện tại sẽ mất.", "Chơi lại", "Huỷ");
+			if (confirm) StartNewBoard();
+		}
+		finally { _nav.Exit(sender as View); }
 	}
 
 	private void OnRevealModeClicked(object? sender, EventArgs e) => SetFlagMode(false);
@@ -541,7 +695,12 @@ public partial class GamePage : ContentPage
 		FlagModeButton.TextColor = flagMode ? Colors.White : primary;
 	}
 
-	private async void OnBackClicked(object? sender, EventArgs e) => await ConfirmAndLeaveAsync();
+	private async void OnBackClicked(object? sender, EventArgs e)
+	{
+		if (!_nav.TryEnter(sender as View)) return;
+		try { await ConfirmAndLeaveAsync(); }
+		finally { _nav.Exit(sender as View); }
+	}
 
 	private async Task ConfirmAndLeaveAsync()
 	{

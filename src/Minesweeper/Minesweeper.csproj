@@ -19,7 +19,13 @@
 		<ApplicationTitle>Dò Mìn</ApplicationTitle>
 		<ApplicationId>com.tonyq.minesweeper</ApplicationId>
 
-		<!-- Versions. Bump ApplicationVersion (Android versionCode) on every build going to a device or to Play. -->
+		<!-- Versions. Bump ApplicationVersion (Android versionCode) on every build going to a device or to Play.
+		     Release .aab, run from the repo root (test ads — the default, see AdsMode below):
+		       dotnet publish src/Minesweeper -f net10.0-android -c Release -p:AndroidPackageFormat=aab
+		     (AndroidPackageFormat=aab is already the default here via release\Signing.props, so it can be left
+		     off; kept in the example for the same clarity as PdfReader/DocScanner's own command, where it is
+		     not already defaulted.) Lands signed at bin\Release\net10.0-android\publish\ and, via
+		     CopyReleaseAabWithVersion below, also at release\Minesweeper-<version>-<code>\. -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>2</ApplicationVersion>
 
@@ -29,9 +35,10 @@
 		     if not passed on the command line) always requests the provider's own test/sandbox ad units,
 		     whatever is being built, so a Release .aab uploaded to a Play internal/closed testing track
 		     still shows test ads and can never trigger an invalid-click policy strike. Only "Pro" switches
-		     to the real ids (RealAdsConfig.cs), and only when explicitly passed: same pattern as PdfReader/
-		     DocScanner (not yet wired here: Minesweeper has no LevelPlay app/ad units of its own yet, see
-		     MINESWEEPER-PLAN.md section 7). -->
+		     to the real ids (RealAdsConfig.cs), and only when explicitly passed:
+		       dotnet publish src/Minesweeper -f net10.0-android -c Release -p:AndroidPackageFormat=aab -p:AdsMode=Pro
+		     same pattern as PdfReader/DocScanner (not yet wired here: Minesweeper has no LevelPlay app/ad units
+		     of its own yet, see MINESWEEPER-PLAN.md section 7, so this flag has no real ids to switch to today). -->
 		<AdsMode Condition="'$(AdsMode)' == ''">Dev</AdsMode>
 		<DefineConstants Condition="'$(AdsMode)' == 'Pro'">$(DefineConstants);ADS_MODE_PRO</DefineConstants>
 
@@ -77,15 +84,19 @@
 			<_ReleaseDir>release\$(_ReleaseName)\</_ReleaseDir>
 			<_ReleaseMapping>$(OutputPath)mapping.txt</_ReleaseMapping>
 		</PropertyGroup>
-		<!-- Warn when the build was NOT obfuscated (SDK older than 36.1.118 injects -dontobfuscate): such an AAB would keep
-		     Play's "Obfuscation" below 25%. -->
+		<!-- Warn when the build was NOT obfuscated (this project does not set AndroidR8ObfuscationMode at all
+		     yet, unlike PdfReader/DocScanner, so this always fires today — a reminder, not a blocker): such an
+		     AAB keeps Play's "DEX code optimization" obfuscation score below 25%. There is no build-release.ps1
+		     in this repo (that script, which points dotnet at a newer Android SDK supporting
+		     AndroidR8ObfuscationMode, only exists in the sibling PdfReader/DocScanner repos) — adopting real
+		     obfuscation here means doing the same setup there first. -->
 		<ReadLinesFromFile File="$(IntermediateOutputPath)proguard\proguard_xamarin.cfg" Condition="Exists('$(IntermediateOutputPath)proguard\proguard_xamarin.cfg')">
 			<Output TaskParameter="Lines" ItemName="_ProguardXamarinLine" />
 		</ReadLinesFromFile>
 		<ItemGroup>
 			<_NoObfuscationLine Include="@(_ProguardXamarinLine)" Condition="'%(Identity)' == '-dontobfuscate'" />
 		</ItemGroup>
-		<Warning Condition="'@(_NoObfuscationLine)' != ''" Text="This build is NOT obfuscated (SDK without AndroidR8ObfuscationMode). Use build-release.ps1 for any AAB that goes to Google Play." />
+		<Warning Condition="'@(_NoObfuscationLine)' != ''" Text="This build is NOT obfuscated (AndroidR8ObfuscationMode not set in this project; see the comment above)." />
 		<MakeDir Directories="$(_ReleaseDir)" Condition="'@(_SignedAab)' != ''" />
 		<Copy SourceFiles="@(_SignedAab)" DestinationFiles="$(_ReleaseDir)$(_ReleaseName).aab" Condition="'@(_SignedAab)' != ''" />
 		<Copy SourceFiles="$(_ReleaseMapping)" DestinationFiles="$(_ReleaseDir)mapping.txt" Condition="'@(_SignedAab)' != '' AND Exists('$(_ReleaseMapping)')" />
@@ -106,6 +117,11 @@
 		<!-- MIT: Play Billing wrapper for the Pro unlock (Services/LicenseService.cs), same pattern as
 		     PdfReader/DocScanner. -->
 		<PackageReference Include="Plugin.InAppBilling" Version="10.0.0" />
+		<!-- MIT: short gameplay sound effects (Services/SoundService.cs) — same author/ecosystem as
+		     Plugin.InAppBilling above. Targets net9.0-android in its own nuspec but resolves fine under this
+		     project's net10.0-android (newer TFM consuming an older-targeted MAUI lib), confirmed by building
+		     after adding it, 2026-10-20. -->
+		<PackageReference Include="Plugin.Maui.Audio" Version="4.0.0" />
 		<!-- Pins androidx.fragment to one resolved version: without it, AdsService.LevelPlay's own
 		     transitive fragment-ktx.aar and the plain fragment.aar pulled in elsewhere resolve to two
 		     different versions, and R8 fails with "Type androidx.fragment.app.FragmentManagerKt is defined

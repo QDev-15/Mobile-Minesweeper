@@ -7,9 +7,9 @@ namespace Minesweeper;
 /// default to ship M0-M3 with before M4 (plan section 8) sets up the real LevelPlay app.</summary>
 public static class LevelPlayConfig
 {
-    public const string AppKey = "REPLACE_ME_LEVELPLAY_APP_KEY";
-    public const string BannerAdUnitId = "REPLACE_ME_BANNER_SANDBOX";
-    public const string InterstitialAdUnitId = "REPLACE_ME_INTERSTITIAL_SANDBOX";
+    public const string AppKey = "28decb375";
+    public const string BannerAdUnitId = "Minesweeper_Android_Banner";
+    public const string InterstitialAdUnitId = "Minesweeper_Android_Interstitial";
 
 #if DEBUG
     public const bool TestMode = true;

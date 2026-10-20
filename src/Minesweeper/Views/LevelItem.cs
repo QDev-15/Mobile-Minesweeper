@@ -13,8 +13,14 @@ public sealed class LevelItem
     /// 100-tile grid, not something the player has to hunt for.</summary>
     public required bool IsNext { get; init; }
 
-    public string NumberText => Unlocked ? Number.ToString() : "🔒";
-    public string StarsText => Stars > 0 ? new string('★', Stars) : string.Empty;
+    public string NumberText => Unlocked ? Number.ToString() : Icons.Lock;
+
+    // Always exactly 3 stars, win or lock: a locked tile's Stars is always 0, so these come out all-false on
+    // their own -- no separate "locked -> 3 gray stars" branch needed. LevelsPage.xaml's DataTrigger per star
+    // swaps StarBorder/gray for Star/Accent-gold only when that star is actually earned.
+    public bool Star1 => Stars >= 1;
+    public bool Star2 => Stars >= 2;
+    public bool Star3 => Stars >= 3;
 
     /// <summary>A locked tile needs to read as "not available yet" at a glance, not just differ by its icon
     /// -- dimming the whole card (background, border and icon together via Border.Opacity) is a cheaper and
