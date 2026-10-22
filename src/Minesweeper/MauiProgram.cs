@@ -1,6 +1,8 @@
 using AdsService;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using Microsoft.Maui.ApplicationModel;
+using Minesweeper.Core;
 using Minesweeper.Core.Licensing;
 using Minesweeper.Services;
 using Minesweeper.Views;
@@ -74,10 +76,35 @@ public static class MauiProgram
 #endif
 
 		MauiApp app = builder.Build();
-		// Resolve the ads service now (before any page exists): its constructor applies the cached Pro flag
-		// to the ads library, which creates the ad SDK lazily -- a Pro user therefore never initialises the
-		// SDK. Same reasoning as PdfReader/DocScanner's own MauiProgram.
-		_ = app.Services.GetRequiredService<IAdsService>();
+		// Resolve the ads service (its constructor applies the cached Pro flag to the ads library, and for a
+		// non-Pro user that synchronously constructs + Initialize()s the LevelPlay SDK -- real class-loading/
+		// JNI cost, not just a cheap flag check). Resolving it right here inline used to run that cost as part
+		// of CreateMauiApp(), which Android calls from MauiApplication.OnCreate() -- i.e. it blocked the app's
+		// own OnCreate from returning, before MainActivity/the first page/frame even starts. Posting it via
+		// MainThread instead keeps the "before any page can request a banner/interstitial" guarantee (same
+		// reasoning as PdfReader/DocScanner's own MauiProgram) while letting Android's OnCreate return and the
+		// first frame get drawn first -- fixed 2026-10-20 after the owner reported slow app startup.
+		MainThread.BeginInvokeOnMainThread(() => _ = app.Services.GetRequiredService<IAdsService>());
+
+		// Warms up the JIT for BoardGenerator/NoGuessSolver off the critical path (owner's report,
+		// 2026-10-21): a Debug/JIT session only compiles a method's native code the first time it actually
+		// runs, so the player's very first tap of a fresh app session paid that cost on top of real
+		// generation time -- a throwaway tiny board on a background thread, started now while the player is
+		// still looking at HomePage, exercises the exact same code paths so the real first tap doesn't have
+		// to. A Release/AOT build (what Play Store ships) compiles ahead of time and barely needs this, but
+		// it is harmless there too -- a 9x9 board generates in low single-digit milliseconds either way.
+		_ = Task.Run(() => BoardGenerator.GenerateNoGuess(Difficulty.Easy, 4, 4, new Random()));
+
+		// REVERTED 2026-10-22: tried pre-warming a throwaway GamePage instance here (same dispatched-off-
+		// CreateMauiApp() idea as the ads warm-up above) to pay its first-construction cost early instead of
+		// on the player's first "Chơi" tap. Caused an immediate crash on a real device instead -- almost
+		// certainly because constructing a ContentPage this early races the platform's own App/Window/Shell
+		// startup sequence: CreateMauiApp() only builds the DI container, the actual App instance (and with
+		// it Application.Current.Resources, which GamePage.xaml's `{StaticResource Card}` etc. need to
+		// already be merged) is not guaranteed to exist yet by the time a MainThread.BeginInvokeOnMainThread
+		// callback queued this early actually runs -- unlike the IAdsService warm-up above, whose constructor
+		// touches no XAML/UI resources at all. Not worth the crash risk for an unverified perf tweak; left as
+		// a note so this exact approach isn't tried again the same way.
 		return app;
 	}
 }

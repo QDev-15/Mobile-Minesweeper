@@ -10,11 +10,11 @@
     <Grid RowDefinitions="Auto,*,Auto,Auto">
 
         <!-- Top bar: back, mine counter, timer, hint, restart. Hint/restart hide once the round ends (see
-             ResultBanner below) — the end-of-round moment is meant to be look-only + a single way out. -->
+             ResultBanner below), which pops up its own Quay lại/Chơi lại/Đóng actions instead. -->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto,Auto,Auto" Padding="10,10" ColumnSpacing="8">
-            <Button Grid.Column="0" Text="{x:Static views:Icons.ArrowBack}" FontSize="22" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
+            <Button Grid.Column="0" Text="{x:Static views:Icons.ArrowBack}" FontSize="22" Padding="0,0" Margin="0" TextColor="Red" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
 
-            <VerticalStackLayout Grid.Column="1" Spacing="2" HorizontalOptions="Center">
+            <VerticalStackLayout Grid.Column="1" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
                 <HorizontalStackLayout Spacing="6" HorizontalOptions="Center">
                     <Label Text="{x:Static views:Icons.Flag}" FontFamily="Icons" FontSize="16" TextColor="{DynamicResource Accent}" VerticalOptions="Center" />
                     <Label x:Name="MineCountLabel" Style="{StaticResource TitleText}" FontSize="17" VerticalOptions="Center" />
@@ -30,13 +30,12 @@
                        Padding="8,2" HorizontalOptions="Center" IsVisible="False" />
             </VerticalStackLayout>
 
-            <Button x:Name="HintButton" Grid.Column="2" Text="{x:Static views:Icons.LightbulbOutline}" FontSize="18" Style="{StaticResource IconButton}" Clicked="OnHintClicked" />
-            <Button x:Name="RestartButton" Grid.Column="3" Text="{x:Static views:Icons.RestartAlt}" FontSize="18" Style="{StaticResource IconButton}" Clicked="OnRestartClicked" />
+            <Button x:Name="HintButton" Grid.Column="2" Padding="0,0" Margin="0" TextColor="Yellow" Text="{x:Static views:Icons.LightbulbOutline}" FontSize="22" Style="{StaticResource IconButton}" Clicked="OnHintClicked" />
+            <Button x:Name="RestartButton" Grid.Column="3" Padding="0,0" Margin="0" TextColor="LightSeaGreen" Text="{x:Static views:Icons.RestartAlt}" FontSize="22" Style="{StaticResource IconButton}" Clicked="OnRestartClicked" />
         </Grid>
 
-        <!-- Board: stays fully visible (no scrim/popup on top of it) once the round ends, so the player can
-             look back at the finished board — RefreshAllCells reveals every mine on a loss the same way it
-             always did, this just stops hiding that result behind a modal.
+        <!-- Board: RefreshAllCells reveals every mine on a loss as usual; the ResultBanner modal below dims
+             it but the finished board is still visible underneath once "Đóng" closes that modal.
 
              No ScrollView any more (owner's direction, 2026-10-20: the board must NEVER need scrolling to be
              seen in full). BoardArea fills this whole row; BuildEmptyBoard measures its actual pixel size and
@@ -57,28 +56,57 @@
                     <Label Text="Đang tạo bàn chơi…" Style="{StaticResource Hint}" HorizontalOptions="Center" />
                 </VerticalStackLayout>
             </Grid>
+            <!-- Per-mine "burst" debris (owner follow-up, 2026-10-22: the ring-by-ring spread needed an actual
+                 scatter effect per cell, not just the 💣 color-swap pop). A single GraphicsView, not one native
+                 view per particle (see the ParticleField class comment in GamePage.xaml.cs, near
+                 AnimateMineExplosionRippleAsync, for why) — SpawnMineBurst adds Particle records to the
+                 code-behind-owned ParticleField wrapping this view; it draws nothing and costs nothing while
+                 empty, so it never needs an outer IsVisible toggle. A LATER sibling than BoardHost/
+                 BoardLoadingOverlay so sparks render on top of the board; InputTransparent so it never steals
+                 taps from the still-live cells underneath it. -->
+            <GraphicsView x:Name="MineBurstLayer" InputTransparent="True" />
         </Grid>
-
-        <!-- Flag-mode toggle: the touch-friendly stand-in for Minesweeper's right-click (plan section 5).
-             Swapped for ResultBanner once the round ends — flagging/opening is meaningless on a finished
-             board, so there is nothing left to toggle between. -->
-        <Grid x:Name="FlagToggleRow" Grid.Row="2" Padding="14,6" ColumnDefinitions="*,*" ColumnSpacing="10">
-            <Button x:Name="RevealModeButton" Grid.Column="0" Text="Mở ô" Clicked="OnRevealModeClicked" CornerRadius="20" HeightRequest="44" FontFamily="OpenSansSemibold" />
-            <Button x:Name="FlagModeButton" Grid.Column="1" Text="Cắm cờ" Clicked="OnFlagModeClicked" CornerRadius="20" HeightRequest="44" FontFamily="OpenSansSemibold" />
-        </Grid>
-
-        <!-- Result banner: replaces the old scrim+popup. Sits in the same row as the flag toggle (never
-             covers the board), shows the outcome, and offers no action of its own — the top bar's own "‹"
-             back button (always present, see above) is the one and only way out of this screen while it is
-             showing, per the owner's explicit "chỉ có một button là back" direction (2026-10-19). -->
-        <Border x:Name="ResultBanner" Grid.Row="2" Style="{StaticResource Card}" Margin="14,4" IsVisible="False">
-            <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
-                <Label x:Name="ResultTitleLabel" Style="{StaticResource TitleText}" FontSize="18" HorizontalOptions="Center" />
-                <Label x:Name="StarsLabel" FontSize="20" TextColor="{DynamicResource Accent}" HorizontalOptions="Center" IsVisible="False" />
-                <Label x:Name="ResultDetailLabel" FontSize="13" TextColor="{DynamicResource InkSoft}" HorizontalOptions="Center" />
-            </VerticalStackLayout>
-        </Border>
 
         <ads:AdBannerSurface x:Name="Banner" Grid.Row="3" />
+
+        <!-- Game-end modal (owner's direction, 2026-10-21: win/loss must interrupt as a real popup with
+             choices, not a quiet inline banner with the top bar's back button as the only way out). Spans
+             every row so it sits over the whole page including the toolbar/banner, with a dimmed scrim behind
+             a centered card — the board stays visible (dimmed) underneath so "Đóng" can still let the player
+             look back at the finished board, same as before.
+
+             Win/loss redesign (2026-10-22): the same Border/card is still reused for both outcomes (ONLY its
+             BackgroundColor/Stroke/icon/title color are swapped from code, in HandleGameEndIfNeeded), rather
+             than two separate card trees, so the two outcomes stay visually consistent with each other and
+             with the rest of the app's Card style — just re-themed per outcome, not two independently
+             designed popups. ResultIconLabel is mood_bad (loss) or check_circle (win), both already
+             circle-enclosed Material glyphs, so no extra badge/circle wrapper is needed around either. -->
+        <Grid x:Name="ResultBanner" Grid.RowSpan="4" BackgroundColor="#B3000000" IsVisible="False">
+            <Border x:Name="ResultCard" Style="{StaticResource Card}" Margin="28" VerticalOptions="Center">
+                <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                    <Label x:Name="ResultIconLabel" FontFamily="Icons" FontSize="52" HorizontalOptions="Center" Margin="0,0,0,2" />
+                    <Label x:Name="ResultTitleLabel" Style="{StaticResource TitleText}" FontSize="21" HorizontalOptions="Center" />
+                    <Label x:Name="StarsLabel" FontSize="22" TextColor="{DynamicResource Accent}" HorizontalOptions="Center" IsVisible="False" />
+                    <Label x:Name="ResultDetailLabel" FontSize="13.5" TextColor="{DynamicResource InkSoft}" HorizontalOptions="Center" />
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,14,0,0">
+                        <Button Grid.Column="0" Text="Quay lại" Clicked="OnResultBackClicked"
+                                BackgroundColor="Transparent" TextColor="{DynamicResource Primary}" BorderColor="{DynamicResource Primary}"
+                                BorderWidth="1.5" FontFamily="OpenSansSemibold" CornerRadius="20" HeightRequest="46" />
+                        <Button Grid.Column="1" Text="Chơi lại" Clicked="OnResultRestartClicked" Style="{StaticResource PrimaryButton}" HeightRequest="46" />
+                    </Grid>
+                    <Button Text="Đóng" Clicked="OnResultCloseClicked" BackgroundColor="Transparent" TextColor="{DynamicResource InkSoft}"
+                            FontFamily="OpenSansSemibold" FontSize="13.5" HeightRequest="36" Margin="0,2,0,0" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Win-only confetti, built and started from code-behind (StartWinCelebration) — same GraphicsView-
+                 backed ParticleField as MineBurstLayer above (see that element's own comment), not an icon/
+                 glyph effect (there is no confetti glyph, and a particle effect reads far better than a single
+                 static symbol). Sits as a LATER sibling than the card above so pieces can fall in front of it
+                 too, like real confetti would. InputTransparent so it never blocks the card's own buttons
+                 underneath it. -->
+            <GraphicsView x:Name="ConfettiLayer" InputTransparent="True" />
+        </Grid>
     </Grid>
 </ContentPage>

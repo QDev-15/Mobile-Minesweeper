@@ -28,7 +28,7 @@ public class BoardGeneratorTests
     [Theory]
     [InlineData(0, 0)]
     [InlineData(8, 8)]
-    [InlineData(15, 15)]
+    [InlineData(11, 11)]
     public void Generate_WorksFromAnyCorner(int x, int y)
     {
         var rng = new Random(1);

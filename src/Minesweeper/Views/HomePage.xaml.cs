@@ -1,3 +1,5 @@
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using Minesweeper.Core;
 using Minesweeper.Core.Licensing;
 using Minesweeper.Services;
@@ -65,20 +67,18 @@ public partial class HomePage : ContentPage
 	private async void OnMediumClicked(object? sender, EventArgs e) => await GuardedAsync(sender, () => StartAsync(DifficultyLevel.Medium));
 	private async void OnHardClicked(object? sender, EventArgs e) => await GuardedAsync(sender, () => StartAsync(DifficultyLevel.Hard));
 
+	// No noGuess param any more (owner's direction, 2026-10-21: the on/off toggle is gone) -- GamePage now
+	// decides it itself from the difficulty alone (true for everything except Hard).
 	private async Task StartAsync(DifficultyLevel level)
 	{
-		await Shell.Current.GoToAsync(
-			$"{nameof(GamePage)}?difficulty={level}&noGuess={NoGuessSwitch.IsToggled}&daily=False");
+		await Shell.Current.GoToAsync($"{nameof(GamePage)}?difficulty={level}&daily=False");
 	}
 
-	private async void OnDailyChallengeClicked(object? sender, EventArgs e) => await GuardedAsync(sender, () =>
-		Shell.Current.GoToAsync($"{nameof(GamePage)}?difficulty={DifficultyLevel.Medium}&noGuess=True&daily=True"));
-
 	private async void OnResumeClicked(object? sender, EventArgs e) => await GuardedAsync(sender, () =>
-		Shell.Current.GoToAsync($"{nameof(GamePage)}?resume=True&difficulty={DifficultyLevel.Easy}&noGuess=False&daily=False"));
+		Shell.Current.GoToAsync($"{nameof(GamePage)}?resume=True&difficulty={DifficultyLevel.Easy}&daily=False"));
 
 	private async void OnTutorialTapped(object? sender, EventArgs e) => await GuardedAsync(sender, () => Shell.Current.GoToAsync(nameof(LevelsPage)));
-	private async void OnDailyCalendarClicked(object? sender, EventArgs e) => await GuardedAsync(sender, () => Shell.Current.GoToAsync(nameof(DailyCalendarPage)));
+	private async void OnDailyCardTapped(object? sender, EventArgs e) => await GuardedAsync(sender, () => Shell.Current.GoToAsync(nameof(DailyCalendarPage)));
 
 	private async void OnSettingsClicked(object? sender, EventArgs e) => await GuardedAsync(sender, () => Shell.Current.GoToAsync(nameof(SettingsPage)));
 	private async void OnAboutClicked(object? sender, EventArgs e) => await GuardedAsync(sender, () => Shell.Current.GoToAsync(nameof(AboutPage)));
@@ -89,5 +89,22 @@ public partial class HomePage : ContentPage
 		if (!_nav.TryEnter(sender as View)) return;
 		try { await action(); }
 		finally { _nav.Exit(sender as View); }
+	}
+
+	// Double-back-to-exit (owner's report, 2026-10-21: HomePage had no override at all, so Shell's default
+	// behaviour -- a single back press on the root page exits the app immediately -- was the only thing
+	// that ever ran here). A stray/accidental back press is common enough on a phone that every well-behaved
+	// Android app treats the root screen as a safety-netted exit, not a bare one.
+	private DateTime _lastBackPressUtc = DateTime.MinValue;
+	private static readonly TimeSpan BackPressExitWindow = TimeSpan.FromSeconds(2);
+
+	protected override bool OnBackButtonPressed()
+	{
+		DateTime now = DateTime.UtcNow;
+		if (now - _lastBackPressUtc < BackPressExitWindow) return base.OnBackButtonPressed(); // really exit this time
+
+		_lastBackPressUtc = now;
+		_ = Toast.Make("Nhấn lần nữa để thoát", ToastDuration.Short).Show();
+		return true; // swallow this first press
 	}
 }

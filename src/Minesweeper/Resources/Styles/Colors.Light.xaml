@@ -18,6 +18,13 @@
     <Color x:Key="Accent">#F2A93C</Color>
     <Color x:Key="AccentSoft">#FCEBD2</Color>
     <Color x:Key="Danger">#D64545</Color>
+    <!-- Added 2026-10-22 for the win/loss result popup redesign: Success deliberately matches Number2's
+         green exactly (same hue already reads as "good" on this board) but is its own semantic key so the
+         popup's green can be re-tuned later without touching the board's own number coloring. DangerSoft is
+         a pale tonal tint of Danger, same relationship AccentSoft already has to Accent, used as the loss
+         card's background so it reads as a failure state at a glance, not a plain white/cream card. -->
+    <Color x:Key="Success">#2E8B57</Color>
+    <Color x:Key="DangerSoft">#FBE1DE</Color>
 
     <Color x:Key="MilkBackground">#F7F1E6</Color>
     <Color x:Key="SurfaceTonal">#FFFDF9</Color>

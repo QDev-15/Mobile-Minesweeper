@@ -20,10 +20,15 @@ public partial class SettingsPage : ContentPage
 		base.OnAppearing();
 		Refresh();
 		RefreshThemeButtons();
+		SoundSwitch.IsToggled = AppPreferences.SoundEnabled;
+		VibrationSwitch.IsToggled = AppPreferences.VibrationEnabled;
 		_ = _license.RefreshAsync();
 	}
 
 	private void Refresh() => LicenseLabel.Text = _license.State.SummaryText;
+
+	private void OnSoundToggled(object? sender, ToggledEventArgs e) => AppPreferences.SoundEnabled = e.Value;
+	private void OnVibrationToggled(object? sender, ToggledEventArgs e) => AppPreferences.VibrationEnabled = e.Value;
 
 	// ===== Theme picker (design spec §1.4/§3.6) =====
 

@@ -14,14 +14,16 @@ public class LevelCatalogTests
     }
 
     [Fact]
-    public void Level100_MatchesHardExactly()
+    public void Level100_MatchesHardsSizeButNotItsMineCount()
     {
-        // By construction (t=1.0 at level 100 interpolates straight to Hard's own width/height/density):
-        // the hardest Tutorial level is exactly the already-measured Hard board, not a new, unverified size.
+        // By construction (t=1.0 at level 100 interpolates straight to Hard's own width/height): the
+        // hardest Tutorial level is exactly the already-measured Hard board's SIZE. Its mine count is
+        // deliberately its own, independent cap (LevelCatalog.MaxDensity), not Hard's -- Tutorial is always
+        // No-guess, and Hard's own 99 mines/288 cells measured as a reliable No-guess failure (2026-10-21).
         Difficulty d = LevelCatalog.DifficultyFor(100);
         Assert.Equal(Difficulty.Hard.Width, d.Width);
         Assert.Equal(Difficulty.Hard.Height, d.Height);
-        Assert.Equal(Difficulty.Hard.MineCount, d.MineCount);
+        Assert.True(d.MineCount < Difficulty.Hard.MineCount, "Level 100 should stay below Hard's own (non-No-guess) mine count");
     }
 
     [Fact]

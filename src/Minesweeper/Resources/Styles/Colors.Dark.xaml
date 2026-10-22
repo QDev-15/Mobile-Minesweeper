@@ -15,6 +15,11 @@
     <Color x:Key="Accent">#F5B95C</Color>
     <Color x:Key="AccentSoft">#3A2F1C</Color>
     <Color x:Key="Danger">#E57373</Color>
+    <!-- Success/DangerSoft added 2026-10-22, same reasoning as Colors.Light.xaml's own comment — Success
+         matches Number2's dark-theme green, DangerSoft is a dark muted-red tonal tint of Danger (same
+         lighten-toward-background-but-inverted relationship AccentSoft has to Accent in this file). -->
+    <Color x:Key="Success">#4FCB8A</Color>
+    <Color x:Key="DangerSoft">#3A2020</Color>
 
     <Color x:Key="MilkBackground">#15181D</Color>
     <Color x:Key="SurfaceTonal">#1E232B</Color>

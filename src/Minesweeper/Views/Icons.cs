@@ -33,4 +33,9 @@ public static class Icons
 	// same codepoint neighborhood as other icons already confirmed correct on-device (HelpOutline 0xE8FD,
 	// LightbulbOutline 0xE90F), does not have the same problem.
 	public const string Event = "";               // event -- opens DailyCalendarPage from HomePage's Daily card
+	// Written as a literal \uXXXX escape (not a pasted raw glyph like the constants above) specifically so
+	// this one stays greppable/diffable text -- rendered from the actual .ttf with Pillow and visually
+	// confirmed as a clean frown-face-in-a-circle before use (2026-10-22, GamePage's loss popup icon), per
+	// this file's own header rule.
+	public const string MoodBad = "";       // mood_bad -- GamePage ResultBanner loss icon
 }

@@ -9,7 +9,7 @@
 
     <Grid RowDefinitions="Auto,*">
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*" Padding="6,8">
-            <Button Grid.Column="0" Text="{x:Static views:Icons.ArrowBack}" FontSize="22" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
+            <Button Grid.Column="0" Text="{x:Static views:Icons.ArrowBack}" Padding="0, 0" Margin="0, 0" FontSize="22" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
             <Label Grid.Column="1" Text="Giới thiệu" Style="{StaticResource TitleText}" FontSize="19" VerticalOptions="Center" Margin="6,0,0,0" />
         </Grid>
 

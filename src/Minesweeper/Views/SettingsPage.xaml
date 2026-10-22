@@ -18,7 +18,7 @@
 
     <Grid RowDefinitions="Auto,*">
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*" Padding="6,8">
-            <Button Grid.Column="0" Text="{x:Static views:Icons.ArrowBack}" FontSize="22" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
+            <Button Grid.Column="0" Text="{x:Static views:Icons.ArrowBack}" Padding="0, 0" Margin="0, 0" FontSize="22" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
             <Label Grid.Column="1" Text="Cài đặt" Style="{StaticResource TitleText}" FontSize="19" VerticalOptions="Center" Margin="6,0,0,0" />
         </Grid>
 
@@ -53,6 +53,20 @@
                         <Button x:Name="ThemeHighContrastButton" Grid.Row="1" Grid.Column="1" Text="Độ tương phản cao" Clicked="OnThemeHighContrastClicked"
                                 FontSize="12" HeightRequest="42" CornerRadius="14" FontFamily="OpenSansSemibold" />
                     </Grid>
+                </Border>
+
+                <Label Text="ÂM THANH &amp; RUNG" Style="{StaticResource Section}" />
+                <Border Style="{StaticResource Card}" Margin="14,0">
+                    <VerticalStackLayout Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Âm thanh" FontFamily="OpenSansSemibold" FontSize="15" VerticalOptions="Center" />
+                            <Switch x:Name="SoundSwitch" Grid.Column="1" OnColor="{DynamicResource Primary}" Toggled="OnSoundToggled" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Rung" FontFamily="OpenSansSemibold" FontSize="15" VerticalOptions="Center" />
+                            <Switch x:Name="VibrationSwitch" Grid.Column="1" OnColor="{DynamicResource Primary}" Toggled="OnVibrationToggled" />
+                        </Grid>
+                    </VerticalStackLayout>
                 </Border>
 
                 <Label Text="ỨNG DỤNG" Style="{StaticResource Section}" />

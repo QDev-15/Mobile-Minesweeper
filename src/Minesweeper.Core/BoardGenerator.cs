@@ -3,18 +3,30 @@ namespace Minesweeper.Core;
 public static class BoardGenerator
 {
     /// <summary>Places mines so (firstX, firstY) and its immediate neighbors are never mines -- standard
-    /// "first click is always safe, and always opens onto something" rule, same as real Minesweeper.</summary>
+    /// "first click is always safe, and always opens onto something" rule, same as real Minesweeper. Still
+    /// used by No-guess generation (GenerateNoGuess below), which needs a real anchor cell to build its
+    /// solvability proof around; GeneratePureRandom is the one GamePage actually calls when No-guess is
+    /// off (owner's direction, 2026-10-21: no cell should be specially protected any more).</summary>
     public static Board Generate(Difficulty difficulty, int firstX, int firstY, Random rng)
     {
         var safe = new HashSet<(int, int)> { (firstX, firstY) };
         foreach (var n in NeighborsOf(firstX, firstY, difficulty.Width, difficulty.Height)) safe.Add(n);
+        return PlaceMines(difficulty, rng, safe);
+    }
 
+    /// <summary>No excluded cell at all -- every cell, including wherever the player's first tap lands, has
+    /// an equal chance of being a mine (owner's direction, 2026-10-21: the board/mine layout must already
+    /// exist the moment a level opens, not deferred to and protected around the player's first tap).</summary>
+    public static Board GeneratePureRandom(Difficulty difficulty, Random rng) => PlaceMines(difficulty, rng, []);
+
+    private static Board PlaceMines(Difficulty difficulty, Random rng, HashSet<(int, int)> excluded)
+    {
         var cells = new List<(int, int)>(difficulty.Width * difficulty.Height);
         for (int x = 0; x < difficulty.Width; x++)
             for (int y = 0; y < difficulty.Height; y++)
-                if (!safe.Contains((x, y))) cells.Add((x, y));
+                if (!excluded.Contains((x, y))) cells.Add((x, y));
 
-        // Fisher-Yates: shuffle the non-safe pool, then take the first MineCount as mine locations.
+        // Fisher-Yates: shuffle the eligible pool, then take the first MineCount as mine locations.
         for (int i = cells.Count - 1; i > 0; i--)
         {
             int j = rng.Next(i + 1);

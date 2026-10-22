@@ -27,7 +27,7 @@
 		     not already defaulted.) Lands signed at bin\Release\net10.0-android\publish\ and, via
 		     CopyReleaseAabWithVersion below, also at release\Minesweeper-<version>-<code>\. -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-		<ApplicationVersion>2</ApplicationVersion>
+		<ApplicationVersion>4</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">26.0</SupportedOSPlatformVersion>
 
@@ -56,7 +56,22 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
-		<AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+		<!-- Profiled AOT + RunAOTCompilation (owner's report, 2026-10-22: "Chơi" still felt slow to navigate
+		     to even from a Release .aab on a real device) — per Microsoft's own .NET 8 MAUI Android
+		     benchmark post, Profiled AOT is the recommended middle ground for Release builds (smallest
+		     measured APK of the AOT options there, real cold-start improvement) and "should be enabled by
+		     default for Release builds"; this project had it explicitly OFF with no comment explaining why.
+		     RunAOTCompilation is required alongside it (Mono.Profiler.Android's own README). Trade-off:
+		     longer build time and a larger APK than no-AOT-at-all (though still smaller than full AOT per
+		     that same benchmark) — acceptable here since startup/navigation speed is the actual complaint,
+		     not install size. Needs a real before/after measurement on-device, not just a build-time guess.
+		     Some of the remaining gap (Shell does not cache pages — every navigation to a route not already
+		     on the stack constructs a brand-new page from scratch, by design) is NOT fixable by any of this:
+		     Microsoft's own benchmark shows even a bare non-Shell MAUI Android app cold-starts around 464ms
+		     vs. ~182ms for a plain native Android app, so "Chơi" will never feel literally as instant as the
+		     hardware Back button (which returns to an already-alive HomePage, nothing to construct). -->
+		<AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
+		<RunAOTCompilation>true</RunAOTCompilation>
 		<EnableLLVM>true</EnableLLVM>
 	</PropertyGroup>
 

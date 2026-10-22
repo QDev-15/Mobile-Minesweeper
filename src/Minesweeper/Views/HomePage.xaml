@@ -28,9 +28,9 @@
                  a 0.4 ratio of glyph size to box size in this font (confirmed on a real device, see Icons.cs's
                  Event comment for the same glyph-specific issue on a different icon). Every other IconButton
                  in the app stays at the default 40dp box and is unaffected. -->
-            <Button Grid.Column="2" Text="{x:Static views:Icons.HelpOutline}" FontSize="18" Style="{StaticResource IconButton}"
+            <Button Grid.Column="2" Text="{x:Static views:Icons.HelpOutline}" FontSize="22" Padding="0, 0" Margin="0, 0" Style="{StaticResource IconButton}"
                     WidthRequest="46" HeightRequest="46" Clicked="OnAboutClicked" />
-            <Button Grid.Column="3" Text="{x:Static views:Icons.Tune}" FontSize="18" Style="{StaticResource IconButton}"
+            <Button Grid.Column="3" Text="{x:Static views:Icons.Tune}" Padding="0, 0" Margin="0, 0" FontSize="22" Style="{StaticResource IconButton}"
                     WidthRequest="46" HeightRequest="46" Clicked="OnSettingsClicked" />
         </Grid>
 
@@ -43,29 +43,26 @@
                             <Label Text="Ván đang chơi dở" FontFamily="OpenSansSemibold" FontSize="16" TextColor="{DynamicResource OffBlack}" />
                             <Label x:Name="ResumeDetailLabel" FontSize="12.5" TextColor="{DynamicResource OffBlack}" Opacity="0.75" />
                         </VerticalStackLayout>
-                        <Button Grid.Column="1" Text="Tiếp tục" Clicked="OnResumeClicked" BackgroundColor="{DynamicResource OffBlack}"
-                                TextColor="White" FontFamily="OpenSansSemibold" CornerRadius="20" WidthRequest="100" HeightRequest="40" VerticalOptions="Center" />
+                        <Button Grid.Column="1" Text="Tiếp tục" TextColor="Gray" Clicked="OnResumeClicked" BackgroundColor="{DynamicResource OffBlack}"
+                                FontFamily="OpenSansSemibold" CornerRadius="20" WidthRequest="100" HeightRequest="40" VerticalOptions="Center" />
                     </Grid>
                 </Border>
 
+                <!-- The whole card opens DailyCalendarPage now (owner's direction, 2026-10-20: the dedicated
+                     calendar-icon button and the separate "Chơi ngay" button both read as unclear/low-contrast
+                     glyphs on-device, and splitting "open calendar" from "play today" into two small controls
+                     was redundant anyway) — pick a day there, Chơi ngay on THAT page is what actually starts
+                     a game, defaulting to today. -->
                 <Border Style="{StaticResource Card}" BackgroundColor="{DynamicResource Primary}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDailyCardTapped" />
+                    </Border.GestureRecognizers>
                     <VerticalStackLayout Spacing="6">
-                        <Grid ColumnDefinitions="*,Auto">
-                            <Label Grid.Column="0" Text="HÔM NAY" FontFamily="OpenSansSemibold" FontSize="10.5" TextColor="White" Opacity="0.85"
-                                   BackgroundColor="#33FFFFFF" Padding="9,3" HorizontalOptions="Start" VerticalOptions="Center" />
-                            <!-- Opens DailyCalendarPage (owner's direction, 2026-10-20: "thử thách hôm nay" should
-                                 really be "thử thách mỗi ngày", with a calendar of past days behind it), kept as a
-                                 separate button from "Chơi ngay" below so tapping it never accidentally starts a
-                                 game. -->
-                            <Button Grid.Column="1" Text="{x:Static views:Icons.Event}" FontSize="20" TextColor="White"
-                                    BackgroundColor="Transparent" WidthRequest="38" HeightRequest="38" Padding="0"
-                                    VerticalOptions="Center" Clicked="OnDailyCalendarClicked" />
-                        </Grid>
+                        <Label Text="HÔM NAY" FontFamily="OpenSansSemibold" FontSize="10.5" TextColor="White" Opacity="0.85"
+                               BackgroundColor="#33FFFFFF" Padding="9,3" HorizontalOptions="Start" VerticalOptions="Center" />
                         <Label Text="Thử thách hôm nay" Style="{StaticResource TitleText}" TextColor="White" />
                         <Label x:Name="DailyDateLabel" FontSize="13" TextColor="#E0E8FF" />
                         <Label Text="Bàn giống nhau cho mọi người, giải được 100% bằng suy luận — không phải đoán." FontSize="12.5" TextColor="#E0E8FF" />
-                        <Button Text="Chơi ngay" Clicked="OnDailyChallengeClicked" BackgroundColor="White" TextColor="{DynamicResource Primary}"
-                                FontFamily="OpenSansSemibold" CornerRadius="20" HeightRequest="42" Margin="0,6,0,0" />
                     </VerticalStackLayout>
                 </Border>
 
@@ -75,7 +72,7 @@
                             <TapGestureRecognizer Tapped="OnTutorialTapped" />
                         </Grid.GestureRecognizers>
                         <VerticalStackLayout Spacing="2">
-                            <Label Text="Tutorial — 100 màn" FontFamily="OpenSansSemibold" FontSize="16" />
+                            <Label Text="Tutorial" FontFamily="OpenSansSemibold" FontSize="16" />
                             <Label x:Name="TutorialProgressLabel" FontSize="12.5" TextColor="{DynamicResource InkSoft}" />
                         </VerticalStackLayout>
                         <Label Grid.Column="1" Text="{x:Static views:Icons.ChevronRight}" FontFamily="Icons" FontSize="20" TextColor="{DynamicResource InkSoft}" VerticalOptions="Center" />
@@ -83,16 +80,6 @@
                 </Border>
 
                 <Label Text="CHƠI THƯỜNG" FontSize="12.5" FontFamily="OpenSansSemibold" TextColor="{DynamicResource Primary}" Margin="4,10,0,0" />
-
-                <Border Style="{StaticResource Card}">
-                    <VerticalStackLayout Spacing="4">
-                        <Grid ColumnDefinitions="*,Auto">
-                            <Label Text="Không đoán mù (No-guess)" FontFamily="OpenSansSemibold" FontSize="15" VerticalOptions="Center" />
-                            <Switch x:Name="NoGuessSwitch" Grid.Column="1" OnColor="{DynamicResource Primary}" />
-                        </Grid>
-                        <Label Text="Mọi bàn chơi đều giải được bằng logic thuần, không bao giờ ép đoán 50/50." Style="{StaticResource Hint}" FontSize="12" TextColor="{DynamicResource InkSoft}" />
-                    </VerticalStackLayout>
-                </Border>
 
                 <Border x:Name="EasyCard" Style="{StaticResource Card}">
                     <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">

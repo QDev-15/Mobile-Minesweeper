@@ -55,12 +55,21 @@
 
     <!-- FontFamily defaults to the Material "Icons" glyph font (see Views/Icons.cs) — every icon button
          across the app now renders a real vector glyph instead of an emoji/Unicode symbol character. -->
+    <!-- BackgroundColor + CornerRadius added 2026-10-21 (owner's report: toolbar icons, Hint/Restart
+         especially, read as too faint to notice): the outline-style glyphs these buttons use (hollow
+         lightbulb, thin circular restart arrow) have much less visual weight than a solid shape like
+         ArrowBack/Flag, even at a large FontSize and correct text-on-background contrast — a soft tonal
+         circle behind every icon button gives it a contrasting edge regardless of how thin its own glyph
+         is, the same "tonal icon button" treatment Material uses for exactly this problem. SurfaceTonal is
+         already the app's own proven light-on-dark/dark-on-light card tint (Styles.xaml's Card style), not
+         a new color. -->
     <Style x:Key="IconButton" TargetType="Button">
-        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource SurfaceTonal}" />
         <Setter Property="TextColor" Value="{DynamicResource OffBlack}" />
         <Setter Property="FontFamily" Value="Icons" />
         <Setter Property="WidthRequest" Value="40" />
         <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="CornerRadius" Value="20" />
     </Style>
 
     <Style TargetType="Label">

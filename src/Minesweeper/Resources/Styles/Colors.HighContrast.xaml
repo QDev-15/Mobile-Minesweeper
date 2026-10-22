@@ -16,6 +16,11 @@
     <Color x:Key="Accent">#FFC233</Color>
     <Color x:Key="AccentSoft">#3A2900</Color>
     <Color x:Key="Danger">#FF5C42</Color>
+    <!-- Success/DangerSoft added 2026-10-22, same reasoning as the other two theme files — Success matches
+         Number2's high-contrast green, DangerSoft is a near-black muted-red tint (same pattern AccentSoft
+         uses in this file). -->
+    <Color x:Key="Success">#81C784</Color>
+    <Color x:Key="DangerSoft">#330000</Color>
 
     <Color x:Key="MilkBackground">#000000</Color>
     <Color x:Key="SurfaceTonal">#121212</Color>

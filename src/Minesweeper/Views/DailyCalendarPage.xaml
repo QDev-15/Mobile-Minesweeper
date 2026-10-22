@@ -6,9 +6,9 @@
              BackgroundColor="{DynamicResource MilkBackground}"
              Shell.NavBarIsVisible="False">
 
-    <Grid RowDefinitions="Auto,*">
+    <Grid RowDefinitions="Auto,*,Auto">
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*" Padding="6,8">
-            <Button Grid.Column="0" Text="{x:Static views:Icons.ArrowBack}" FontSize="22" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
+            <Button Grid.Column="0" Text="{x:Static views:Icons.ArrowBack}" Padding="0, 0" Margin="0, 0" FontSize="22" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
             <Label Grid.Column="1" Text="Lịch thử thách hằng ngày" Style="{StaticResource TitleText}" FontSize="17" VerticalOptions="Center" Margin="6,0,0,0" />
         </Grid>
 
@@ -18,11 +18,11 @@
                 <!-- Month navigator: NextMonthButton.IsEnabled is turned off in code-behind once _currentMonth
                      reaches the real calendar month, since there is no Daily Challenge board for a future date. -->
                 <Grid ColumnDefinitions="Auto,*,Auto">
-                    <Button Grid.Column="0" x:Name="PrevMonthButton" Text="{x:Static views:Icons.ChevronLeft}" FontSize="20"
+                    <Button Grid.Column="0" x:Name="PrevMonthButton" Padding="0, 0" Margin="0, 0" TextColor="{DynamicResource Text}" Text="{x:Static views:Icons.ChevronLeft}" FontSize="20"
                             Style="{StaticResource IconButton}" Clicked="OnPrevMonthClicked" />
                     <Label Grid.Column="1" x:Name="MonthLabel" Style="{StaticResource TitleText}" FontSize="17"
                            HorizontalOptions="Center" VerticalOptions="Center" />
-                    <Button Grid.Column="2" x:Name="NextMonthButton" Text="{x:Static views:Icons.ChevronRight}" FontSize="20"
+                    <Button Grid.Column="2" x:Name="NextMonthButton" Padding="0, 0" Margin="0, 0" TextColor="{DynamicResource Text}" Text="{x:Static views:Icons.ChevronRight}" FontSize="20"
                             Style="{StaticResource IconButton}" Clicked="OnNextMonthClicked" />
                 </Grid>
 
@@ -44,6 +44,9 @@
                         <DataTemplate x:DataType="views:CalendarDayItem">
                             <Border BackgroundColor="{DynamicResource SurfaceTonal}" Stroke="Transparent" StrokeThickness="2"
                                     StrokeShape="RoundRectangle 10" Padding="0" HeightRequest="52">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnDayTapped" CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
                                 <Border.Triggers>
                                     <DataTrigger TargetType="Border" Binding="{Binding IsBlank}" Value="True">
                                         <Setter Property="BackgroundColor" Value="Transparent" />
@@ -51,9 +54,24 @@
                                     <DataTrigger TargetType="Border" Binding="{Binding IsToday}" Value="True">
                                         <Setter Property="Stroke" Value="{DynamicResource Accent}" />
                                     </DataTrigger>
+                                    <DataTrigger TargetType="Border" Binding="{Binding IsSelectable}" Value="False">
+                                        <Setter Property="Opacity" Value="0.35" />
+                                    </DataTrigger>
+                                    <!-- The day "Chơi ngay" below will actually play — filled solid so it reads as
+                                         "this one is chosen" even when it is also Today (ring) or Completed (its
+                                         own small badge still shows on top, see the Labels below). -->
+                                    <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
+                                        <Setter Property="BackgroundColor" Value="{DynamicResource Primary}" />
+                                    </DataTrigger>
                                 </Border.Triggers>
                                 <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="2">
-                                    <Label Text="{Binding DayText}" FontFamily="OpenSansSemibold" FontSize="14" HorizontalOptions="Center" />
+                                    <Label Text="{Binding DayText}" FontFamily="OpenSansSemibold" FontSize="14" HorizontalOptions="Center">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
+                                                <Setter Property="TextColor" Value="White" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
                                     <Label Text="{x:Static views:Icons.CheckCircle}" FontFamily="Icons" FontSize="11" TextColor="#3FAE5C"
                                            HorizontalOptions="Center" IsVisible="{Binding IsCompleted}" />
                                     <Label Text="{x:Static views:Icons.FiberManualRecord}" FontFamily="Icons" FontSize="9" TextColor="{DynamicResource Danger}"
@@ -79,5 +97,11 @@
 
             </VerticalStackLayout>
         </ScrollView>
+
+        <!-- Pick a day above, then play it from here — outside the ScrollView so it stays reachable without
+             scrolling down past the legend card (owner's direction, 2026-10-20: tapping a day used to jump
+             straight into it; now picking and playing are two separate, explicit steps). -->
+        <Button x:Name="PlayNowButton" Grid.Row="2" Text="Chơi ngay" Clicked="OnPlayNowClicked" Style="{StaticResource PrimaryButton}"
+                Margin="16,0,16,16" HeightRequest="48" FontFamily="OpenSansSemibold" />
     </Grid>
 </ContentPage>
