@@ -11,7 +11,7 @@
 
         <!-- Top bar: back, mine counter, timer, hint, restart. Hint/restart hide once the round ends (see
              ResultBanner below), which pops up its own Quay lại/Chơi lại/Đóng actions instead. -->
-        <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto,Auto,Auto" Padding="10,10" ColumnSpacing="8">
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto,Auto,Auto" Padding="10,0" ColumnSpacing="8">
             <Button Grid.Column="0" Text="{x:Static views:Icons.ArrowBack}" FontSize="22" Padding="0,0" Margin="0" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
 
             <VerticalStackLayout Grid.Column="1" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
@@ -39,17 +39,20 @@
 
              No ScrollView any more (owner's direction, 2026-10-20: the board must NEVER need scrolling to be
              seen in full). BoardArea fills this whole row; BuildEmptyBoard measures its actual pixel size and
-             computes a cell size from it (Width/Height both constrained, a 10px margin baked into the sum),
-             so BoardHost always lands at or under BoardArea's size and just sits centered inside it. -->
+             computes the cell's width/height independently (full width, no side margin; height keeps a 10px
+             top/bottom margin) so BoardCanvas always lands at or under BoardArea's size and just sits centered
+             inside it, see BuildEmptyBoard's own comment for why width and height aren't a single square
+             cellSize any more. -->
         <Grid x:Name="BoardArea" Grid.Row="1" HorizontalOptions="Fill" VerticalOptions="Fill">
-            <!-- AbsoluteLayout, not Grid: a Grid re-evaluates its RowDefinitions/ColumnDefinitions star-sizing
-                 across every already-added child each time one more is inserted, which made populating 288
-                 uniform, fixed-size cells one Children.Add at a time cost 6+ seconds on a real device (measured
-                 2026-10-22: ~3.5s building the Border/Label objects, ~3s just adding them to the Grid). Every
-                 cell here is the same fixed pixel size placed at an exact (x*cellSize, y*cellSize) offset, which
-                 is exactly what AbsoluteLayoutFlags.None bounds are for, with none of the Grid's per-insert
-                 re-layout cost. -->
-            <AbsoluteLayout x:Name="BoardHost" HorizontalOptions="Center" VerticalOptions="Center" />
+            <!-- GraphicsView, not 288 individual Border/Label Views: even after trimming per-cell Grid/Shadow
+                 costs down to a few hundred ms (see git history), actually laying out and drawing 288 real
+                 native Android views in one frame still cost multiple seconds on a real device (measured
+                 2026-10-22, Davey frame-drop evidence), a cost inherent to the native view COUNT, not any
+                 one property. A GraphicsView is ONE native view; GamePage.Board.cs's BoardDrawable draws every
+                 cell itself each frame, the same approach already used below for the mine-burst/confetti
+                 particle effects. GamePage.Board.cs subscribes to its StartInteraction/EndInteraction events
+                 for tap/long-press, replacing the old per-cell TouchBehavior. -->
+            <GraphicsView x:Name="BoardCanvas" HorizontalOptions="Center" VerticalOptions="Center" />
             <!-- No-guess board generation (always on for the Daily Challenge, optional otherwise) can take a
                  real moment on a slow device, and was running synchronously on the UI thread with nothing
                  shown for it, which read as the app freezing (owner's report, 2026-10-20). It now runs on a
