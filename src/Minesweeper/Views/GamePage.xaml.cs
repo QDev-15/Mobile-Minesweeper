@@ -65,9 +65,11 @@ public partial class GamePage : ContentPage
 	// page already off-screen (found in review, 2026-10-20).
 	private readonly CancellationTokenSource _lifetimeCts = new();
 
-	// Shared instance: a Shadow is a reference type and MAUI is fine with the same one assigned to many
-	// Border.Shadow properties, so this avoids one allocation per cell per refresh on a 480-cell Hard board.
-	private static readonly Shadow HiddenShadow = new() { Brush = Colors.Black, Opacity = 0.32f, Radius = 5, Offset = new Point(0, 2.5) };
+	// Hidden cells no longer carry a Border.Shadow at all (owner's direction, 2026-10-22, after a fresh-
+	// per-cell Shadow -- see git history for that intermediate fix -- still left a multi-second Davey frame
+	// drop AFTER BuildEmptyBoard returned: Android has to rasterize a real offscreen shadow layer per View,
+	// and compositing ~288 of them in one frame was the actual remaining cost, not construction). The flat
+	// classic-Minesweeper look (Stroke only, see hiddenStroke below) reads as a tile well enough without it.
 
 	// One GraphicsView-backed ParticleField each for the mine-burst debris and the win confetti -- see the
 	// ParticleField class comment (near AnimateMineExplosionRippleAsync) for why this replaced an earlier
@@ -305,11 +307,8 @@ public partial class GamePage : ContentPage
 		}
 
 		BoardHost.Children.Clear();
-		BoardHost.RowDefinitions.Clear();
-		BoardHost.ColumnDefinitions.Clear();
-
-		for (int x = 0; x < _difficulty.Width; x++) BoardHost.ColumnDefinitions.Add(new ColumnDefinition(cellSize));
-		for (int y = 0; y < _difficulty.Height; y++) BoardHost.RowDefinitions.Add(new RowDefinition(cellSize));
+		BoardHost.WidthRequest = _difficulty.Width * cellSize;
+		BoardHost.HeightRequest = _difficulty.Height * cellSize;
 
 		_cellBorders = new Border[_difficulty.Width, _difficulty.Height];
 		_cellLabels = new Label[_difficulty.Width, _difficulty.Height];
@@ -319,8 +318,8 @@ public partial class GamePage : ContentPage
 		// (below) only ever writes PressedBackgroundColor into .BackgroundColor (confirmed by inspecting
 		// GestureManager in the installed package, 2026-10-20 -- it has no Brush-aware counterpart), and a
 		// non-null Border.Background Brush always wins over BackgroundColor when both are set. A gradient
-		// fill here would render fine at rest but silently swallow the press-flash every time -- the "raised"
-		// look instead comes from HiddenRaisedStroke + HiddenShadow below, which don't touch either property.
+		// fill here would render fine at rest but silently swallow the press-flash every time -- the tile
+		// look instead comes from the lighter Stroke below, which doesn't touch either property.
 		Color hiddenColor = (Color)Application.Current!.Resources["CellHidden"];
 
 		for (int x = 0; x < _difficulty.Width; x++)
@@ -342,12 +341,6 @@ public partial class GamePage : ContentPage
 					StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 6 },
 					Content = label,
 					Padding = 0,
-					// A beveled-highlight edge (Stroke, above) + a stronger drop shadow (below) stand in for a
-					// real raised-button bevel (owner's direction, 2026-10-20: a hidden cell should read as a
-					// physical, raised tile, not a flat sharp-cornered square) -- RefreshAllCells turns the
-					// shadow off the moment a cell is revealed so the board reads as "this one is now flat/
-					// open" at a glance, not just by its color changing.
-					Shadow = HiddenShadow,
 				};
 
 				// ONE TouchBehavior only, for both tap and long-press: a TapGestureRecognizer added
@@ -366,9 +359,8 @@ public partial class GamePage : ContentPage
 					// makes touch controls feel unresponsive, even when the underlying action is fast.
 					PressedBackgroundColor = (Color)Application.Current!.Resources["CellHiddenPressed"],
 				});
-
-				Grid.SetColumn(border, x);
-				Grid.SetRow(border, y);
+				AbsoluteLayout.SetLayoutBounds(border, new Rect(x * cellSize, y * cellSize, cellSize, cellSize));
+				AbsoluteLayout.SetLayoutFlags(border, Microsoft.Maui.Layouts.AbsoluteLayoutFlags.None);
 				BoardHost.Children.Add(border);
 				_cellBorders[x, y] = border;
 				_cellLabels[x, y] = label;
@@ -380,7 +372,7 @@ public partial class GamePage : ContentPage
 		_builtCellSize = cellSize;
 	}
 
-	// Mirrors exactly what a freshly-constructed cell above starts out as (BackgroundColor/Stroke/Shadow
+	// Mirrors exactly what a freshly-constructed cell above starts out as (BackgroundColor/Stroke back to
 	// hidden, empty label, resting Scale/Opacity) -- RefreshAllCells's own CellState.Hidden branch does the
 	// same thing but only reaches cells once a move actually happens, and this must be visible immediately,
 	// before the player's first tap, when BuildEmptyBoard reuses a view tree that still shows the previous
@@ -396,7 +388,6 @@ public partial class GamePage : ContentPage
 				Border border = _cellBorders![x, y];
 				border.BackgroundColor = hiddenColor;
 				border.Stroke = hiddenStroke;
-				border.Shadow = HiddenShadow;
 				border.Scale = 1;
 				border.Opacity = 1;
 				_cellLabels![x, y].Text = string.Empty;
@@ -559,13 +550,11 @@ public partial class GamePage : ContentPage
 					case CellState.Hidden:
 						border.BackgroundColor = hiddenColor;
 						border.Stroke = hiddenStroke;
-						border.Shadow = HiddenShadow;
 						label.Text = string.Empty;
 						break;
 					case CellState.Flagged:
 						border.BackgroundColor = hiddenColor;
 						border.Stroke = hiddenStroke;
-						border.Shadow = HiddenShadow;
 						label.FontFamily = "Icons"; // Material glyph (Views/Icons.cs) -- no font-icon exists for a mine, that one case stays the 💣 emoji below
 						label.Text = Icons.Flag;
 						label.TextColor = (Color)Application.Current!.Resources["Accent"];
@@ -579,14 +568,12 @@ public partial class GamePage : ContentPage
 							// by ring, once this method returns.
 							border.BackgroundColor = hiddenColor;
 							border.Stroke = hiddenStroke;
-							border.Shadow = HiddenShadow;
 							label.Text = string.Empty;
 							deferredMines.Add((border, label, x, y));
 							deferredThisCell = true;
 							break;
 						}
 						border.Stroke = (Color)Application.Current!.Resources["MilkBackground"]; // flat/sunken, not raised: back to the plain grid-line stroke BuildEmptyBoard no longer sets, since a revealed cell has no bevel
-						border.Shadow = null!; // flat the instant it opens: null is valid at runtime to clear a Border's shadow, just not reflected in its (non-nullable) property type
 						if (number == -1)
 						{
 							border.BackgroundColor = mineColor;
@@ -721,7 +708,6 @@ public partial class GamePage : ContentPage
 			{
 				border.BackgroundColor = mineColor;
 				border.Stroke = revealedStroke;
-				border.Shadow = null!;
 				label.FontFamily = "OpenSansSemibold";
 				label.Text = "💣";
 				border.Scale = CellPopStartScale;

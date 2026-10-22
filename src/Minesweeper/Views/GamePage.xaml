@@ -12,7 +12,7 @@
         <!-- Top bar: back, mine counter, timer, hint, restart. Hint/restart hide once the round ends (see
              ResultBanner below), which pops up its own Quay lại/Chơi lại/Đóng actions instead. -->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto,Auto,Auto" Padding="10,10" ColumnSpacing="8">
-            <Button Grid.Column="0" Text="{x:Static views:Icons.ArrowBack}" FontSize="22" Padding="0,0" Margin="0" TextColor="Red" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
+            <Button Grid.Column="0" Text="{x:Static views:Icons.ArrowBack}" FontSize="22" Padding="0,0" Margin="0" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
 
             <VerticalStackLayout Grid.Column="1" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
                 <HorizontalStackLayout Spacing="6" HorizontalOptions="Center">
@@ -30,8 +30,8 @@
                        Padding="8,2" HorizontalOptions="Center" IsVisible="False" />
             </VerticalStackLayout>
 
-            <Button x:Name="HintButton" Grid.Column="2" Padding="0,0" Margin="0" TextColor="Yellow" Text="{x:Static views:Icons.LightbulbOutline}" FontSize="22" Style="{StaticResource IconButton}" Clicked="OnHintClicked" />
-            <Button x:Name="RestartButton" Grid.Column="3" Padding="0,0" Margin="0" TextColor="LightSeaGreen" Text="{x:Static views:Icons.RestartAlt}" FontSize="22" Style="{StaticResource IconButton}" Clicked="OnRestartClicked" />
+            <Button x:Name="HintButton" Grid.Column="2" Padding="0,0" Margin="0" Text="{x:Static views:Icons.LightbulbOutline}" FontSize="22" Style="{StaticResource IconButton}" Clicked="OnHintClicked" />
+            <Button x:Name="RestartButton" Grid.Column="3" Padding="0,0" Margin="0" Text="{x:Static views:Icons.RestartAlt}" FontSize="22" Style="{StaticResource IconButton}" Clicked="OnRestartClicked" />
         </Grid>
 
         <!-- Board: RefreshAllCells reveals every mine on a loss as usual; the ResultBanner modal below dims
@@ -42,7 +42,14 @@
              computes a cell size from it (Width/Height both constrained, a 10px margin baked into the sum),
              so BoardHost always lands at or under BoardArea's size and just sits centered inside it. -->
         <Grid x:Name="BoardArea" Grid.Row="1" HorizontalOptions="Fill" VerticalOptions="Fill">
-            <Grid x:Name="BoardHost" HorizontalOptions="Center" VerticalOptions="Center" />
+            <!-- AbsoluteLayout, not Grid: a Grid re-evaluates its RowDefinitions/ColumnDefinitions star-sizing
+                 across every already-added child each time one more is inserted, which made populating 288
+                 uniform, fixed-size cells one Children.Add at a time cost 6+ seconds on a real device (measured
+                 2026-10-22: ~3.5s building the Border/Label objects, ~3s just adding them to the Grid). Every
+                 cell here is the same fixed pixel size placed at an exact (x*cellSize, y*cellSize) offset, which
+                 is exactly what AbsoluteLayoutFlags.None bounds are for, with none of the Grid's per-insert
+                 re-layout cost. -->
+            <AbsoluteLayout x:Name="BoardHost" HorizontalOptions="Center" VerticalOptions="Center" />
             <!-- No-guess board generation (always on for the Daily Challenge, optional otherwise) can take a
                  real moment on a slow device, and was running synchronously on the UI thread with nothing
                  shown for it, which read as the app freezing (owner's report, 2026-10-20). It now runs on a
