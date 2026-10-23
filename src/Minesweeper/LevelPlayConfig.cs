@@ -8,8 +8,6 @@ namespace Minesweeper;
 public static class LevelPlayConfig
 {
     public const string AppKey = "28decb375";
-    public const string BannerAdUnitId = "Minesweeper_Android_Banner";
-    public const string InterstitialAdUnitId = "Minesweeper_Android_Interstitial";
 
 #if DEBUG
     public const bool TestMode = true;
