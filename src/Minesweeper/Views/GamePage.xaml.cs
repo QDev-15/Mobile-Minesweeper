@@ -1,5 +1,4 @@
 using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Behaviors;
 using CommunityToolkit.Maui.Core;
 using Minesweeper.Core;
 using Minesweeper.Services;
@@ -41,19 +40,11 @@ public partial class GamePage : ContentPage
 	private Difficulty _difficulty = Difficulty.Easy;
 
 	private GameEngine? _engine;
-	private Border[,]? _cellBorders;
-	private Label[,]? _cellLabels;
 	// What RefreshAllCells last painted each cell as; compared against engine.StateAt on the next call so only
 	// a cell that is NEWLY Revealed/Flagged this pass gets the pop animation below, not one that was already
 	// sitting open/flagged from an earlier call (e.g. the periodic timer tick never touches this, but a second
 	// Reveal elsewhere on the board re-runs the whole grid and must not replay the pop on untouched cells).
 	private CellState?[,]? _priorCellState;
-	// The dimensions/cell size BuildEmptyBoard last actually built the Border/Label tree for -- a "Chơi lại"
-	// restart of the same difficulty recomputes to the exact same values (BoardArea never resizes mid-session),
-	// so BuildEmptyBoard reuses the existing ~480-cell view tree instead of tearing it down and reallocating
-	// every native Android view on the UI thread (owner's report, 2026-10-20: game start/restart felt slow).
-	private int _builtWidth = -1, _builtHeight = -1;
-	private double _builtCellSize = -1;
 	private bool _loaded;
 
 	private IDispatcherTimer? _timer;
@@ -64,12 +55,6 @@ public partial class GamePage : ContentPage
 	// tree, GameEngine, everything -- alive until generation happened to finish on its own, then mutated a
 	// page already off-screen (found in review, 2026-10-20).
 	private readonly CancellationTokenSource _lifetimeCts = new();
-
-	// Hidden cells no longer carry a Border.Shadow at all (owner's direction, 2026-10-22, after a fresh-
-	// per-cell Shadow -- see git history for that intermediate fix -- still left a multi-second Davey frame
-	// drop AFTER BuildEmptyBoard returned: Android has to rasterize a real offscreen shadow layer per View,
-	// and compositing ~288 of them in one frame was the actual remaining cost, not construction). The flat
-	// classic-Minesweeper look (Stroke only, see hiddenStroke below) reads as a tile well enough without it.
 
 	// One GraphicsView-backed ParticleField each for the mine-burst debris and the win confetti -- see the
 	// ParticleField class comment (near AnimateMineExplosionRippleAsync) for why this replaced an earlier
@@ -123,6 +108,7 @@ public partial class GamePage : ContentPage
 		BoardArea.SizeChanged += OnBoardAreaSizeChanged;
 		_mineBurstField = new ParticleField(MineBurstLayer);
 		_confettiField = new ParticleField(ConfettiLayer);
+		InitBoardCanvas();
 	}
 
 	// ===== Board sizing =====
@@ -189,11 +175,11 @@ public partial class GamePage : ContentPage
 		// depend on the player having explicitly confirmed an exit. StopTimer here too: ConfirmAndLeaveAsync
 		// already stops it on the confirmed paths, but without this, any OTHER way off this page left the
 		// IDispatcherTimer ticking once a second forever -- it, and everything its closure keeps alive (this
-		// whole page, its ~190-cell Border/Label/TouchBehavior tree, the GameEngine), never became eligible
-		// for GC (found in review, 2026-10-20).
+		// whole page, the GameEngine), never became eligible for GC (found in review, 2026-10-20).
 		StopTimer();
 		SaveProgressIfPlaying();
 		_lifetimeCts.Cancel();
+		_longPressCts?.Cancel(); // a pending Dispatcher.DispatchDelayed long-press must not fire into a gone-or-reused page
 	}
 
 	// Android hardware/gesture back: OnBackButtonPressed is synchronous and cannot await a dialog, so it
@@ -255,7 +241,7 @@ public partial class GamePage : ContentPage
 		// The save's OWN dimensions/mine count, NOT today's live preset: a preset's Width/Height can change
 		// between app versions (exactly what happened when Difficulty.Medium/Hard were resized 2026-10-20) --
 		// BuildEmptyBoard sizes the cell grid from _difficulty, while _engine below is rebuilt from the save's
-		// real dimensions; if those two disagree, RefreshAllCells indexes _cellBorders past its bounds and
+		// real dimensions; if those two disagree, RefreshAllCells indexes _cellAnims past its bounds and
 		// crashes the instant a resumed game renders. "Chơi lại" (OnRestartClicked) re-derives _difficulty
 		// from CurrentPresetDifficulty() instead, so a restart still gets today's real difficulty.
 		_difficulty = new Difficulty("Tiếp tục", save.Width, save.Height, save.MinesFlat.Count(m => m));
@@ -288,113 +274,7 @@ public partial class GamePage : ContentPage
 	private const double BoardCellMaxSize = 42;
 	private const double BoardAreaMargin = 10;
 
-	private void BuildEmptyBoard()
-	{
-		double availableWidth = Math.Max(1, BoardArea.Width - BoardAreaMargin * 2);
-		double availableHeight = Math.Max(1, BoardArea.Height - BoardAreaMargin * 2);
-		double cellSize = Math.Clamp(
-			Math.Min(availableWidth / _difficulty.Width, availableHeight / _difficulty.Height),
-			BoardCellMinSize, BoardCellMaxSize);
-		double fontSize = Math.Clamp(cellSize * 0.42, 9, 17);
-
-		// Same grid as the last build -- reuse it (see the field comment on _builtWidth) instead of
-		// rebuilding. Just needs its visuals snapped back to a fresh Hidden look; RefreshAllCells repaints
-		// everything else (revealed/flagged/mine) the moment a real move happens on the new board.
-		if (_cellBorders != null && _builtWidth == _difficulty.Width && _builtHeight == _difficulty.Height && _builtCellSize == cellSize)
-		{
-			ResetCellsToHidden();
-			return;
-		}
-
-		BoardHost.Children.Clear();
-		BoardHost.WidthRequest = _difficulty.Width * cellSize;
-		BoardHost.HeightRequest = _difficulty.Height * cellSize;
-
-		_cellBorders = new Border[_difficulty.Width, _difficulty.Height];
-		_cellLabels = new Label[_difficulty.Width, _difficulty.Height];
-		_priorCellState = new CellState?[_difficulty.Width, _difficulty.Height];
-
-		// Deliberately BackgroundColor, not a gradient Background Brush: CommunityToolkit's TouchBehavior
-		// (below) only ever writes PressedBackgroundColor into .BackgroundColor (confirmed by inspecting
-		// GestureManager in the installed package, 2026-10-20 -- it has no Brush-aware counterpart), and a
-		// non-null Border.Background Brush always wins over BackgroundColor when both are set. A gradient
-		// fill here would render fine at rest but silently swallow the press-flash every time -- the tile
-		// look instead comes from the lighter Stroke below, which doesn't touch either property.
-		Color hiddenColor = (Color)Application.Current!.Resources["CellHidden"];
-
-		for (int x = 0; x < _difficulty.Width; x++)
-		{
-			for (int y = 0; y < _difficulty.Height; y++)
-			{
-				var label = new Label
-				{
-					HorizontalOptions = LayoutOptions.Center,
-					VerticalOptions = LayoutOptions.Center,
-					FontFamily = "OpenSansSemibold",
-					FontSize = fontSize,
-				};
-				var border = new Border
-				{
-					BackgroundColor = hiddenColor,
-					Stroke = hiddenColor.AddLuminosity(0.22f),
-					StrokeThickness = 1.5,
-					StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 6 },
-					Content = label,
-					Padding = 0,
-				};
-
-				// ONE TouchBehavior only, for both tap and long-press: a TapGestureRecognizer added
-				// alongside TouchBehavior on the same view does not fire on Android (TouchBehavior owns the
-				// touch stream first) -- confirmed on a real device 2026-10-17, every cell went dead the
-				// moment long-press was added via a second, separate TapGestureRecognizer. Chord (opening
-				// every unflagged neighbor of an already-satisfied number) is just a single tap on that
-				// already-revealed cell -- see OnCellPrimaryTap -- so no second gesture is needed for it at all.
-				int cx = x, cy = y; // capture
-				border.Behaviors.Add(new TouchBehavior
-				{
-					Command = new Command(() => OnCellPrimaryTap(cx, cy)),
-					LongPressCommand = new Command(() => OnCellLongPress(cx, cy)),
-					// Instant feedback the instant a finger lands, before Reveal/ToggleFlag even runs --
-					// research into this genre consistently flags silence-until-result as the thing that
-					// makes touch controls feel unresponsive, even when the underlying action is fast.
-					PressedBackgroundColor = (Color)Application.Current!.Resources["CellHiddenPressed"],
-				});
-				AbsoluteLayout.SetLayoutBounds(border, new Rect(x * cellSize, y * cellSize, cellSize, cellSize));
-				AbsoluteLayout.SetLayoutFlags(border, Microsoft.Maui.Layouts.AbsoluteLayoutFlags.None);
-				BoardHost.Children.Add(border);
-				_cellBorders[x, y] = border;
-				_cellLabels[x, y] = label;
-			}
-		}
-
-		_builtWidth = _difficulty.Width;
-		_builtHeight = _difficulty.Height;
-		_builtCellSize = cellSize;
-	}
-
-	// Mirrors exactly what a freshly-constructed cell above starts out as (BackgroundColor/Stroke back to
-	// hidden, empty label, resting Scale/Opacity) -- RefreshAllCells's own CellState.Hidden branch does the
-	// same thing but only reaches cells once a move actually happens, and this must be visible immediately,
-	// before the player's first tap, when BuildEmptyBoard reuses a view tree that still shows the previous
-	// game's revealed/flagged/mine state.
-	private void ResetCellsToHidden()
-	{
-		Color hiddenColor = (Color)Application.Current!.Resources["CellHidden"];
-		Color hiddenStroke = hiddenColor.AddLuminosity(0.22f);
-		for (int x = 0; x < _difficulty.Width; x++)
-		{
-			for (int y = 0; y < _difficulty.Height; y++)
-			{
-				Border border = _cellBorders![x, y];
-				border.BackgroundColor = hiddenColor;
-				border.Stroke = hiddenStroke;
-				border.Scale = 1;
-				border.Opacity = 1;
-				_cellLabels![x, y].Text = string.Empty;
-				_priorCellState![x, y] = null;
-			}
-		}
-	}
+	// BuildEmptyBoard lives in GamePage.Board.cs now, alongside the rest of the canvas-based board rendering.
 
 	// ===== Input =====
 
@@ -424,7 +304,12 @@ public partial class GamePage : ContentPage
 			// RefreshAllCells pass (deferMineReveal) -- AnimateMineExplosionRippleAsync below stages them
 			// into the actual blast, and HandleGameEndIfNeeded/the ResultBanner popup must not appear until
 			// that finishes (owner's direction, 2026-10-22).
-			List<(Border Border, Label Label, int X, int Y)> mines = RefreshAllCells(deferMineReveal: true);
+			List<(int X, int Y)> mines = RefreshAllCells(deferMineReveal: true);
+			// Broader than "currently mid-pop-animation" for the whole ripple's duration: a still-deferred mine
+			// needs to be read live (DeferredMines) every frame too, not from the StaticLayer snapshot
+			// RefreshAllCells just took (which was taken BEFORE any ring has fired) -- see BoardDrawable's own
+			// field comment.
+			_boardDrawable!.AlwaysLiveCells = [.. mines];
 			_ = AnimateMineExplosionRippleAsync(mines, x, y);
 		}
 		else
@@ -509,159 +394,34 @@ public partial class GamePage : ContentPage
 	}
 
 	// ===== Rendering =====
-
-	// deferMineReveal: true only for the one RefreshAllCells call that itself triggers a loss (see
-	// OnCellPrimaryTap) -- every mine that would otherwise instantly snap to its revealed 💣 look in this
-	// same pass is instead left painted as still-Hidden and returned to the caller, so
-	// AnimateMineExplosionRippleAsync can stage them into an actual outward blast instead of a single
-	// instant flash. Every other caller ignores the return value and gets the old all-at-once behavior.
-	private List<(Border Border, Label Label, int X, int Y)> RefreshAllCells(bool deferMineReveal = false)
-	{
-		if (_engine is not { } engine || _cellBorders == null || _cellLabels == null || _priorCellState == null) return [];
-
-		// See BuildEmptyBoard's comment on why this is BackgroundColor + Stroke, not a Background Brush:
-		// TouchBehavior's PressedBackgroundColor only ever writes BackgroundColor, which a non-null Background
-		// Brush would otherwise always render over.
-		Color hiddenColor = (Color)Application.Current!.Resources["CellHidden"];
-		Color hiddenStroke = hiddenColor.AddLuminosity(0.22f);
-		var revealedColor = (Color)Application.Current.Resources["CellRevealed"];
-		var mineColor = (Color)Application.Current.Resources["CellMine"];
-
-		// Cells that just transitioned into Revealed/Flagged this pass get a quick pop (ScaleTo+FadeTo in
-		// AnimatePoppedCellsAsync below). Collected rather than started inline so a single flood-fill reveal
-		// -- which can touch the whole board at once on Hard -- is counted first; past PopAnimationCap, the
-		// pop is skipped and cells just snap straight to their final look, trading the flourish for guaranteed
-		// smooth frame pacing on a big reveal (there's no device here to verify many-cells-at-once GPU cost).
-		List<Border> justAppeared = [];
-		List<(Border Border, Label Label, int X, int Y)> deferredMines = [];
-
-		for (int x = 0; x < engine.Width; x++)
-		{
-			for (int y = 0; y < engine.Height; y++)
-			{
-				Border border = _cellBorders[x, y];
-				Label label = _cellLabels[x, y];
-				CellState state = engine.StateAt(x, y);
-				bool isNewlyShown = state != _priorCellState[x, y] && state is CellState.Revealed or CellState.Flagged;
-				bool deferredThisCell = false;
-
-				switch (state)
-				{
-					case CellState.Hidden:
-						border.BackgroundColor = hiddenColor;
-						border.Stroke = hiddenStroke;
-						label.Text = string.Empty;
-						break;
-					case CellState.Flagged:
-						border.BackgroundColor = hiddenColor;
-						border.Stroke = hiddenStroke;
-						label.FontFamily = "Icons"; // Material glyph (Views/Icons.cs) -- no font-icon exists for a mine, that one case stays the 💣 emoji below
-						label.Text = Icons.Flag;
-						label.TextColor = (Color)Application.Current!.Resources["Accent"];
-						break;
-					case CellState.Revealed:
-						int number = engine.NumberAt(x, y);
-						if (number == -1 && deferMineReveal && isNewlyShown)
-						{
-							// Left exactly as Hidden for now (engine already considers it Revealed) --
-							// AnimateMineExplosionRippleAsync paints the real mine look + pop itself, staged
-							// by ring, once this method returns.
-							border.BackgroundColor = hiddenColor;
-							border.Stroke = hiddenStroke;
-							label.Text = string.Empty;
-							deferredMines.Add((border, label, x, y));
-							deferredThisCell = true;
-							break;
-						}
-						border.Stroke = (Color)Application.Current!.Resources["MilkBackground"]; // flat/sunken, not raised: back to the plain grid-line stroke BuildEmptyBoard no longer sets, since a revealed cell has no bevel
-						if (number == -1)
-						{
-							border.BackgroundColor = mineColor;
-							label.FontFamily = "OpenSansSemibold"; // emoji renders regardless of FontFamily; this just resets it for the next cell that reuses this Label as a number
-							label.Text = "💣";
-						}
-						else
-						{
-							border.BackgroundColor = revealedColor;
-							label.FontFamily = "OpenSansSemibold";
-							label.Text = number > 0 ? number.ToString() : string.Empty;
-							label.TextColor = NumberColor(number);
-						}
-						break;
-				}
-
-				if (isNewlyShown && !deferredThisCell)
-				{
-					// Set synchronously now, before the pop/skip decision below is even made, so the cell
-					// never flashes at its resting scale/opacity for one frame first.
-					border.Scale = CellPopStartScale;
-					border.Opacity = 0;
-					justAppeared.Add(border);
-				}
-				_priorCellState[x, y] = state;
-			}
-		}
-
-		if (justAppeared.Count > 0)
-		{
-			if (justAppeared.Count <= PopAnimationCap)
-			{
-				foreach (Border border in justAppeared) _ = AnimateCellPopAsync(border);
-			}
-			else
-			{
-				foreach (Border border in justAppeared) { border.Scale = 1; border.Opacity = 1; }
-			}
-		}
-
-		MineCountLabel.Text = engine.MinesRemaining.ToString();
-		return deferredMines;
-	}
-
+	//
+	// RefreshAllCells/the pop animation live in GamePage.Board.cs now (canvas-based rendering); these two
+	// consts stay here since OnHintClicked/AnimateMineExplosionRippleAsync and BoardDrawable all reference them.
 	private const double CellPopStartScale = 0.8;
 	private const int PopAnimationCap = 60;
 
-	// A single combined Animation (not two independent ScaleToAsync/FadeToAsync calls via Task.WhenAll) --
-	// found on a real device, 2026-10-20: two concurrent ...ToAsync calls on the SAME view intermittently left
-	// Opacity stuck near 0 (cell content nearly invisible, permanently, not just mid-animation), on this MAUI
-	// build (10.0.90). Animation.Add lets both properties share one Commit/one ticker instead of two competing
-	// ones, and the `finished` callback is a hard safety net: whatever the interpolation did, Scale/Opacity
-	// are forced to their real resting values the moment it ends, so this can never leave a cell stuck faded.
-	private static Task AnimateCellPopAsync(Border border)
-	{
-		var tcs = new TaskCompletionSource();
-		double startScale = border.Scale;
-		double startOpacity = border.Opacity;
-		var animation = new Animation();
-		animation.Add(0, 1, new Animation(v => border.Scale = v, startScale, 1));
-		animation.Add(0, 1, new Animation(v => border.Opacity = v, startOpacity, 1));
-		animation.Commit(border, "CellPop", length: 140, easing: Easing.CubicOut, finished: (_, _) =>
-		{
-			border.Scale = 1;
-			border.Opacity = 1;
-			tcs.TrySetResult();
-		});
-		return tcs.Task;
-	}
-
 	// Hit a mine -> every other hidden mine on the board explodes outward from the tapped cell, ring by ring
 	// (Chebyshev distance, matching the 8-neighbor adjacency GameEngine/Board already use everywhere else),
-	// instead of RefreshAllCells's usual single instant pass. Each ring's cells are committed to AnimateCellPopAsync
-	// -- a distinct Border per call, so the "two concurrent animations on the SAME view" bug that method's own
-	// comment documents does not apply here -- and only the NEXT ring's start is staggered by Task.Delay, not
-	// each ring's own pop completion, so rings visibly overlap/cascade like a real spreading blast rather than
-	// pausing dead between each one. stepDelay is adaptive (MaxRippleTotalMs spread across however many rings
-	// actually have a mine in them) so a Hard board, whose 12x24 grid can span up to ~24 distinct rings from a
-	// corner tap, never drags the loss popup out past about a second, while a tight cluster of mines (few
-	// rings) still gets a visible stagger instead of collapsing to nothing.
-	private async Task AnimateMineExplosionRippleAsync(List<(Border Border, Label Label, int X, int Y)> mines, int originX, int originY)
+	// instead of RefreshAllCells's usual single instant pass. Canvas-based now (GamePage.Board.cs): a ring
+	// "firing" just removes its cells from BoardDrawable.DeferredMines (so Draw() picks up the engine's real
+	// Revealed/mine look for them immediately) and marks their pop-start sim time -- a single shared ticker
+	// animates every live cell at once, so there is no more per-cell Task/Animation to track, only the
+	// inter-ring Task.Delay stagger below. stepDelay is adaptive (MaxRippleTotalMs spread across however many
+	// rings actually have a mine in them) so a Hard board, whose 12x24 grid can span up to ~24 distinct rings
+	// from a corner tap, never drags the loss popup out past about a second, while a tight cluster of mines
+	// (few rings) still gets a visible stagger instead of collapsing to nothing.
+	private async Task AnimateMineExplosionRippleAsync(List<(int X, int Y)> mines, int originX, int originY)
 	{
-		if (mines.Count == 0) { _sound.PlayExplosion(); HandleGameEndIfNeeded(); SaveProgressIfPlaying(); return; }
+		if (mines.Count == 0)
+		{
+			_boardDrawable!.AlwaysLiveCells = null;
+			_sound.PlayExplosion();
+			HandleGameEndIfNeeded();
+			SaveProgressIfPlaying();
+			return;
+		}
 
-		Color mineColor = (Color)Application.Current!.Resources["CellMine"];
-		Color revealedStroke = (Color)Application.Current!.Resources["MilkBackground"];
-
-		List<List<(Border Border, Label Label, int X, int Y)>> rings = mines
+		List<List<(int X, int Y)>> rings = mines
 			.GroupBy(m => Math.Max(Math.Abs(m.X - originX), Math.Abs(m.Y - originY)))
 			.OrderBy(g => g.Key)
 			.Select(g => g.ToList())
@@ -678,54 +438,59 @@ public partial class GamePage : ContentPage
 		// actually bangs once at least MinExplosionGapMs has passed since the last one did -- except the FIRST
 		// and LAST ring, which always bang regardless, so the blast is never silent at its start or its finish.
 		double msSinceLastBang = double.MaxValue;
-		Task lastRingPop = Task.CompletedTask;
 		for (int i = 0; i < rings.Count; i++)
 		{
 			if (i == 0 || i == rings.Count - 1 || msSinceLastBang >= MinExplosionGapMs)
 			{
-				// Dispatcher.Dispatch, not a direct call: found on a real device, 2026-10-22, right after this
-				// per-ring chained sound first shipped -- SoundService.Play's "fire-and-forget" Task only
-				// actually yields the UI thread on a genuine async wait; once explosion.wav is cached (true for
-				// every ring after the very first one this session), GetBytesAsync's cache hit completes
-				// synchronously, so CreatePlayer/Play() end up running INLINE on the UI thread, in the same
-				// frame as this ring's Animation.Commit calls below -- exactly the kind of piled-up synchronous
-				// work that reads as stutter, not a smooth spread. Dispatching it instead queues that work for
-				// its own turn on the message loop, so it doesn't compete with this ring's animation kickoff in
-				// the same frame.
+				// Dispatcher.Dispatch, not a direct call: found on a real device, 2026-10-22 -- see this
+				// method's own git history for the full reasoning (SoundService's fire-and-forget Task
+				// completing synchronously once explosion.wav is cached, piling onto the same frame as this
+				// ring's own animation kickoff otherwise).
 				Dispatcher.Dispatch(_sound.PlayExplosion);
 				msSinceLastBang = 0;
 			}
 
-			// BurstRingCap bounds how many of THIS ring's mines actually get debris particles -- now a visual-
-			// density choice more than a raw performance one (SpawnMineBurst only adds cheap Particle records to
-			// a GraphicsView-backed ParticleField, see that class's own comment, not one native view per spark
-			// any more), but a dozen+ simultaneous bursts on a single wide Hard-board ring would still read as
-			// visual noise rather than a readable blast, so every mine still gets its color-swap/pop either way,
-			// just not every mine gets its own spark burst on a crowded ring.
+			// BurstRingCap bounds how many of THIS ring's mines actually get debris particles -- a visual-
+			// density choice (SpawnMineBurst only adds cheap Particle records to a GraphicsView-backed
+			// ParticleField, not one native view per spark), since a dozen+ simultaneous bursts on a single
+			// wide Hard-board ring would read as visual noise rather than a readable blast; every mine still
+			// gets its color-swap/pop either way, just not every mine gets its own spark burst on a crowded ring.
 			int burstBudget = BurstRingCap;
-			var tasks = new List<Task>(rings[i].Count);
-			foreach ((Border border, Label label, int _, int _) in rings[i])
+			foreach ((int x, int y) in rings[i])
 			{
-				border.BackgroundColor = mineColor;
-				border.Stroke = revealedStroke;
-				label.FontFamily = "OpenSansSemibold";
-				label.Text = "💣";
-				border.Scale = CellPopStartScale;
-				border.Opacity = 0;
-				tasks.Add(AnimateCellPopAsync(border));
-				if (burstBudget > 0) { SpawnMineBurst(border); burstBudget--; } // debris scatter at this exact cell, timed with its own ring (see method comment)
+				_boardDrawable!.DeferredMines?.Remove((x, y));
+				if (burstBudget > 0) { SpawnMineBurst(x, y); burstBudget--; } // debris scatter at this exact cell, timed with its own ring (see method comment)
 			}
-			lastRingPop = Task.WhenAll(tasks);
+			double now = _boardAnimator!.NowMs;
+			foreach ((int x, int y) in rings[i]) _cellAnims![x, y] = now;
+			_boardAnimator.Trigger(PopDurationMs + 60);
+			BoardCanvas.Invalidate();
+
 			if (i < rings.Count - 1)
 			{
 				await Task.Delay(stepDelay);
 				msSinceLastBang += stepDelay;
 			}
 		}
-		await lastRingPop; // the final ring's own pop must actually finish before the loss modal covers it
+		await Task.Delay((int)PopDurationMs); // let the final ring's own pop actually finish before the loss modal covers it
 
+		// Show the modal FIRST, the StaticLayer catch-up after: only the mine cells actually changed during the
+		// ripple (every other cell's StaticLayer content is already correct from the RefreshAllCells call that
+		// started this whole method), so RebuildStaticLayerCells(mines) only has to redraw those ~20-99 cells,
+		// not the whole board -- still, deferred behind HandleGameEndIfNeeded so there is zero chance of it
+		// delaying the "Trúng mìn rồi!" popup even on a dense Hard board (own doc comment on
+		// RebuildStaticLayerCells for the earlier full-board version of this cost, 700-1100ms on a real device,
+		// 2026-10-22, which WAS the "hiệu ứng nổ ... lag" the owner reported). The board is about to sit dimmed
+		// under the modal regardless, so AlwaysLiveCells stays set until this runs, so Draw() still reads the
+		// correct exploded look live if anything forces a redraw before the deferred catch-up runs.
 		HandleGameEndIfNeeded();
 		SaveProgressIfPlaying();
+		Dispatcher.Dispatch(() =>
+		{
+			_boardDrawable!.AlwaysLiveCells = null;
+			RebuildStaticLayerCells(mines);
+			BoardCanvas.Invalidate();
+		});
 	}
 
 	// MaxRingStepMs trimmed from 90 to 70 (owner's report, 2026-10-22: the ripple itself read as "stiff/
@@ -887,47 +652,8 @@ public partial class GamePage : ContentPage
 	private const int BurstParticlesPerMine = 5;
 	private const double BurstDurationMs = 300;
 
-	private void SpawnMineBurst(Border cellBorder)
-	{
-		if (cellBorder.Width <= 0) return; // not actually laid out yet -- shouldn't happen mid-ripple, defensive only
-
-		// BoardHost is centered inside BoardArea (BuildEmptyBoard/XAML), and MineBurstLayer is BoardArea's OWN
-		// direct child, same as BoardHost -- so a cell's position relative to MineBurstLayer's coordinate space
-		// is BoardHost's own offset within BoardArea plus the cell's offset within BoardHost.
-		double centerX = BoardHost.Bounds.X + cellBorder.Bounds.X + cellBorder.Width / 2;
-		double centerY = BoardHost.Bounds.Y + cellBorder.Bounds.Y + cellBorder.Height / 2;
-
-		Color[] colors =
-		[
-			(Color)Application.Current!.Resources["CellMine"],
-			(Color)Application.Current!.Resources["Danger"],
-			(Color)Application.Current!.Resources["Accent"], // spark-colored, not just debris-red -- reads more like a burst than a single flat color would
-		];
-
-		Random rng = Random.Shared;
-		double baseAngle = rng.NextDouble() * 360;
-		for (int i = 0; i < BurstParticlesPerMine; i++)
-		{
-			double angle = baseAngle + i * (360.0 / BurstParticlesPerMine) + (rng.NextDouble() - 0.5) * 24; // evenly spread with a little jitter, not a perfectly mechanical fan
-			double radians = angle * Math.PI / 180;
-			double distance = rng.Next(26, 46);
-
-			_mineBurstField.Add(new Particle
-			{
-				StartX = centerX,
-				StartY = centerY,
-				DX = Math.Cos(radians) * distance,
-				DY = Math.Sin(radians) * distance,
-				Size = rng.Next(9, 16),
-				Color = colors[rng.Next(colors.Length)],
-				LifeMs = BurstDurationMs,
-				FadeStartT = 0, // fades the whole flight, same as the Opacity 1->0 the old per-particle Animation used
-				XEasing = Easing.CubicOut,
-				YEasing = Easing.CubicOut,
-				IsCircle = true,
-			});
-		}
-	}
+	// SpawnMineBurst(int x, int y) lives in GamePage.Board.cs now -- a cell is a canvas-drawn rect, not a
+	// Border with its own Bounds, so it takes the cell's grid coordinates instead of a View reference.
 
 	private static Color NumberColor(int number) => number switch
 	{
@@ -1110,7 +836,7 @@ public partial class GamePage : ContentPage
 
 	private void OnHintClicked(object? sender, EventArgs e)
 	{
-		if (_engine is not { Status: GameStatus.Playing } engine || _cellBorders == null) return;
+		if (_engine is not { Status: GameStatus.Playing } engine) return;
 		(int X, int Y)? hint = engine.FindHint();
 		if (hint is not { } cell)
 		{
@@ -1122,9 +848,8 @@ public partial class GamePage : ContentPage
 			return;
 		}
 
-		Border border = _cellBorders[cell.X, cell.Y];
-		border.Stroke = (Color)Application.Current!.Resources["Accent"];
-		border.StrokeThickness = 3;
+		_boardDrawable!.HintCell = (cell.X, cell.Y);
+		BoardCanvas.Invalidate();
 		_sound.PlayHint();
 	}
 

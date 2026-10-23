@@ -46,17 +46,59 @@ public static class BoardGenerator
 
     /// <summary>Generate-and-check loop for No-guess mode (plan section 3.2): keeps generating fresh boards
     /// for the same first click until <see cref="NoGuessSolver"/> confirms one is fully solvable by logic
-    /// alone, or gives up after <paramref name="maxAttempts"/>. Null on give-up -- the caller decides the
-    /// fallback (e.g. fall back to a normal board, or tell the player and let them retry); never returns a
-    /// board silently without checking it, that would break the one promise No-guess mode makes.</summary>
+    /// alone, or gives up after roughly <paramref name="maxAttempts"/> tries in total. Null on give-up -- the
+    /// caller decides the fallback (e.g. fall back to a normal board, or tell the player and let them retry);
+    /// never returns a board silently without checking it, that would break the one promise No-guess mode
+    /// makes.
+    ///
+    /// Spreads those attempts across every available CPU core instead of trying them one at a time on a
+    /// single thread (owner's direction, 2026-10-22: board generation was the dominant cost in "click play ->
+    /// board ready", and every attempt here is fully independent -- a fresh random board, an isolated solve
+    /// check -- so there is nothing to coordinate between them beyond stopping the others once one succeeds).
+    /// A phone with N cores finishes in roughly 1/N the wall-clock time for the same total attempt budget, or
+    /// equivalently tries roughly N times as many boards in the same wall-clock time -- which also narrows the
+    /// gap for denser difficulties, without changing the solver itself or its accept/reject guarantee at all.
+    /// Each worker gets its OWN Random, seeded from the caller's <paramref name="rng"/> sequentially on THIS
+    /// thread before any parallelism starts: System.Random (unlike Random.Shared) is not thread-safe, and the
+    /// caller is not guaranteed to have passed Random.Shared (the test suite passes a seeded Random for
+    /// reproducibility) -- sharing one Random instance across the parallel workers below would corrupt it.
+    /// Falls back to the plain sequential loop when only one core is actually available, so that path still
+    /// exists and stays simple rather than running Parallel.For with a single worker for no reason.</summary>
     public static Board? GenerateNoGuess(Difficulty difficulty, int firstX, int firstY, Random rng, int maxAttempts = 400)
     {
-        for (int attempt = 0; attempt < maxAttempts; attempt++)
+        int workerCount = Math.Clamp(Environment.ProcessorCount, 1, 8);
+        if (workerCount == 1)
         {
-            Board board = Generate(difficulty, firstX, firstY, rng);
-            if (NoGuessSolver.IsFullySolvable(board, firstX, firstY)) return board;
+            for (int attempt = 0; attempt < maxAttempts; attempt++)
+            {
+                Board board = Generate(difficulty, firstX, firstY, rng);
+                if (NoGuessSolver.IsFullySolvable(board, firstX, firstY)) return board;
+            }
+            return null;
         }
-        return null;
+
+        var workerRngs = new Random[workerCount];
+        for (int i = 0; i < workerCount; i++) workerRngs[i] = new Random(rng.Next());
+
+        int attemptsPerWorker = (maxAttempts + workerCount - 1) / workerCount; // ceil: total tries across all workers is >= maxAttempts, never less
+        Board? found = null;
+        object sync = new();
+
+        Parallel.For(0, workerCount, (workerIndex, state) =>
+        {
+            Random workerRng = workerRngs[workerIndex];
+            for (int attempt = 0; attempt < attemptsPerWorker; attempt++)
+            {
+                if (state.IsStopped) return; // another worker already found one -- stop starting new attempts here too
+                Board board = Generate(difficulty, firstX, firstY, workerRng);
+                if (!NoGuessSolver.IsFullySolvable(board, firstX, firstY)) continue;
+                lock (sync) { found ??= board; } // first worker to get here wins; a near-simultaneous second success is just discarded
+                state.Stop();
+                return;
+            }
+        });
+
+        return found;
     }
 
     private static IEnumerable<(int, int)> NeighborsOf(int x, int y, int width, int height)

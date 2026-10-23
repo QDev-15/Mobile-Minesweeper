@@ -10,7 +10,7 @@ public sealed class LicenseService : ILicenseService
 {
     /// <summary>TODO: replace with the real product id once created in Play Console &gt; Monetize &gt;
     /// Products &gt; In-app products (MINESWEEPER-PLAN.md section 7).</summary>
-    public const string ProProductId = "minesweeper_pro_remove_ads";
+    public const string ProProductId = "minesweeper_pro_remove_ads"; // minesweeper_pro_remove_ads
 
     private const string CachedIsProKey = "license_is_pro_cached";
     private readonly SemaphoreSlim _gate = new(1, 1);
