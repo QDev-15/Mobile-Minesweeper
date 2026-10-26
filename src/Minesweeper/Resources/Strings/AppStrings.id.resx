@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- ===== Common / shared across pages ===== -->
+  <data name="AppName" xml:space="preserve"><value>Penyapu Ranjau</value></data>
+  <data name="Common_Play" xml:space="preserve"><value>Main</value></data>
+  <data name="Common_PlayAgain" xml:space="preserve"><value>Main Lagi</value></data>
+  <data name="Common_PlayNow" xml:space="preserve"><value>Main Sekarang</value></data>
+  <data name="Common_PlayOnDate" xml:space="preserve"><value>Main {0}</value></data>
+  <data name="Common_Back" xml:space="preserve"><value>Kembali</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>Tutup</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Batal</value></data>
+  <data name="Common_Continue" xml:space="preserve"><value>Lanjutkan</value></data>
+  <data name="Common_Daily" xml:space="preserve"><value>Tantangan Hari Ini</value></data>
+  <data name="Common_PrivacyPolicy" xml:space="preserve"><value>Kebijakan Privasi</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>Pengaturan</value></data>
+  <data name="Common_Version" xml:space="preserve"><value>Versi {0} · Build {1}</value></data>
+
+  <!-- ===== Difficulty names ===== -->
+  <data name="Difficulty_Easy" xml:space="preserve"><value>Mudah</value></data>
+  <data name="Difficulty_Medium" xml:space="preserve"><value>Sedang</value></data>
+  <data name="Difficulty_Hard" xml:space="preserve"><value>Sulit</value></data>
+
+  <!-- ===== HomePage ===== -->
+  <data name="Home_ResumeTitle" xml:space="preserve"><value>Permainan Berlangsung</value></data>
+  <data name="Home_Today" xml:space="preserve"><value>HARI INI</value></data>
+  <data name="Home_DailyDescription" xml:space="preserve"><value>Papan yang sama untuk semua orang, 100% bisa diselesaikan dengan logika — tidak pernah menebak.</value></data>
+  <data name="Home_Tutorial" xml:space="preserve"><value>Tutorial</value></data>
+  <data name="Home_NormalPlay" xml:space="preserve"><value>MAIN KLASIK</value></data>
+  <data name="Home_ExitToast" xml:space="preserve"><value>Tekan sekali lagi untuk keluar</value></data>
+  <data name="Home_TutorialProgress" xml:space="preserve"><value>Terbuka {0}/{1} · {2}★</value></data>
+  <data name="Home_DifficultyBest" xml:space="preserve"><value>{0} · Terbaik {1}</value></data>
+  <data name="Home_MineCount" xml:space="preserve"><value>{0} ranjau</value></data>
+
+  <!-- ===== GamePage ===== -->
+  <data name="Game_GeneratingBoard" xml:space="preserve"><value>Membuat papan…</value></data>
+  <data name="Game_Won" xml:space="preserve"><value>Anda Menang!</value></data>
+  <data name="Game_Lost" xml:space="preserve"><value>Anda Menginjak Ranjau!</value></data>
+  <data name="Game_LevelResult" xml:space="preserve"><value>Level {0} · {1}</value></data>
+  <data name="Game_NewRecord" xml:space="preserve"><value>Rekor Baru: {0}</value></data>
+  <data name="Game_TimeResult" xml:space="preserve"><value>Waktu: {0}</value></data>
+  <data name="Game_NoHintYet" xml:space="preserve"><value>Belum ada petunjuk saat ini</value></data>
+  <data name="Game_RestartConfirmTitle" xml:space="preserve"><value>Main lagi?</value></data>
+  <data name="Game_RestartConfirmMessage" xml:space="preserve"><value>Papan saat ini akan hilang.</value></data>
+  <data name="Game_LeaveConfirmTitle" xml:space="preserve"><value>Keluar dari permainan saat ini?</value></data>
+  <data name="Game_LeaveConfirmMessage" xml:space="preserve"><value>Progres Anda akan disimpan, Anda bisa melanjutkannya dari layar utama.</value></data>
+  <data name="Game_Leave" xml:space="preserve"><value>Keluar</value></data>
+  <data name="Game_Stay" xml:space="preserve"><value>Tetap di Sini</value></data>
+
+  <!-- ===== AboutPage ===== -->
+  <data name="About_Title" xml:space="preserve"><value>Tentang</value></data>
+  <data name="About_Description" xml:space="preserve"><value>Penyapu Ranjau klasik dengan dua keunikan: mode Tanpa Menebak (setiap papan bisa diselesaikan dengan logika murni) dan Tantangan Hari Ini (papan yang sama untuk semua orang, setiap hari).</value></data>
+  <data name="About_Author" xml:space="preserve"><value>Dikembangkan oleh Nguyen Huu Quynh.</value></data>
+
+  <!-- ===== SettingsPage ===== -->
+  <data name="Settings_ProTier" xml:space="preserve"><value>PAKET PRO</value></data>
+  <data name="Settings_BuyPro" xml:space="preserve"><value>Beli Pro</value></data>
+  <data name="Settings_RestorePurchase" xml:space="preserve"><value>Pulihkan Pembelian</value></data>
+  <data name="Settings_ProFeature1" xml:space="preserve"><value>• Tanpa iklan</value></data>
+  <data name="Settings_ProFeature2" xml:space="preserve"><value>• Petunjuk tak terbatas</value></data>
+  <data name="Settings_ProFeature3" xml:space="preserve"><value>• Beli sekali, selamanya</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>TAMPILAN</value></data>
+  <data name="Settings_ThemeSystem" xml:space="preserve"><value>Sistem</value></data>
+  <data name="Settings_ThemeLight" xml:space="preserve"><value>Terang</value></data>
+  <data name="Settings_ThemeDark" xml:space="preserve"><value>Gelap</value></data>
+  <data name="Settings_ThemeHighContrast" xml:space="preserve"><value>Kontras Tinggi</value></data>
+  <data name="Settings_SoundVibration" xml:space="preserve"><value>SUARA &amp; GETARAN</value></data>
+  <data name="Settings_Sound" xml:space="preserve"><value>Suara</value></data>
+  <data name="Settings_Vibration" xml:space="preserve"><value>Getaran</value></data>
+  <data name="Settings_App" xml:space="preserve"><value>APLIKASI</value></data>
+  <data name="Settings_AppInfo" xml:space="preserve"><value>Informasi Aplikasi</value></data>
+  <data name="Settings_Error" xml:space="preserve"><value>Error</value></data>
+  <data name="Settings_PurchaseFailed" xml:space="preserve"><value>Tidak dapat menyelesaikan pembelian saat ini.</value></data>
+  <data name="Settings_RestoreSuccess" xml:space="preserve"><value>Paket Pro berhasil dipulihkan.</value></data>
+  <data name="Settings_RestoreFailed" xml:space="preserve"><value>Tidak dapat memulihkan pembelian.</value></data>
+  <data name="Settings_RestoreNotFound" xml:space="preserve"><value>Tidak ditemukan pembelian Pro sebelumnya.</value></data>
+  <data name="Settings_RestoreTitle" xml:space="preserve"><value>Pulihkan</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>BAHASA</value></data>
+
+  <!-- ===== LevelsPage ===== -->
+  <data name="Levels_Progress" xml:space="preserve"><value>Terbuka {0}/{1} · {2}★</value></data>
+
+  <!-- ===== DailyCalendarPage ===== -->
+  <data name="Daily_CalendarTitle" xml:space="preserve"><value>Kalender Tantangan Harian</value></data>
+  <data name="Daily_Completed" xml:space="preserve"><value>Tantangan hari itu selesai</value></data>
+  <data name="Daily_NotCompleted" xml:space="preserve"><value>Belum selesai</value></data>
+
+  <!-- ===== Licensing ===== -->
+  <data name="License_Pro" xml:space="preserve"><value>Sudah ditingkatkan ke Pro (bebas iklan)</value></data>
+  <data name="License_Free" xml:space="preserve"><value>Menggunakan versi gratis (dengan iklan)</value></data>
+  <data name="License_ConnectRetryError" xml:space="preserve"><value>Tidak dapat terhubung ke Google Play. Periksa koneksi Anda lalu coba lagi.</value></data>
+  <data name="License_ConnectError" xml:space="preserve"><value>Tidak dapat terhubung ke Google Play.</value></data>
+
+  <!-- ===== PrivacyPolicyPage ===== -->
+  <data name="Privacy_LastUpdated" xml:space="preserve"><value>Terakhir diperbarui: {0}</value></data>
+  <data name="Privacy_Overview_Heading" xml:space="preserve"><value>Ringkasan</value></data>
+  <data name="Privacy_Overview_Body" xml:space="preserve"><value>Penyapu Ranjau adalah permainan Penyapu Ranjau yang berjalan sepenuhnya di perangkat Anda. Aplikasi ini tidak memerlukan akun atau masuk (sign-in). Dokumen ini menjelaskan sedikit data yang dapat diakses oleh aplikasi, beserta layanan pihak ketiga yang digunakannya (iklan, penagihan).</value></data>
+  <data name="Privacy_DirectData_Heading" xml:space="preserve"><value>Informasi yang kami kumpulkan secara langsung</value></data>
+  <data name="Privacy_DirectData_Body" xml:space="preserve"><value>Tidak ada server kami yang menerima progres permainan atau informasi pribadi Anda. Semuanya — level yang terbuka, jumlah bintang, waktu terbaik, permainan yang sedang berlangsung, pengaturan mode Tanpa Menebak — hanya disimpan secara lokal di perangkat Anda (penyimpanan privat milik aplikasi sendiri). Data ini akan hilang jika Anda menghapus aplikasi atau menghapus datanya di Pengaturan Android, dan kami tidak menyimpan salinannya.</value></data>
+  <data name="Privacy_ThirdParty_Heading" xml:space="preserve"><value>Informasi yang dikumpulkan oleh pihak ketiga</value></data>
+  <data name="Privacy_ThirdParty_Intro" xml:space="preserve"><value>Penyapu Ranjau menggunakan beberapa SDK pihak ketiga untuk menampilkan iklan dan memproses pembelian Pro. Layanan-layanan ini dapat mengumpulkan data sesuai kebijakan mereka sendiri:</value></data>
+  <data name="Privacy_LevelPlay_Title" xml:space="preserve"><value>Unity LevelPlay (ironSource) dan jaringan iklan yang terhubung</value></data>
+  <data name="Privacy_LevelPlay_Body" xml:space="preserve"><value>Menampilkan iklan banner/interstisial pada versi gratis. Dapat mengumpulkan: ID Periklanan (Advertising ID), informasi perangkat/OS, perkiraan lokasi (melalui IP), dan aktivitas penggunaan aplikasi yang terkait dengan iklan.</value></data>
+  <data name="Privacy_Billing_Title" xml:space="preserve"><value>Google Play Billing</value></data>
+  <data name="Privacy_Billing_Body" xml:space="preserve"><value>Memproses pembelian Pro (sekali bayar, menghapus iklan). Informasi pembayaran ditangani sepenuhnya oleh Google; kami hanya menerima konfirmasi bahwa pembelian berhasil.</value></data>
+  <data name="Privacy_ThirdParty_Outro" xml:space="preserve"><value>Kami tidak mengontrol bagaimana pihak-pihak ini menggunakan data setelah dikumpulkan. Anda dapat melihat kebijakan masing-masing di sini:</value></data>
+  <data name="Privacy_UnityLink" xml:space="preserve"><value>• Unity (LevelPlay/ironSource): unity.com/legal/privacy-policy</value></data>
+  <data name="Privacy_GoogleLink" xml:space="preserve"><value>• Google: policies.google.com/privacy</value></data>
+  <data name="Privacy_Permissions_Heading" xml:space="preserve"><value>Izin yang diminta aplikasi</value></data>
+  <data name="Privacy_Permissions_Body" xml:space="preserve"><value>Internet &amp; status jaringan — untuk memuat iklan dan memproses pembelian Pro. ID Periklanan (Advertising ID) — wajib sejak Android 13 agar iklan berfungsi dengan benar, digunakan untuk penargetan/pengukuran iklan. Aplikasi ini TIDAK meminta akses kamera, mikrofon, kontak, atau lokasi presisi.</value></data>
+  <data name="Privacy_Children_Heading" xml:space="preserve"><value>Anak-anak</value></data>
+  <data name="Privacy_Children_Body" xml:space="preserve"><value>Penyapu Ranjau tidak ditujukan untuk anak di bawah 13 tahun, dan kami tidak dengan sengaja mengumpulkan informasi pribadi dari anak-anak. Iklan yang ditampilkan mengikuti pengaturan konten iklan yang tersedia di Google Play.</value></data>
+  <data name="Privacy_DataRetention_Heading" xml:space="preserve"><value>Penyimpanan &amp; penghapusan data</value></data>
+  <data name="Privacy_DataRetention_Body" xml:space="preserve"><value>Karena data hanya ada di perangkat Anda, Anda memiliki kendali penuh: menghapus aplikasi atau menghapus datanya di Pengaturan Android akan menghapus semua yang telah disimpan aplikasi. Tidak ada akun atau salinan di server yang perlu kami hapus atas nama Anda.</value></data>
+  <data name="Privacy_PolicyChanges_Heading" xml:space="preserve"><value>Perubahan kebijakan</value></data>
+  <data name="Privacy_PolicyChanges_Body" xml:space="preserve"><value>Jika kebijakan ini berubah, pembaruan akan langsung muncul di halaman ini dalam aplikasi dengan tanggal pembaruan baru. Dengan terus menggunakan aplikasi setelah ada perubahan, berarti Anda menerima kebijakan baru tersebut.</value></data>
+  <data name="Privacy_Contact_Heading" xml:space="preserve"><value>Kontak</value></data>
+  <data name="Privacy_Contact_Body" xml:space="preserve"><value>Pertanyaan tentang kebijakan ini atau cara Penyapu Ranjau menangani data dapat dikirim ke: nguyenquynhvp.ictu@gmail.com</value></data>
+</root>

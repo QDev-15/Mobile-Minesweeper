@@ -1,4 +1,5 @@
 using Minesweeper.Core.Licensing;
+using Minesweeper.Resources.Strings;
 using Plugin.InAppBilling;
 
 namespace Minesweeper.Services;
@@ -38,7 +39,7 @@ public sealed class LicenseService : ILicenseService
         {
             if (!await billing.ConnectAsync())
             {
-                LastError = "Không kết nối được với Google Play. Kiểm tra mạng rồi thử lại.";
+                LastError = AppStrings.License_ConnectRetryError;
                 Changed?.Invoke();
                 return PurchaseOutcome.Error;
             }
@@ -98,7 +99,7 @@ public sealed class LicenseService : ILicenseService
         {
             if (!await billing.ConnectAsync())
             {
-                LastError = "Không kết nối được với Google Play.";
+                LastError = AppStrings.License_ConnectError;
                 return;
             }
             try

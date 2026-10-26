@@ -8,6 +8,8 @@ namespace Minesweeper;
 public static class LevelPlayConfig
 {
     public const string AppKey = "28decb375";
+    public const string BannerAdUnitId = "koeimrjl20oc3nf4";
+    public const string InterstitialAdUnitId = "pzsdsskowseuj9no";
 
 #if DEBUG
     public const bool TestMode = true;

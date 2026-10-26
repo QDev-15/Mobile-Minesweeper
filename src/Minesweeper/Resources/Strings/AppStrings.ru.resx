@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- ===== Common / shared across pages ===== -->
+  <data name="AppName" xml:space="preserve"><value>Сапёр</value></data>
+  <data name="Common_Play" xml:space="preserve"><value>Играть</value></data>
+  <data name="Common_PlayAgain" xml:space="preserve"><value>Играть снова</value></data>
+  <data name="Common_PlayNow" xml:space="preserve"><value>Играть сейчас</value></data>
+  <data name="Common_PlayOnDate" xml:space="preserve"><value>Играть {0}</value></data>
+  <data name="Common_Back" xml:space="preserve"><value>Назад</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>Закрыть</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Отмена</value></data>
+  <data name="Common_Continue" xml:space="preserve"><value>Продолжить</value></data>
+  <data name="Common_Daily" xml:space="preserve"><value>Задача дня</value></data>
+  <data name="Common_PrivacyPolicy" xml:space="preserve"><value>Политика конфиденциальности</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>Настройки</value></data>
+  <data name="Common_Version" xml:space="preserve"><value>Версия {0} · Сборка {1}</value></data>
+
+  <!-- ===== Difficulty names ===== -->
+  <data name="Difficulty_Easy" xml:space="preserve"><value>Лёгкий</value></data>
+  <data name="Difficulty_Medium" xml:space="preserve"><value>Средний</value></data>
+  <data name="Difficulty_Hard" xml:space="preserve"><value>Сложный</value></data>
+
+  <!-- ===== HomePage ===== -->
+  <data name="Home_ResumeTitle" xml:space="preserve"><value>Текущая игра</value></data>
+  <data name="Home_Today" xml:space="preserve"><value>СЕГОДНЯ</value></data>
+  <data name="Home_DailyDescription" xml:space="preserve"><value>Одно и то же поле для всех, решается на 100% логикой — никогда не нужно угадывать.</value></data>
+  <data name="Home_Tutorial" xml:space="preserve"><value>Обучение</value></data>
+  <data name="Home_NormalPlay" xml:space="preserve"><value>КЛАССИЧЕСКАЯ ИГРА</value></data>
+  <data name="Home_ExitToast" xml:space="preserve"><value>Нажмите ещё раз, чтобы выйти</value></data>
+  <data name="Home_TutorialProgress" xml:space="preserve"><value>Открыто {0}/{1} · {2}★</value></data>
+  <data name="Home_DifficultyBest" xml:space="preserve"><value>{0} · Лучший результат {1}</value></data>
+  <data name="Home_MineCount" xml:space="preserve"><value>{0} мин</value></data>
+
+  <!-- ===== GamePage ===== -->
+  <data name="Game_GeneratingBoard" xml:space="preserve"><value>Создание поля…</value></data>
+  <data name="Game_Won" xml:space="preserve"><value>Вы победили!</value></data>
+  <data name="Game_Lost" xml:space="preserve"><value>Вы наткнулись на мину!</value></data>
+  <data name="Game_LevelResult" xml:space="preserve"><value>Уровень {0} · {1}</value></data>
+  <data name="Game_NewRecord" xml:space="preserve"><value>Новый рекорд: {0}</value></data>
+  <data name="Game_TimeResult" xml:space="preserve"><value>Время: {0}</value></data>
+  <data name="Game_NoHintYet" xml:space="preserve"><value>Сейчас подсказок нет</value></data>
+  <data name="Game_RestartConfirmTitle" xml:space="preserve"><value>Играть снова?</value></data>
+  <data name="Game_RestartConfirmMessage" xml:space="preserve"><value>Текущее поле будет потеряно.</value></data>
+  <data name="Game_LeaveConfirmTitle" xml:space="preserve"><value>Выйти из текущей игры?</value></data>
+  <data name="Game_LeaveConfirmMessage" xml:space="preserve"><value>Прогресс будет сохранён, вы можете продолжить игру с главного экрана.</value></data>
+  <data name="Game_Leave" xml:space="preserve"><value>Выйти</value></data>
+  <data name="Game_Stay" xml:space="preserve"><value>Остаться</value></data>
+
+  <!-- ===== AboutPage ===== -->
+  <data name="About_Title" xml:space="preserve"><value>О приложении</value></data>
+  <data name="About_Description" xml:space="preserve"><value>Классический Сапёр с двумя особенностями: режим «Без угадывания» (любое поле решается чистой логикой) и Задача дня (одно и то же поле для всех каждый день).</value></data>
+  <data name="About_Author" xml:space="preserve"><value>Разработано Nguyen Huu Quynh.</value></data>
+
+  <!-- ===== SettingsPage ===== -->
+  <data name="Settings_ProTier" xml:space="preserve"><value>PRO-ВЕРСИЯ</value></data>
+  <data name="Settings_BuyPro" xml:space="preserve"><value>Купить Pro</value></data>
+  <data name="Settings_RestorePurchase" xml:space="preserve"><value>Восстановить покупку</value></data>
+  <data name="Settings_ProFeature1" xml:space="preserve"><value>• Без рекламы</value></data>
+  <data name="Settings_ProFeature2" xml:space="preserve"><value>• Неограниченные подсказки</value></data>
+  <data name="Settings_ProFeature3" xml:space="preserve"><value>• Разовая покупка — навсегда</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>ВНЕШНИЙ ВИД</value></data>
+  <data name="Settings_ThemeSystem" xml:space="preserve"><value>Системная</value></data>
+  <data name="Settings_ThemeLight" xml:space="preserve"><value>Светлая</value></data>
+  <data name="Settings_ThemeDark" xml:space="preserve"><value>Тёмная</value></data>
+  <data name="Settings_ThemeHighContrast" xml:space="preserve"><value>Высокий контраст</value></data>
+  <data name="Settings_SoundVibration" xml:space="preserve"><value>ЗВУК И ВИБРАЦИЯ</value></data>
+  <data name="Settings_Sound" xml:space="preserve"><value>Звук</value></data>
+  <data name="Settings_Vibration" xml:space="preserve"><value>Вибрация</value></data>
+  <data name="Settings_App" xml:space="preserve"><value>ПРИЛОЖЕНИЕ</value></data>
+  <data name="Settings_AppInfo" xml:space="preserve"><value>Информация о приложении</value></data>
+  <data name="Settings_Error" xml:space="preserve"><value>Ошибка</value></data>
+  <data name="Settings_PurchaseFailed" xml:space="preserve"><value>Не удалось завершить покупку сейчас.</value></data>
+  <data name="Settings_RestoreSuccess" xml:space="preserve"><value>Pro-версия восстановлена.</value></data>
+  <data name="Settings_RestoreFailed" xml:space="preserve"><value>Не удалось восстановить покупку.</value></data>
+  <data name="Settings_RestoreNotFound" xml:space="preserve"><value>Предыдущая покупка Pro не найдена.</value></data>
+  <data name="Settings_RestoreTitle" xml:space="preserve"><value>Восстановление</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>ЯЗЫК</value></data>
+
+  <!-- ===== LevelsPage ===== -->
+  <data name="Levels_Progress" xml:space="preserve"><value>Открыто {0}/{1} · {2}★</value></data>
+
+  <!-- ===== DailyCalendarPage ===== -->
+  <data name="Daily_CalendarTitle" xml:space="preserve"><value>Календарь ежедневных задач</value></data>
+  <data name="Daily_Completed" xml:space="preserve"><value>Задача этого дня выполнена</value></data>
+  <data name="Daily_NotCompleted" xml:space="preserve"><value>Не выполнено</value></data>
+
+  <!-- ===== Licensing ===== -->
+  <data name="License_Pro" xml:space="preserve"><value>Обновлено до Pro (без рекламы)</value></data>
+  <data name="License_Free" xml:space="preserve"><value>Используется бесплатная версия (с рекламой)</value></data>
+  <data name="License_ConnectRetryError" xml:space="preserve"><value>Не удалось подключиться к Google Play. Проверьте соединение и попробуйте снова.</value></data>
+  <data name="License_ConnectError" xml:space="preserve"><value>Не удалось подключиться к Google Play.</value></data>
+
+  <!-- ===== PrivacyPolicyPage ===== -->
+  <data name="Privacy_LastUpdated" xml:space="preserve"><value>Последнее обновление: {0}</value></data>
+  <data name="Privacy_Overview_Heading" xml:space="preserve"><value>Обзор</value></data>
+  <data name="Privacy_Overview_Body" xml:space="preserve"><value>Сапёр — это игра в сапёра, которая полностью работает на вашем устройстве. Приложению не требуется учётная запись или вход. В этом документе описано небольшое количество данных, к которым может иметь доступ приложение и используемые им сторонние сервисы (реклама, оплата).</value></data>
+  <data name="Privacy_DirectData_Heading" xml:space="preserve"><value>Информация, которую мы собираем напрямую</value></data>
+  <data name="Privacy_DirectData_Body" xml:space="preserve"><value>Ни один из наших серверов не получает ваш игровой прогресс или личную информацию. Всё — открытые уровни, количество звёзд, лучшее время, текущая игра, настройки режима «Без угадывания» — хранится только локально на вашем устройстве (в собственном приватном хранилище приложения). Эти данные теряются при удалении приложения или очистке его данных в настройках Android, и у нас не остаётся никакой их копии.</value></data>
+  <data name="Privacy_ThirdParty_Heading" xml:space="preserve"><value>Информация, собираемая третьими сторонами</value></data>
+  <data name="Privacy_ThirdParty_Intro" xml:space="preserve"><value>Сапёр использует несколько сторонних SDK для показа рекламы и обработки покупок Pro-версии. Эти сервисы могут собирать данные в соответствии со своими собственными политиками:</value></data>
+  <data name="Privacy_LevelPlay_Title" xml:space="preserve"><value>Unity LevelPlay (ironSource) и связанные рекламные сети</value></data>
+  <data name="Privacy_LevelPlay_Body" xml:space="preserve"><value>Показывает баннерную/межстраничную рекламу в бесплатной версии. Может собирать: рекламный идентификатор (Advertising ID), информацию об устройстве/ОС, приблизительное местоположение (по IP) и активность использования приложения, связанную с рекламой.</value></data>
+  <data name="Privacy_Billing_Title" xml:space="preserve"><value>Google Play Billing</value></data>
+  <data name="Privacy_Billing_Body" xml:space="preserve"><value>Обрабатывает покупку Pro-версии (разовая, убирает рекламу). Платёжные данные полностью обрабатываются Google; мы получаем только подтверждение успешной покупки.</value></data>
+  <data name="Privacy_ThirdParty_Outro" xml:space="preserve"><value>Мы не контролируем, как эти стороны используют данные после их сбора. Вы можете ознакомиться с их собственными политиками:</value></data>
+  <data name="Privacy_UnityLink" xml:space="preserve"><value>• Unity (LevelPlay/ironSource): unity.com/legal/privacy-policy</value></data>
+  <data name="Privacy_GoogleLink" xml:space="preserve"><value>• Google: policies.google.com/privacy</value></data>
+  <data name="Privacy_Permissions_Heading" xml:space="preserve"><value>Разрешения, запрашиваемые приложением</value></data>
+  <data name="Privacy_Permissions_Body" xml:space="preserve"><value>Интернет и состояние сети — для загрузки рекламы и обработки покупок Pro-версии. Рекламный идентификатор (Advertising ID) — обязателен начиная с Android 13 для корректной работы рекламы, используется для таргетинга/измерения эффективности рекламы. Приложение НЕ запрашивает доступ к камере, микрофону, контактам или точному местоположению.</value></data>
+  <data name="Privacy_Children_Heading" xml:space="preserve"><value>Дети</value></data>
+  <data name="Privacy_Children_Body" xml:space="preserve"><value>Сапёр не предназначен для детей младше 13 лет, и мы сознательно не собираем личную информацию от детей. Показываемая реклама соответствует настройкам рекламного контента, доступным в Google Play.</value></data>
+  <data name="Privacy_DataRetention_Heading" xml:space="preserve"><value>Хранение и удаление данных</value></data>
+  <data name="Privacy_DataRetention_Body" xml:space="preserve"><value>Поскольку данные хранятся только на вашем устройстве, вы полностью контролируете их: удаление приложения или очистка его данных в настройках Android удаляет всё, что сохранило приложение. Нет учётной записи или серверной копии, которую мы могли бы удалить от вашего имени.</value></data>
+  <data name="Privacy_PolicyChanges_Heading" xml:space="preserve"><value>Изменения политики</value></data>
+  <data name="Privacy_PolicyChanges_Body" xml:space="preserve"><value>Если эта политика изменится, обновление появится прямо на этой странице в приложении с новой датой обновления. Продолжение использования приложения после изменения означает, что вы принимаете новую политику.</value></data>
+  <data name="Privacy_Contact_Heading" xml:space="preserve"><value>Контакты</value></data>
+  <data name="Privacy_Contact_Body" xml:space="preserve"><value>Вопросы об этой политике или о том, как Сапёр обрабатывает данные, можно отправить на адрес: nguyenquynhvp.ictu@gmail.com</value></data>
+</root>

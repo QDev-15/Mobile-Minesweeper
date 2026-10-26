@@ -2,8 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:views="clr-namespace:Minesweeper.Views"
+             xmlns:strings="clr-namespace:Minesweeper.Resources.Strings"
              x:Class="Minesweeper.Views.SettingsPage"
-             Title="Cài đặt"
+             Title="{x:Static strings:AppStrings.Common_Settings}"
              BackgroundColor="{DynamicResource MilkBackground}"
              Shell.NavBarIsVisible="False">
 
@@ -19,57 +20,67 @@
     <Grid RowDefinitions="Auto,*">
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*" Padding="6,8">
             <Button Grid.Column="0" Text="{x:Static views:Icons.ArrowBack}" Padding="0, 0" Margin="0, 0" FontSize="22" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
-            <Label Grid.Column="1" Text="Cài đặt" Style="{StaticResource TitleText}" FontSize="19" VerticalOptions="Center" Margin="6,0,0,0" />
+            <Label Grid.Column="1" Text="{x:Static strings:AppStrings.Common_Settings}" Style="{StaticResource TitleText}" FontSize="19" VerticalOptions="Center" Margin="6,0,0,0" />
         </Grid>
 
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="0,0,0,24">
-                <Label Text="GÓI PRO" Style="{StaticResource Section}" />
+                <Label Text="{x:Static strings:AppStrings.Settings_ProTier}" Style="{StaticResource Section}" />
                 <Border Style="{StaticResource Card}" Margin="14,0">
                     <VerticalStackLayout Spacing="8">
                         <Label x:Name="LicenseLabel" FontFamily="OpenSansSemibold" FontSize="15" />
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
-                            <Button Text="Mua Pro" Clicked="OnBuyClicked" Style="{StaticResource PrimaryButton}" FontSize="13" HeightRequest="42" />
-                            <Button Grid.Column="1" Text="Khôi phục giao dịch" Clicked="OnRestoreClicked" BackgroundColor="Transparent"
+                            <Button Text="{x:Static strings:AppStrings.Settings_BuyPro}" Clicked="OnBuyClicked" Style="{StaticResource PrimaryButton}" FontSize="13" HeightRequest="42" />
+                            <Button Grid.Column="1" Text="{x:Static strings:AppStrings.Settings_RestorePurchase}" Clicked="OnRestoreClicked" BackgroundColor="Transparent"
                                     BorderWidth="1" BorderColor="{DynamicResource Primary}" TextColor="{DynamicResource Primary}"
                                     FontSize="12" HeightRequest="42" CornerRadius="21" />
                         </Grid>
                         <ActivityIndicator x:Name="Busy" IsRunning="False" IsVisible="False" Color="{DynamicResource Primary}" />
-                        <Label Style="{StaticResource Hint}" Text="• Không còn quảng cáo" />
-                        <Label Style="{StaticResource Hint}" Text="• Gợi ý (Hint) không giới hạn" />
-                        <Label Style="{StaticResource Hint}" Text="• Mua một lần, dùng vĩnh viễn" />
+                        <Label Style="{StaticResource Hint}" Text="{x:Static strings:AppStrings.Settings_ProFeature1}" />
+                        <Label Style="{StaticResource Hint}" Text="{x:Static strings:AppStrings.Settings_ProFeature2}" />
+                        <Label Style="{StaticResource Hint}" Text="{x:Static strings:AppStrings.Settings_ProFeature3}" />
                     </VerticalStackLayout>
                 </Border>
 
-                <Label Text="GIAO DIỆN" Style="{StaticResource Section}" />
+                <Label Text="{x:Static strings:AppStrings.Settings_Appearance}" Style="{StaticResource Section}" />
                 <Border Style="{StaticResource Card}" Margin="14,0">
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="8" RowSpacing="8">
-                        <Button x:Name="ThemeSystemButton" Grid.Row="0" Grid.Column="0" Text="Hệ thống" Clicked="OnThemeSystemClicked"
+                        <Button x:Name="ThemeSystemButton" Grid.Row="0" Grid.Column="0" Text="{x:Static strings:AppStrings.Settings_ThemeSystem}" Clicked="OnThemeSystemClicked"
                                 FontSize="13" HeightRequest="42" CornerRadius="14" FontFamily="OpenSansSemibold" />
-                        <Button x:Name="ThemeLightButton" Grid.Row="0" Grid.Column="1" Text="Sáng" Clicked="OnThemeLightClicked"
+                        <Button x:Name="ThemeLightButton" Grid.Row="0" Grid.Column="1" Text="{x:Static strings:AppStrings.Settings_ThemeLight}" Clicked="OnThemeLightClicked"
                                 FontSize="13" HeightRequest="42" CornerRadius="14" FontFamily="OpenSansSemibold" />
-                        <Button x:Name="ThemeDarkButton" Grid.Row="1" Grid.Column="0" Text="Tối" Clicked="OnThemeDarkClicked"
+                        <Button x:Name="ThemeDarkButton" Grid.Row="1" Grid.Column="0" Text="{x:Static strings:AppStrings.Settings_ThemeDark}" Clicked="OnThemeDarkClicked"
                                 FontSize="13" HeightRequest="42" CornerRadius="14" FontFamily="OpenSansSemibold" />
-                        <Button x:Name="ThemeHighContrastButton" Grid.Row="1" Grid.Column="1" Text="Độ tương phản cao" Clicked="OnThemeHighContrastClicked"
+                        <Button x:Name="ThemeHighContrastButton" Grid.Row="1" Grid.Column="1" Text="{x:Static strings:AppStrings.Settings_ThemeHighContrast}" Clicked="OnThemeHighContrastClicked"
                                 FontSize="12" HeightRequest="42" CornerRadius="14" FontFamily="OpenSansSemibold" />
                     </Grid>
                 </Border>
 
-                <Label Text="ÂM THANH &amp; RUNG" Style="{StaticResource Section}" />
+                <Label Text="{x:Static strings:AppStrings.Settings_Language}" Style="{StaticResource Section}" />
+                <Border Style="{StaticResource Card}" Margin="14,0">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="{x:Static strings:AppStrings.Settings_Language}" FontFamily="OpenSansSemibold" FontSize="15" VerticalOptions="Center" />
+                        <Picker Grid.Column="1" x:Name="LanguagePicker" SelectedIndexChanged="OnLanguagePickerChanged"
+                                TextColor="{DynamicResource Primary}" FontFamily="OpenSansSemibold" FontSize="14"
+                                HorizontalOptions="End" MinimumWidthRequest="140" />
+                    </Grid>
+                </Border>
+
+                <Label Text="{x:Static strings:AppStrings.Settings_SoundVibration}" Style="{StaticResource Section}" />
                 <Border Style="{StaticResource Card}" Margin="14,0">
                     <VerticalStackLayout Spacing="10">
                         <Grid ColumnDefinitions="*,Auto">
-                            <Label Text="Âm thanh" FontFamily="OpenSansSemibold" FontSize="15" VerticalOptions="Center" />
+                            <Label Text="{x:Static strings:AppStrings.Settings_Sound}" FontFamily="OpenSansSemibold" FontSize="15" VerticalOptions="Center" />
                             <Switch x:Name="SoundSwitch" Grid.Column="1" OnColor="{DynamicResource Primary}" Toggled="OnSoundToggled" />
                         </Grid>
                         <Grid ColumnDefinitions="*,Auto">
-                            <Label Text="Rung" FontFamily="OpenSansSemibold" FontSize="15" VerticalOptions="Center" />
+                            <Label Text="{x:Static strings:AppStrings.Settings_Vibration}" FontFamily="OpenSansSemibold" FontSize="15" VerticalOptions="Center" />
                             <Switch x:Name="VibrationSwitch" Grid.Column="1" OnColor="{DynamicResource Primary}" Toggled="OnVibrationToggled" />
                         </Grid>
                     </VerticalStackLayout>
                 </Border>
 
-                <Label Text="ỨNG DỤNG" Style="{StaticResource Section}" />
+                <Label Text="{x:Static strings:AppStrings.Settings_App}" Style="{StaticResource Section}" />
                 <Border Style="{StaticResource Card}" Margin="14,0">
                     <VerticalStackLayout>
                         <Grid ColumnDefinitions="*,Auto" Padding="0,4">
@@ -77,7 +88,7 @@
                                 <TapGestureRecognizer Tapped="OnAboutTapped" />
                             </Grid.GestureRecognizers>
                             <VerticalStackLayout Spacing="2" VerticalOptions="Center">
-                                <Label Text="Thông tin ứng dụng" />
+                                <Label Text="{x:Static strings:AppStrings.Settings_AppInfo}" />
                                 <Label x:Name="VersionCaptionLabel" Style="{StaticResource Hint}" />
                             </VerticalStackLayout>
                             <Label Grid.Column="1" Text="{x:Static views:Icons.ChevronRight}" FontFamily="Icons" FontSize="18" TextColor="{DynamicResource InkSoft}" VerticalOptions="Center" />
@@ -87,7 +98,7 @@
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnPrivacyPolicyTapped" />
                             </Grid.GestureRecognizers>
-                            <Label Text="Chính sách quyền riêng tư" VerticalOptions="Center" />
+                            <Label Text="{x:Static strings:AppStrings.Common_PrivacyPolicy}" VerticalOptions="Center" />
                             <Label Grid.Column="1" Text="{x:Static views:Icons.ChevronRight}" FontFamily="Icons" FontSize="18" TextColor="{DynamicResource InkSoft}" VerticalOptions="Center" />
                         </Grid>
                     </VerticalStackLayout>

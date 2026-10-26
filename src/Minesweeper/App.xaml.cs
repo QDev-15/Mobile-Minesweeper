@@ -13,6 +13,10 @@ public partial class App : Application
 
 	public App()
 	{
+		// Before InitializeComponent: that call (and everything after it) can construct XAML content whose
+		// {x:Static strings:AppStrings.X} bindings resolve through CultureInfo.CurrentUICulture, so the right
+		// language has to already be in effect before any of that runs, not after.
+		AppLanguage.Apply();
 		InitializeComponent();
 		ApplyColorTheme();
 		RequestedThemeChanged += (_, _) =>

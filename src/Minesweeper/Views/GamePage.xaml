@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ads="clr-namespace:AdsService;assembly=AdsService"
              xmlns:views="clr-namespace:Minesweeper.Views"
+             xmlns:strings="clr-namespace:Minesweeper.Resources.Strings"
              x:Class="Minesweeper.Views.GamePage"
              BackgroundColor="{DynamicResource MilkBackground}"
              Shell.NavBarIsVisible="False">
@@ -25,7 +26,7 @@
                      the only cue — shown/hidden from code-behind via _isDaily, same idea as HomePage's own
                      "HÔM NAY" badge on its Daily card. Sits in Row 0's own Auto height, so it never
                      overlaps the board below. -->
-                <Label x:Name="DailyBadge" Text="Thử thách hôm nay" FontFamily="OpenSansSemibold" FontSize="10"
+                <Label x:Name="DailyBadge" Text="{x:Static strings:AppStrings.Common_Daily}" FontFamily="OpenSansSemibold" FontSize="10"
                        TextColor="{DynamicResource OffBlack}" BackgroundColor="{DynamicResource Accent}"
                        Padding="8,2" HorizontalOptions="Center" IsVisible="False" />
             </VerticalStackLayout>
@@ -63,7 +64,7 @@
             <Grid x:Name="BoardLoadingOverlay" IsVisible="False" BackgroundColor="{DynamicResource MilkBackground}" Opacity="0.94">
                 <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
                     <ActivityIndicator x:Name="BoardLoadingSpinner" Color="{DynamicResource Primary}" WidthRequest="42" HeightRequest="42" />
-                    <Label Text="Đang tạo bàn chơi…" Style="{StaticResource Hint}" HorizontalOptions="Center" />
+                    <Label Text="{x:Static strings:AppStrings.Game_GeneratingBoard}" Style="{StaticResource Hint}" HorizontalOptions="Center" />
                 </VerticalStackLayout>
             </Grid>
             <!-- Per-mine "burst" debris (owner follow-up, 2026-10-22: the ring-by-ring spread needed an actual
@@ -100,12 +101,12 @@
                     <Label x:Name="ResultDetailLabel" FontSize="13.5" TextColor="{DynamicResource InkSoft}" HorizontalOptions="Center" />
 
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,14,0,0">
-                        <Button Grid.Column="0" Text="Quay lại" Clicked="OnResultBackClicked"
+                        <Button Grid.Column="0" Text="{x:Static strings:AppStrings.Common_Back}" Clicked="OnResultBackClicked"
                                 BackgroundColor="Transparent" TextColor="{DynamicResource Primary}" BorderColor="{DynamicResource Primary}"
                                 BorderWidth="1.5" FontFamily="OpenSansSemibold" CornerRadius="20" HeightRequest="46" />
-                        <Button Grid.Column="1" Text="Chơi lại" Clicked="OnResultRestartClicked" Style="{StaticResource PrimaryButton}" HeightRequest="46" />
+                        <Button Grid.Column="1" Text="{x:Static strings:AppStrings.Common_PlayAgain}" Clicked="OnResultRestartClicked" Style="{StaticResource PrimaryButton}" HeightRequest="46" />
                     </Grid>
-                    <Button Text="Đóng" Clicked="OnResultCloseClicked" BackgroundColor="Transparent" TextColor="{DynamicResource InkSoft}"
+                    <Button Text="{x:Static strings:AppStrings.Common_Close}" Clicked="OnResultCloseClicked" BackgroundColor="Transparent" TextColor="{DynamicResource InkSoft}"
                             FontFamily="OpenSansSemibold" FontSize="13.5" HeightRequest="36" Margin="0,2,0,0" />
                 </VerticalStackLayout>
             </Border>

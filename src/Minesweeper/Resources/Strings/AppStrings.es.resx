@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- ===== Common / shared across pages ===== -->
+  <data name="AppName" xml:space="preserve"><value>Buscaminas</value></data>
+  <data name="Common_Play" xml:space="preserve"><value>Jugar</value></data>
+  <data name="Common_PlayAgain" xml:space="preserve"><value>Jugar de nuevo</value></data>
+  <data name="Common_PlayNow" xml:space="preserve"><value>Jugar ahora</value></data>
+  <data name="Common_PlayOnDate" xml:space="preserve"><value>Jugar el {0}</value></data>
+  <data name="Common_Back" xml:space="preserve"><value>Atrás</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>Cerrar</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Cancelar</value></data>
+  <data name="Common_Continue" xml:space="preserve"><value>Continuar</value></data>
+  <data name="Common_Daily" xml:space="preserve"><value>Desafío de hoy</value></data>
+  <data name="Common_PrivacyPolicy" xml:space="preserve"><value>Política de privacidad</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>Ajustes</value></data>
+  <data name="Common_Version" xml:space="preserve"><value>Versión {0} · Compilación {1}</value></data>
+
+  <!-- ===== Difficulty names ===== -->
+  <data name="Difficulty_Easy" xml:space="preserve"><value>Fácil</value></data>
+  <data name="Difficulty_Medium" xml:space="preserve"><value>Medio</value></data>
+  <data name="Difficulty_Hard" xml:space="preserve"><value>Difícil</value></data>
+
+  <!-- ===== HomePage ===== -->
+  <data name="Home_ResumeTitle" xml:space="preserve"><value>Partida en curso</value></data>
+  <data name="Home_Today" xml:space="preserve"><value>HOY</value></data>
+  <data name="Home_DailyDescription" xml:space="preserve"><value>El mismo tablero para todos, 100% resoluble con lógica — nunca hay que adivinar.</value></data>
+  <data name="Home_Tutorial" xml:space="preserve"><value>Tutorial</value></data>
+  <data name="Home_NormalPlay" xml:space="preserve"><value>JUEGO CLÁSICO</value></data>
+  <data name="Home_ExitToast" xml:space="preserve"><value>Pulsa otra vez para salir</value></data>
+  <data name="Home_TutorialProgress" xml:space="preserve"><value>Desbloqueados {0}/{1} · {2}★</value></data>
+  <data name="Home_DifficultyBest" xml:space="preserve"><value>{0} · Mejor tiempo {1}</value></data>
+  <data name="Home_MineCount" xml:space="preserve"><value>{0} minas</value></data>
+
+  <!-- ===== GamePage ===== -->
+  <data name="Game_GeneratingBoard" xml:space="preserve"><value>Generando tablero…</value></data>
+  <data name="Game_Won" xml:space="preserve"><value>¡Has ganado!</value></data>
+  <data name="Game_Lost" xml:space="preserve"><value>¡Has pisado una mina!</value></data>
+  <data name="Game_LevelResult" xml:space="preserve"><value>Nivel {0} · {1}</value></data>
+  <data name="Game_NewRecord" xml:space="preserve"><value>Nuevo récord: {0}</value></data>
+  <data name="Game_TimeResult" xml:space="preserve"><value>Tiempo: {0}</value></data>
+  <data name="Game_NoHintYet" xml:space="preserve"><value>No hay ninguna pista disponible ahora</value></data>
+  <data name="Game_RestartConfirmTitle" xml:space="preserve"><value>¿Jugar de nuevo?</value></data>
+  <data name="Game_RestartConfirmMessage" xml:space="preserve"><value>Se perderá el tablero actual.</value></data>
+  <data name="Game_LeaveConfirmTitle" xml:space="preserve"><value>¿Salir de la partida actual?</value></data>
+  <data name="Game_LeaveConfirmMessage" xml:space="preserve"><value>Tu progreso se guardará y podrás continuar desde la pantalla de inicio.</value></data>
+  <data name="Game_Leave" xml:space="preserve"><value>Salir</value></data>
+  <data name="Game_Stay" xml:space="preserve"><value>Quedarse</value></data>
+
+  <!-- ===== AboutPage ===== -->
+  <data name="About_Title" xml:space="preserve"><value>Acerca de</value></data>
+  <data name="About_Description" xml:space="preserve"><value>Buscaminas clásico con dos novedades: el modo Sin adivinar (todos los tableros se resuelven con pura lógica) y el Desafío de hoy (el mismo tablero para todos, cada día).</value></data>
+  <data name="About_Author" xml:space="preserve"><value>Desarrollado por Nguyen Huu Quynh.</value></data>
+
+  <!-- ===== SettingsPage ===== -->
+  <data name="Settings_ProTier" xml:space="preserve"><value>VERSIÓN PRO</value></data>
+  <data name="Settings_BuyPro" xml:space="preserve"><value>Comprar Pro</value></data>
+  <data name="Settings_RestorePurchase" xml:space="preserve"><value>Restaurar compra</value></data>
+  <data name="Settings_ProFeature1" xml:space="preserve"><value>• Sin anuncios</value></data>
+  <data name="Settings_ProFeature2" xml:space="preserve"><value>• Pistas ilimitadas</value></data>
+  <data name="Settings_ProFeature3" xml:space="preserve"><value>• Compra única, para siempre</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>APARIENCIA</value></data>
+  <data name="Settings_ThemeSystem" xml:space="preserve"><value>Sistema</value></data>
+  <data name="Settings_ThemeLight" xml:space="preserve"><value>Claro</value></data>
+  <data name="Settings_ThemeDark" xml:space="preserve"><value>Oscuro</value></data>
+  <data name="Settings_ThemeHighContrast" xml:space="preserve"><value>Alto contraste</value></data>
+  <data name="Settings_SoundVibration" xml:space="preserve"><value>SONIDO Y VIBRACIÓN</value></data>
+  <data name="Settings_Sound" xml:space="preserve"><value>Sonido</value></data>
+  <data name="Settings_Vibration" xml:space="preserve"><value>Vibración</value></data>
+  <data name="Settings_App" xml:space="preserve"><value>APLICACIÓN</value></data>
+  <data name="Settings_AppInfo" xml:space="preserve"><value>Información de la app</value></data>
+  <data name="Settings_Error" xml:space="preserve"><value>Error</value></data>
+  <data name="Settings_PurchaseFailed" xml:space="preserve"><value>No se pudo completar la compra ahora.</value></data>
+  <data name="Settings_RestoreSuccess" xml:space="preserve"><value>Se restauró la versión Pro.</value></data>
+  <data name="Settings_RestoreFailed" xml:space="preserve"><value>No se pudo restaurar la compra.</value></data>
+  <data name="Settings_RestoreNotFound" xml:space="preserve"><value>No se encontró ninguna compra Pro anterior.</value></data>
+  <data name="Settings_RestoreTitle" xml:space="preserve"><value>Restaurar</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>IDIOMA</value></data>
+
+  <!-- ===== LevelsPage ===== -->
+  <data name="Levels_Progress" xml:space="preserve"><value>Desbloqueados {0}/{1} · {2}★</value></data>
+
+  <!-- ===== DailyCalendarPage ===== -->
+  <data name="Daily_CalendarTitle" xml:space="preserve"><value>Calendario de desafíos diarios</value></data>
+  <data name="Daily_Completed" xml:space="preserve"><value>Desafío de ese día completado</value></data>
+  <data name="Daily_NotCompleted" xml:space="preserve"><value>No completado</value></data>
+
+  <!-- ===== Licensing ===== -->
+  <data name="License_Pro" xml:space="preserve"><value>Versión Pro activada (sin anuncios)</value></data>
+  <data name="License_Free" xml:space="preserve"><value>Usando la versión gratuita (con anuncios)</value></data>
+  <data name="License_ConnectRetryError" xml:space="preserve"><value>No se pudo conectar con Google Play. Revisa tu conexión e inténtalo de nuevo.</value></data>
+  <data name="License_ConnectError" xml:space="preserve"><value>No se pudo conectar con Google Play.</value></data>
+
+  <!-- ===== PrivacyPolicyPage ===== -->
+  <data name="Privacy_LastUpdated" xml:space="preserve"><value>Última actualización: {0}</value></data>
+  <data name="Privacy_Overview_Heading" xml:space="preserve"><value>Resumen</value></data>
+  <data name="Privacy_Overview_Body" xml:space="preserve"><value>Buscaminas es un juego de Buscaminas que se ejecuta íntegramente en tu dispositivo. La app no requiere cuenta ni inicio de sesión. Este documento explica la escasa cantidad de datos a los que la app, junto con los servicios de terceros que utiliza (anuncios, facturación), pueden tener acceso.</value></data>
+  <data name="Privacy_DirectData_Heading" xml:space="preserve"><value>Información que recopilamos directamente</value></data>
+  <data name="Privacy_DirectData_Body" xml:space="preserve"><value>Ninguno de nuestros servidores recibe tu progreso de juego ni tu información personal. Todo —niveles desbloqueados, número de estrellas, mejores tiempos, la partida en curso, ajustes del modo Sin adivinar— se guarda únicamente de forma local en tu dispositivo (el almacenamiento privado de la propia app). Estos datos se pierden si desinstalas la app o borras sus datos en los ajustes de Android, y no conservamos ninguna copia.</value></data>
+  <data name="Privacy_ThirdParty_Heading" xml:space="preserve"><value>Información recopilada por terceros</value></data>
+  <data name="Privacy_ThirdParty_Intro" xml:space="preserve"><value>Buscaminas utiliza algunos SDK de terceros para mostrar anuncios y procesar las compras de la versión Pro. Estos servicios pueden recopilar datos conforme a sus propias políticas:</value></data>
+  <data name="Privacy_LevelPlay_Title" xml:space="preserve"><value>Unity LevelPlay (ironSource) y redes de anuncios asociadas</value></data>
+  <data name="Privacy_LevelPlay_Body" xml:space="preserve"><value>Muestra anuncios de banner/intersticiales en la versión gratuita. Puede recopilar: identificador de publicidad (Advertising ID), información del dispositivo/sistema operativo, ubicación aproximada (mediante la IP) y actividad de uso de la app relacionada con anuncios.</value></data>
+  <data name="Privacy_Billing_Title" xml:space="preserve"><value>Google Play Billing</value></data>
+  <data name="Privacy_Billing_Body" xml:space="preserve"><value>Procesa la compra de la versión Pro (pago único, elimina los anuncios). Los datos de pago son gestionados íntegramente por Google; nosotros solo recibimos la confirmación de que la compra se realizó con éxito.</value></data>
+  <data name="Privacy_ThirdParty_Outro" xml:space="preserve"><value>No controlamos cómo estas partes usan los datos una vez recopilados. Puedes consultar sus propias políticas:</value></data>
+  <data name="Privacy_UnityLink" xml:space="preserve"><value>• Unity (LevelPlay/ironSource): unity.com/legal/privacy-policy</value></data>
+  <data name="Privacy_GoogleLink" xml:space="preserve"><value>• Google: policies.google.com/privacy</value></data>
+  <data name="Privacy_Permissions_Heading" xml:space="preserve"><value>Permisos que solicita la app</value></data>
+  <data name="Privacy_Permissions_Body" xml:space="preserve"><value>Internet y estado de la red: para cargar anuncios y procesar las compras de la versión Pro. Identificador de publicidad (Advertising ID): obligatorio desde Android 13 para que los anuncios funcionen correctamente, usado para la segmentación/medición de anuncios. La app NO solicita acceso a la cámara, el micrófono, los contactos ni la ubicación precisa.</value></data>
+  <data name="Privacy_Children_Heading" xml:space="preserve"><value>Menores</value></data>
+  <data name="Privacy_Children_Body" xml:space="preserve"><value>Buscaminas no está dirigido a menores de 13 años y no recopilamos intencionadamente información personal de menores. Los anuncios mostrados siguen los ajustes de contenido publicitario disponibles en Google Play.</value></data>
+  <data name="Privacy_DataRetention_Heading" xml:space="preserve"><value>Almacenamiento y eliminación de datos</value></data>
+  <data name="Privacy_DataRetention_Body" xml:space="preserve"><value>Como los datos solo existen en tu dispositivo, tú tienes el control total: desinstalar la app o borrar sus datos en los ajustes de Android elimina todo lo que la app haya guardado. No existe ninguna cuenta ni copia en servidores que debamos eliminar en tu nombre.</value></data>
+  <data name="Privacy_PolicyChanges_Heading" xml:space="preserve"><value>Cambios en la política</value></data>
+  <data name="Privacy_PolicyChanges_Body" xml:space="preserve"><value>Si esta política cambia, la actualización aparecerá directamente en esta misma página de la app, con una nueva fecha de actualización. Seguir usando la app después de un cambio significa que aceptas la nueva política.</value></data>
+  <data name="Privacy_Contact_Heading" xml:space="preserve"><value>Contacto</value></data>
+  <data name="Privacy_Contact_Body" xml:space="preserve"><value>Las preguntas sobre esta política o sobre cómo Buscaminas trata los datos pueden enviarse a: nguyenquynhvp.ictu@gmail.com</value></data>
+</root>

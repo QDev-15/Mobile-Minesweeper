@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- ===== Common / shared across pages ===== -->
+  <data name="AppName" xml:space="preserve"><value>扫雷</value></data>
+  <data name="Common_Play" xml:space="preserve"><value>开始</value></data>
+  <data name="Common_PlayAgain" xml:space="preserve"><value>再玩一次</value></data>
+  <data name="Common_PlayNow" xml:space="preserve"><value>立即开始</value></data>
+  <data name="Common_PlayOnDate" xml:space="preserve"><value>玩 {0}</value></data>
+  <data name="Common_Back" xml:space="preserve"><value>返回</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>关闭</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>取消</value></data>
+  <data name="Common_Continue" xml:space="preserve"><value>继续</value></data>
+  <data name="Common_Daily" xml:space="preserve"><value>今日挑战</value></data>
+  <data name="Common_PrivacyPolicy" xml:space="preserve"><value>隐私政策</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>设置</value></data>
+  <data name="Common_Version" xml:space="preserve"><value>版本 {0} · 构建 {1}</value></data>
+
+  <!-- ===== Difficulty names ===== -->
+  <data name="Difficulty_Easy" xml:space="preserve"><value>简单</value></data>
+  <data name="Difficulty_Medium" xml:space="preserve"><value>中等</value></data>
+  <data name="Difficulty_Hard" xml:space="preserve"><value>困难</value></data>
+
+  <!-- ===== HomePage ===== -->
+  <data name="Home_ResumeTitle" xml:space="preserve"><value>进行中的游戏</value></data>
+  <data name="Home_Today" xml:space="preserve"><value>今天</value></data>
+  <data name="Home_DailyDescription" xml:space="preserve"><value>每个人都是同一张棋盘，100% 可用逻辑推理解出——绝不猜测。</value></data>
+  <data name="Home_Tutorial" xml:space="preserve"><value>教程</value></data>
+  <data name="Home_NormalPlay" xml:space="preserve"><value>经典模式</value></data>
+  <data name="Home_ExitToast" xml:space="preserve"><value>再按一次退出</value></data>
+  <data name="Home_TutorialProgress" xml:space="preserve"><value>已解锁 {0}/{1} · {2}★</value></data>
+  <data name="Home_DifficultyBest" xml:space="preserve"><value>{0} · 最佳 {1}</value></data>
+  <data name="Home_MineCount" xml:space="preserve"><value>{0} 颗雷</value></data>
+
+  <!-- ===== GamePage ===== -->
+  <data name="Game_GeneratingBoard" xml:space="preserve"><value>正在生成棋盘…</value></data>
+  <data name="Game_Won" xml:space="preserve"><value>你赢了！</value></data>
+  <data name="Game_Lost" xml:space="preserve"><value>踩到地雷了！</value></data>
+  <data name="Game_LevelResult" xml:space="preserve"><value>第 {0} 关 · {1}</value></data>
+  <data name="Game_NewRecord" xml:space="preserve"><value>新纪录：{0}</value></data>
+  <data name="Game_TimeResult" xml:space="preserve"><value>用时：{0}</value></data>
+  <data name="Game_NoHintYet" xml:space="preserve"><value>目前没有可用的提示</value></data>
+  <data name="Game_RestartConfirmTitle" xml:space="preserve"><value>重新开始？</value></data>
+  <data name="Game_RestartConfirmMessage" xml:space="preserve"><value>当前棋盘将会丢失。</value></data>
+  <data name="Game_LeaveConfirmTitle" xml:space="preserve"><value>退出当前游戏？</value></data>
+  <data name="Game_LeaveConfirmMessage" xml:space="preserve"><value>进度会被保存，你可以从主页继续游戏。</value></data>
+  <data name="Game_Leave" xml:space="preserve"><value>退出</value></data>
+  <data name="Game_Stay" xml:space="preserve"><value>留下</value></data>
+
+  <!-- ===== AboutPage ===== -->
+  <data name="About_Title" xml:space="preserve"><value>关于</value></data>
+  <data name="About_Description" xml:space="preserve"><value>经典扫雷，带有两个特色玩法：无猜模式（每张棋盘都能靠纯逻辑解出）和今日挑战（每天所有人的棋盘都一样）。</value></data>
+  <data name="About_Author" xml:space="preserve"><value>由 Nguyen Huu Quynh 开发。</value></data>
+
+  <!-- ===== SettingsPage ===== -->
+  <data name="Settings_ProTier" xml:space="preserve"><value>专业版</value></data>
+  <data name="Settings_BuyPro" xml:space="preserve"><value>购买专业版</value></data>
+  <data name="Settings_RestorePurchase" xml:space="preserve"><value>恢复购买</value></data>
+  <data name="Settings_ProFeature1" xml:space="preserve"><value>• 无广告</value></data>
+  <data name="Settings_ProFeature2" xml:space="preserve"><value>• 无限提示</value></data>
+  <data name="Settings_ProFeature3" xml:space="preserve"><value>• 一次购买，永久使用</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>外观</value></data>
+  <data name="Settings_ThemeSystem" xml:space="preserve"><value>跟随系统</value></data>
+  <data name="Settings_ThemeLight" xml:space="preserve"><value>浅色</value></data>
+  <data name="Settings_ThemeDark" xml:space="preserve"><value>深色</value></data>
+  <data name="Settings_ThemeHighContrast" xml:space="preserve"><value>高对比度</value></data>
+  <data name="Settings_SoundVibration" xml:space="preserve"><value>声音与震动</value></data>
+  <data name="Settings_Sound" xml:space="preserve"><value>声音</value></data>
+  <data name="Settings_Vibration" xml:space="preserve"><value>震动</value></data>
+  <data name="Settings_App" xml:space="preserve"><value>应用</value></data>
+  <data name="Settings_AppInfo" xml:space="preserve"><value>应用信息</value></data>
+  <data name="Settings_Error" xml:space="preserve"><value>错误</value></data>
+  <data name="Settings_PurchaseFailed" xml:space="preserve"><value>目前无法完成购买。</value></data>
+  <data name="Settings_RestoreSuccess" xml:space="preserve"><value>已恢复专业版。</value></data>
+  <data name="Settings_RestoreFailed" xml:space="preserve"><value>无法恢复购买。</value></data>
+  <data name="Settings_RestoreNotFound" xml:space="preserve"><value>未找到以前的专业版购买记录。</value></data>
+  <data name="Settings_RestoreTitle" xml:space="preserve"><value>恢复</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>语言</value></data>
+
+  <!-- ===== LevelsPage ===== -->
+  <data name="Levels_Progress" xml:space="preserve"><value>已解锁 {0}/{1} · {2}★</value></data>
+
+  <!-- ===== DailyCalendarPage ===== -->
+  <data name="Daily_CalendarTitle" xml:space="preserve"><value>每日挑战日历</value></data>
+  <data name="Daily_Completed" xml:space="preserve"><value>已完成当天的挑战</value></data>
+  <data name="Daily_NotCompleted" xml:space="preserve"><value>未完成</value></data>
+
+  <!-- ===== Licensing ===== -->
+  <data name="License_Pro" xml:space="preserve"><value>已升级为专业版（无广告）</value></data>
+  <data name="License_Free" xml:space="preserve"><value>正在使用免费版（含广告）</value></data>
+  <data name="License_ConnectRetryError" xml:space="preserve"><value>无法连接 Google Play，请检查网络后重试。</value></data>
+  <data name="License_ConnectError" xml:space="preserve"><value>无法连接 Google Play。</value></data>
+
+  <!-- ===== PrivacyPolicyPage ===== -->
+  <data name="Privacy_LastUpdated" xml:space="preserve"><value>最后更新：{0}</value></data>
+  <data name="Privacy_Overview_Heading" xml:space="preserve"><value>概述</value></data>
+  <data name="Privacy_Overview_Body" xml:space="preserve"><value>扫雷是一款完全在你的设备上运行的扫雷游戏。应用不需要账户，也不需要登录。本文档说明了应用以及它所使用的第三方服务（广告、支付）可以访问的少量数据。</value></data>
+  <data name="Privacy_DirectData_Heading" xml:space="preserve"><value>我们直接收集的信息</value></data>
+  <data name="Privacy_DirectData_Body" xml:space="preserve"><value>我们的服务器不会接收你的游戏进度或个人信息。所有内容——已解锁的关卡、星级、最佳用时、进行中的游戏、无猜模式设置——都只保存在你的设备本地（应用自身的私有存储）。卸载应用或在 Android 设置中清除应用数据会丢失这些数据，我们也没有任何副本。</value></data>
+  <data name="Privacy_ThirdParty_Heading" xml:space="preserve"><value>第三方收集的信息</value></data>
+  <data name="Privacy_ThirdParty_Intro" xml:space="preserve"><value>扫雷使用了一些第三方 SDK 来展示广告和处理专业版购买。这些服务可能依照其自身政策收集数据：</value></data>
+  <data name="Privacy_LevelPlay_Title" xml:space="preserve"><value>Unity LevelPlay（ironSource）及其联接的广告网络</value></data>
+  <data name="Privacy_LevelPlay_Body" xml:space="preserve"><value>在免费版中展示横幅/插屏广告。可能收集：广告标识符（Advertising ID）、设备/操作系统信息、大致位置（通过 IP）以及与广告相关的应用使用活动。</value></data>
+  <data name="Privacy_Billing_Title" xml:space="preserve"><value>Google Play Billing</value></data>
+  <data name="Privacy_Billing_Body" xml:space="preserve"><value>处理专业版购买（一次性，移除广告）。支付信息完全由 Google 处理；我们只会收到购买成功的确认。</value></data>
+  <data name="Privacy_ThirdParty_Outro" xml:space="preserve"><value>我们无法控制这些第三方收集数据后的使用方式。你可以查看它们各自的政策：</value></data>
+  <data name="Privacy_UnityLink" xml:space="preserve"><value>• Unity (LevelPlay/ironSource)：unity.com/legal/privacy-policy</value></data>
+  <data name="Privacy_GoogleLink" xml:space="preserve"><value>• Google：policies.google.com/privacy</value></data>
+  <data name="Privacy_Permissions_Heading" xml:space="preserve"><value>应用请求的权限</value></data>
+  <data name="Privacy_Permissions_Body" xml:space="preserve"><value>互联网和网络状态——用于加载广告和处理专业版购买。广告标识符（Advertising ID）——Android 13 及以上版本要求提供，以便广告正常运作，用于广告定向/效果测量。应用不会请求相机、麦克风、联系人或精确位置权限。</value></data>
+  <data name="Privacy_Children_Heading" xml:space="preserve"><value>儿童</value></data>
+  <data name="Privacy_Children_Body" xml:space="preserve"><value>扫雷并非面向 13 岁以下儿童，我们不会故意收集儿童的个人信息。所展示的广告遵循 Google Play 上可用的广告内容设置。</value></data>
+  <data name="Privacy_DataRetention_Heading" xml:space="preserve"><value>数据存储与删除</value></data>
+  <data name="Privacy_DataRetention_Body" xml:space="preserve"><value>由于数据只保存在你的设备上，你始终拥有完全的控制权：卸载应用或在 Android 设置中清除应用数据会清除应用保存的所有内容。没有账户或服务器端副本需要我们代为删除。</value></data>
+  <data name="Privacy_PolicyChanges_Heading" xml:space="preserve"><value>政策变更</value></data>
+  <data name="Privacy_PolicyChanges_Body" xml:space="preserve"><value>如果本政策发生变更，更新内容会直接显示在应用内的此页面，并附上新的更新日期。变更后继续使用本应用即表示你接受新的政策。</value></data>
+  <data name="Privacy_Contact_Heading" xml:space="preserve"><value>联系我们</value></data>
+  <data name="Privacy_Contact_Body" xml:space="preserve"><value>有关本政策或扫雷如何处理数据的问题，可发送至：nguyenquynhvp.ictu@gmail.com</value></data>
+</root>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- ===== Common / shared across pages ===== -->
+  <data name="AppName" xml:space="preserve"><value>マインスイーパー</value></data>
+  <data name="Common_Play" xml:space="preserve"><value>プレイ</value></data>
+  <data name="Common_PlayAgain" xml:space="preserve"><value>もう一度プレイ</value></data>
+  <data name="Common_PlayNow" xml:space="preserve"><value>今すぐプレイ</value></data>
+  <data name="Common_PlayOnDate" xml:space="preserve"><value>{0}をプレイ</value></data>
+  <data name="Common_Back" xml:space="preserve"><value>戻る</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>閉じる</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="Common_Continue" xml:space="preserve"><value>続ける</value></data>
+  <data name="Common_Daily" xml:space="preserve"><value>今日のチャレンジ</value></data>
+  <data name="Common_PrivacyPolicy" xml:space="preserve"><value>プライバシーポリシー</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>設定</value></data>
+  <data name="Common_Version" xml:space="preserve"><value>バージョン {0} · ビルド {1}</value></data>
+
+  <!-- ===== Difficulty names ===== -->
+  <data name="Difficulty_Easy" xml:space="preserve"><value>簡単</value></data>
+  <data name="Difficulty_Medium" xml:space="preserve"><value>普通</value></data>
+  <data name="Difficulty_Hard" xml:space="preserve"><value>難しい</value></data>
+
+  <!-- ===== HomePage ===== -->
+  <data name="Home_ResumeTitle" xml:space="preserve"><value>プレイ中のゲーム</value></data>
+  <data name="Home_Today" xml:space="preserve"><value>本日</value></data>
+  <data name="Home_DailyDescription" xml:space="preserve"><value>みんな同じボードで、論理だけで100%解けます——推測は一切不要です。</value></data>
+  <data name="Home_Tutorial" xml:space="preserve"><value>チュートリアル</value></data>
+  <data name="Home_NormalPlay" xml:space="preserve"><value>クラシックプレイ</value></data>
+  <data name="Home_ExitToast" xml:space="preserve"><value>もう一度押すと終了します</value></data>
+  <data name="Home_TutorialProgress" xml:space="preserve"><value>開放済み {0}/{1} · {2}★</value></data>
+  <data name="Home_DifficultyBest" xml:space="preserve"><value>{0} · 最高記録 {1}</value></data>
+  <data name="Home_MineCount" xml:space="preserve"><value>地雷 {0} 個</value></data>
+
+  <!-- ===== GamePage ===== -->
+  <data name="Game_GeneratingBoard" xml:space="preserve"><value>ボードを生成中…</value></data>
+  <data name="Game_Won" xml:space="preserve"><value>勝利しました！</value></data>
+  <data name="Game_Lost" xml:space="preserve"><value>地雷を踏みました！</value></data>
+  <data name="Game_LevelResult" xml:space="preserve"><value>レベル {0} · {1}</value></data>
+  <data name="Game_NewRecord" xml:space="preserve"><value>新記録：{0}</value></data>
+  <data name="Game_TimeResult" xml:space="preserve"><value>時間：{0}</value></data>
+  <data name="Game_NoHintYet" xml:space="preserve"><value>現在ヒントはありません</value></data>
+  <data name="Game_RestartConfirmTitle" xml:space="preserve"><value>もう一度プレイしますか？</value></data>
+  <data name="Game_RestartConfirmMessage" xml:space="preserve"><value>現在のボードは失われます。</value></data>
+  <data name="Game_LeaveConfirmTitle" xml:space="preserve"><value>現在のゲームを終了しますか？</value></data>
+  <data name="Game_LeaveConfirmMessage" xml:space="preserve"><value>進行状況は保存され、ホーム画面から再開できます。</value></data>
+  <data name="Game_Leave" xml:space="preserve"><value>終了</value></data>
+  <data name="Game_Stay" xml:space="preserve"><value>続ける</value></data>
+
+  <!-- ===== AboutPage ===== -->
+  <data name="About_Title" xml:space="preserve"><value>アプリについて</value></data>
+  <data name="About_Description" xml:space="preserve"><value>クラシックなマインスイーパーに2つの特徴を追加：ノーゲスモード（すべてのボードが純粋な論理で解けます）と今日のチャレンジ（毎日みんな同じボードで挑戦）。</value></data>
+  <data name="About_Author" xml:space="preserve"><value>開発者：Nguyen Huu Quynh</value></data>
+
+  <!-- ===== SettingsPage ===== -->
+  <data name="Settings_ProTier" xml:space="preserve"><value>プロ版</value></data>
+  <data name="Settings_BuyPro" xml:space="preserve"><value>プロ版を購入</value></data>
+  <data name="Settings_RestorePurchase" xml:space="preserve"><value>購入を復元</value></data>
+  <data name="Settings_ProFeature1" xml:space="preserve"><value>• 広告なし</value></data>
+  <data name="Settings_ProFeature2" xml:space="preserve"><value>• ヒント無制限</value></data>
+  <data name="Settings_ProFeature3" xml:space="preserve"><value>• 一度購入すれば永久に使用可能</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>外観</value></data>
+  <data name="Settings_ThemeSystem" xml:space="preserve"><value>システム</value></data>
+  <data name="Settings_ThemeLight" xml:space="preserve"><value>ライト</value></data>
+  <data name="Settings_ThemeDark" xml:space="preserve"><value>ダーク</value></data>
+  <data name="Settings_ThemeHighContrast" xml:space="preserve"><value>ハイコントラスト</value></data>
+  <data name="Settings_SoundVibration" xml:space="preserve"><value>サウンドとバイブレーション</value></data>
+  <data name="Settings_Sound" xml:space="preserve"><value>サウンド</value></data>
+  <data name="Settings_Vibration" xml:space="preserve"><value>バイブレーション</value></data>
+  <data name="Settings_App" xml:space="preserve"><value>アプリ</value></data>
+  <data name="Settings_AppInfo" xml:space="preserve"><value>アプリ情報</value></data>
+  <data name="Settings_Error" xml:space="preserve"><value>エラー</value></data>
+  <data name="Settings_PurchaseFailed" xml:space="preserve"><value>現在購入を完了できません。</value></data>
+  <data name="Settings_RestoreSuccess" xml:space="preserve"><value>プロ版を復元しました。</value></data>
+  <data name="Settings_RestoreFailed" xml:space="preserve"><value>購入を復元できませんでした。</value></data>
+  <data name="Settings_RestoreNotFound" xml:space="preserve"><value>以前のプロ版購入が見つかりませんでした。</value></data>
+  <data name="Settings_RestoreTitle" xml:space="preserve"><value>復元</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>言語</value></data>
+
+  <!-- ===== LevelsPage ===== -->
+  <data name="Levels_Progress" xml:space="preserve"><value>開放済み {0}/{1} · {2}★</value></data>
+
+  <!-- ===== DailyCalendarPage ===== -->
+  <data name="Daily_CalendarTitle" xml:space="preserve"><value>デイリーチャレンジカレンダー</value></data>
+  <data name="Daily_Completed" xml:space="preserve"><value>その日のチャレンジを完了</value></data>
+  <data name="Daily_NotCompleted" xml:space="preserve"><value>未完了</value></data>
+
+  <!-- ===== Licensing ===== -->
+  <data name="License_Pro" xml:space="preserve"><value>プロ版にアップグレード済み（広告なし）</value></data>
+  <data name="License_Free" xml:space="preserve"><value>無料版を使用中（広告あり）</value></data>
+  <data name="License_ConnectRetryError" xml:space="preserve"><value>Google Playに接続できません。接続を確認して再試行してください。</value></data>
+  <data name="License_ConnectError" xml:space="preserve"><value>Google Playに接続できません。</value></data>
+
+  <!-- ===== PrivacyPolicyPage ===== -->
+  <data name="Privacy_LastUpdated" xml:space="preserve"><value>最終更新日：{0}</value></data>
+  <data name="Privacy_Overview_Heading" xml:space="preserve"><value>概要</value></data>
+  <data name="Privacy_Overview_Body" xml:space="preserve"><value>マインスイーパーは、お使いの端末上で完全に動作するマインスイーパーゲームです。アカウントやログインは不要です。本書では、本アプリおよび本アプリが利用する第三者サービス（広告、決済）がアクセスできる、ごく少量のデータについて説明します。</value></data>
+  <data name="Privacy_DirectData_Heading" xml:space="preserve"><value>当社が直接収集する情報</value></data>
+  <data name="Privacy_DirectData_Body" xml:space="preserve"><value>当社のサーバーは、あなたのゲーム進行状況や個人情報を受け取ることはありません。解放済みのレベル、獲得した星の数、最速記録、プレイ中のゲーム、ノーゲス設定など、すべての情報は端末上（アプリ専用の保存領域）にのみ保存されます。これらのデータは、アプリをアンインストールするか、Androidの設定でアプリのデータを消去すると失われ、当社はそのコピーを保持していません。</value></data>
+  <data name="Privacy_ThirdParty_Heading" xml:space="preserve"><value>第三者が収集する情報</value></data>
+  <data name="Privacy_ThirdParty_Intro" xml:space="preserve"><value>マインスイーパーは、広告の表示とプロ版購入の処理のためにいくつかの第三者SDKを使用しています。これらのサービスは、それぞれ独自の方針に基づいてデータを収集する場合があります。</value></data>
+  <data name="Privacy_LevelPlay_Title" xml:space="preserve"><value>Unity LevelPlay（ironSource）および連携する広告ネットワーク</value></data>
+  <data name="Privacy_LevelPlay_Body" xml:space="preserve"><value>無料版でバナー広告やインタースティシャル広告を表示します。収集される可能性のある情報：広告ID（Advertising ID）、端末・OS情報、おおよその位置情報（IPアドレス経由）、広告関連のアプリ利用状況。</value></data>
+  <data name="Privacy_Billing_Title" xml:space="preserve"><value>Google Play Billing</value></data>
+  <data name="Privacy_Billing_Body" xml:space="preserve"><value>プロ版の購入（一度限り、広告を削除）を処理します。決済情報はすべてGoogleが処理し、当社は購入が成功したことの確認のみを受け取ります。</value></data>
+  <data name="Privacy_ThirdParty_Outro" xml:space="preserve"><value>当社は、これらの第三者が収集したデータをどのように利用するかを管理していません。それぞれの方針は以下でご確認いただけます。</value></data>
+  <data name="Privacy_UnityLink" xml:space="preserve"><value>• Unity (LevelPlay/ironSource)：unity.com/legal/privacy-policy</value></data>
+  <data name="Privacy_GoogleLink" xml:space="preserve"><value>• Google：policies.google.com/privacy</value></data>
+  <data name="Privacy_Permissions_Heading" xml:space="preserve"><value>アプリが要求する権限</value></data>
+  <data name="Privacy_Permissions_Body" xml:space="preserve"><value>インターネットとネットワーク状態——広告の読み込みとプロ版購入の処理に使用します。広告ID（Advertising ID）——Android 13以降で広告を正しく機能させるために必須で、広告のターゲティング・効果測定に使用します。本アプリはカメラ、マイク、連絡先、正確な位置情報を要求しません。</value></data>
+  <data name="Privacy_Children_Heading" xml:space="preserve"><value>子供向けについて</value></data>
+  <data name="Privacy_Children_Body" xml:space="preserve"><value>マインスイーパーは13歳未満の子供を対象としておらず、子供から故意に個人情報を収集することはありません。表示される広告は、Google Playで利用可能な広告コンテンツ設定に従います。</value></data>
+  <data name="Privacy_DataRetention_Heading" xml:space="preserve"><value>データの保存と削除</value></data>
+  <data name="Privacy_DataRetention_Body" xml:space="preserve"><value>データは端末上にのみ保存されるため、すべてあなた自身で管理できます。アプリをアンインストールするか、Androidの設定でアプリのデータを消去すると、アプリが保存したすべての情報が消去されます。当社が代わりに削除すべきアカウントやサーバー側のコピーは存在しません。</value></data>
+  <data name="Privacy_PolicyChanges_Heading" xml:space="preserve"><value>ポリシーの変更</value></data>
+  <data name="Privacy_PolicyChanges_Body" xml:space="preserve"><value>本ポリシーが変更された場合、アプリ内のこのページに新しい更新日とともに変更内容が表示されます。変更後もアプリを継続してご利用いただくことで、新しいポリシーに同意したものとみなされます。</value></data>
+  <data name="Privacy_Contact_Heading" xml:space="preserve"><value>お問い合わせ</value></data>
+  <data name="Privacy_Contact_Body" xml:space="preserve"><value>本ポリシーまたはマインスイーパーによるデータの取り扱いに関するご質問は、nguyenquynhvp.ictu@gmail.com までお送りください。</value></data>
+</root>

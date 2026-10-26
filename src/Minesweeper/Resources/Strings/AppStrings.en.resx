@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- ===== Common / shared across pages ===== -->
+  <data name="AppName" xml:space="preserve"><value>Minesweeper</value></data>
+  <data name="Common_Play" xml:space="preserve"><value>Play</value></data>
+  <data name="Common_PlayAgain" xml:space="preserve"><value>Play Again</value></data>
+  <data name="Common_PlayNow" xml:space="preserve"><value>Play Now</value></data>
+  <data name="Common_PlayOnDate" xml:space="preserve"><value>Play {0}</value></data>
+  <data name="Common_Back" xml:space="preserve"><value>Back</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>Close</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Common_Continue" xml:space="preserve"><value>Continue</value></data>
+  <data name="Common_Daily" xml:space="preserve"><value>Today's Challenge</value></data>
+  <data name="Common_PrivacyPolicy" xml:space="preserve"><value>Privacy Policy</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>Settings</value></data>
+  <data name="Common_Version" xml:space="preserve"><value>Version {0} · Build {1}</value></data>
+
+  <!-- ===== Difficulty names ===== -->
+  <data name="Difficulty_Easy" xml:space="preserve"><value>Easy</value></data>
+  <data name="Difficulty_Medium" xml:space="preserve"><value>Medium</value></data>
+  <data name="Difficulty_Hard" xml:space="preserve"><value>Hard</value></data>
+
+  <!-- ===== HomePage ===== -->
+  <data name="Home_ResumeTitle" xml:space="preserve"><value>Game in Progress</value></data>
+  <data name="Home_Today" xml:space="preserve"><value>TODAY</value></data>
+  <data name="Home_DailyDescription" xml:space="preserve"><value>The same board for everyone, 100% solvable by logic — never a guess.</value></data>
+  <data name="Home_Tutorial" xml:space="preserve"><value>Tutorial</value></data>
+  <data name="Home_NormalPlay" xml:space="preserve"><value>CLASSIC PLAY</value></data>
+  <data name="Home_ExitToast" xml:space="preserve"><value>Tap again to exit</value></data>
+  <data name="Home_TutorialProgress" xml:space="preserve"><value>Unlocked {0}/{1} · {2}★</value></data>
+  <data name="Home_DifficultyBest" xml:space="preserve"><value>{0} · Best {1}</value></data>
+  <data name="Home_MineCount" xml:space="preserve"><value>{0} mines</value></data>
+
+  <!-- ===== GamePage ===== -->
+  <data name="Game_GeneratingBoard" xml:space="preserve"><value>Generating board…</value></data>
+  <data name="Game_Won" xml:space="preserve"><value>You Won!</value></data>
+  <data name="Game_Lost" xml:space="preserve"><value>You Hit a Mine!</value></data>
+  <data name="Game_LevelResult" xml:space="preserve"><value>Level {0} · {1}</value></data>
+  <data name="Game_NewRecord" xml:space="preserve"><value>New Record: {0}</value></data>
+  <data name="Game_TimeResult" xml:space="preserve"><value>Time: {0}</value></data>
+  <data name="Game_NoHintYet" xml:space="preserve"><value>No hint available right now</value></data>
+  <data name="Game_RestartConfirmTitle" xml:space="preserve"><value>Play Again?</value></data>
+  <data name="Game_RestartConfirmMessage" xml:space="preserve"><value>The current board will be lost.</value></data>
+  <data name="Game_LeaveConfirmTitle" xml:space="preserve"><value>Exit the current game?</value></data>
+  <data name="Game_LeaveConfirmMessage" xml:space="preserve"><value>Your progress will be saved — you can resume it from the home screen.</value></data>
+  <data name="Game_Leave" xml:space="preserve"><value>Exit</value></data>
+  <data name="Game_Stay" xml:space="preserve"><value>Stay</value></data>
+
+  <!-- ===== AboutPage ===== -->
+  <data name="About_Title" xml:space="preserve"><value>About</value></data>
+  <data name="About_Description" xml:space="preserve"><value>Classic Minesweeper with two twists: No-Guess mode (every board is solvable by pure logic) and Today's Challenge (the same board for everyone, every day).</value></data>
+  <data name="About_Author" xml:space="preserve"><value>Developed by Nguyen Huu Quynh.</value></data>
+
+  <!-- ===== SettingsPage ===== -->
+  <data name="Settings_ProTier" xml:space="preserve"><value>PRO PLAN</value></data>
+  <data name="Settings_BuyPro" xml:space="preserve"><value>Buy Pro</value></data>
+  <data name="Settings_RestorePurchase" xml:space="preserve"><value>Restore Purchase</value></data>
+  <data name="Settings_ProFeature1" xml:space="preserve"><value>• No more ads</value></data>
+  <data name="Settings_ProFeature2" xml:space="preserve"><value>• Unlimited hints</value></data>
+  <data name="Settings_ProFeature3" xml:space="preserve"><value>• One-time purchase, yours forever</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>APPEARANCE</value></data>
+  <data name="Settings_ThemeSystem" xml:space="preserve"><value>System</value></data>
+  <data name="Settings_ThemeLight" xml:space="preserve"><value>Light</value></data>
+  <data name="Settings_ThemeDark" xml:space="preserve"><value>Dark</value></data>
+  <data name="Settings_ThemeHighContrast" xml:space="preserve"><value>High Contrast</value></data>
+  <data name="Settings_SoundVibration" xml:space="preserve"><value>SOUND &amp; VIBRATION</value></data>
+  <data name="Settings_Sound" xml:space="preserve"><value>Sound</value></data>
+  <data name="Settings_Vibration" xml:space="preserve"><value>Vibration</value></data>
+  <data name="Settings_App" xml:space="preserve"><value>APP</value></data>
+  <data name="Settings_AppInfo" xml:space="preserve"><value>App Info</value></data>
+  <data name="Settings_Error" xml:space="preserve"><value>Error</value></data>
+  <data name="Settings_PurchaseFailed" xml:space="preserve"><value>Couldn't complete the purchase right now.</value></data>
+  <data name="Settings_RestoreSuccess" xml:space="preserve"><value>Pro plan restored.</value></data>
+  <data name="Settings_RestoreFailed" xml:space="preserve"><value>Couldn't restore your purchase.</value></data>
+  <data name="Settings_RestoreNotFound" xml:space="preserve"><value>No previous Pro purchase was found.</value></data>
+  <data name="Settings_RestoreTitle" xml:space="preserve"><value>Restore</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>LANGUAGE</value></data>
+
+  <!-- ===== LevelsPage ===== -->
+  <data name="Levels_Progress" xml:space="preserve"><value>Unlocked {0}/{1} · {2}★</value></data>
+
+  <!-- ===== DailyCalendarPage ===== -->
+  <data name="Daily_CalendarTitle" xml:space="preserve"><value>Daily Challenge Calendar</value></data>
+  <data name="Daily_Completed" xml:space="preserve"><value>Completed that day's challenge</value></data>
+  <data name="Daily_NotCompleted" xml:space="preserve"><value>Not completed</value></data>
+
+  <!-- ===== Licensing ===== -->
+  <data name="License_Pro" xml:space="preserve"><value>Upgraded to Pro (ad-free)</value></data>
+  <data name="License_Free" xml:space="preserve"><value>Using the free version (with ads)</value></data>
+  <data name="License_ConnectRetryError" xml:space="preserve"><value>Couldn't connect to Google Play. Check your connection and try again.</value></data>
+  <data name="License_ConnectError" xml:space="preserve"><value>Couldn't connect to Google Play.</value></data>
+
+  <!-- ===== PrivacyPolicyPage ===== -->
+  <data name="Privacy_LastUpdated" xml:space="preserve"><value>Last updated: {0}</value></data>
+  <data name="Privacy_Overview_Heading" xml:space="preserve"><value>Overview</value></data>
+  <data name="Privacy_Overview_Body" xml:space="preserve"><value>Minesweeper is a Minesweeper game that runs entirely on your device. The app requires no account and no sign-in. This document explains the small amount of data the app, along with the third-party services it uses (ads, billing), can access.</value></data>
+  <data name="Privacy_DirectData_Heading" xml:space="preserve"><value>Information we collect directly</value></data>
+  <data name="Privacy_DirectData_Body" xml:space="preserve"><value>None of our servers receive your game progress or personal information. Everything — unlocked levels, star counts, best times, the game in progress, No-guess settings — is stored only locally on your device (the app's own private storage). This data is lost if you uninstall the app or clear its data in Android Settings, and we keep no copy of it.</value></data>
+  <data name="Privacy_ThirdParty_Heading" xml:space="preserve"><value>Information collected by third parties</value></data>
+  <data name="Privacy_ThirdParty_Intro" xml:space="preserve"><value>Minesweeper uses a few third-party SDKs to show ads and process Pro purchases. These services may collect data under their own policies:</value></data>
+  <data name="Privacy_LevelPlay_Title" xml:space="preserve"><value>Unity LevelPlay (ironSource) and connected ad networks</value></data>
+  <data name="Privacy_LevelPlay_Body" xml:space="preserve"><value>Shows banner/interstitial ads in the free version. May collect: Advertising ID, device/OS information, approximate location (via IP), and ad-related app usage activity.</value></data>
+  <data name="Privacy_Billing_Title" xml:space="preserve"><value>Google Play Billing</value></data>
+  <data name="Privacy_Billing_Body" xml:space="preserve"><value>Processes the Pro purchase (one-time, removes ads). Payment details are handled entirely by Google; we only receive confirmation that the purchase succeeded.</value></data>
+  <data name="Privacy_ThirdParty_Outro" xml:space="preserve"><value>We don't control how these parties use data once collected. You can review their own policies:</value></data>
+  <data name="Privacy_UnityLink" xml:space="preserve"><value>• Unity (LevelPlay/ironSource): unity.com/legal/privacy-policy</value></data>
+  <data name="Privacy_GoogleLink" xml:space="preserve"><value>• Google: policies.google.com/privacy</value></data>
+  <data name="Privacy_Permissions_Heading" xml:space="preserve"><value>Permissions the app requests</value></data>
+  <data name="Privacy_Permissions_Body" xml:space="preserve"><value>Internet &amp; network state — to load ads and process Pro purchases. Advertising ID — required from Android 13 onward for ads to work correctly, used for ad targeting/measurement. The app does NOT request camera, microphone, contacts, or precise location.</value></data>
+  <data name="Privacy_Children_Heading" xml:space="preserve"><value>Children</value></data>
+  <data name="Privacy_Children_Body" xml:space="preserve"><value>Minesweeper is not directed at children under 13, and we do not knowingly collect personal information from children. Ads shown follow the ad content settings available on Google Play.</value></data>
+  <data name="Privacy_DataRetention_Heading" xml:space="preserve"><value>Data storage &amp; deletion</value></data>
+  <data name="Privacy_DataRetention_Body" xml:space="preserve"><value>Since your data lives only on your device, you're always in control: uninstalling the app or clearing its data in Android Settings erases everything the app has saved. There is no account or server-side copy for us to delete on your behalf.</value></data>
+  <data name="Privacy_PolicyChanges_Heading" xml:space="preserve"><value>Policy changes</value></data>
+  <data name="Privacy_PolicyChanges_Body" xml:space="preserve"><value>If this policy changes, the update will appear right on this page in the app with a new update date. Continuing to use the app after a change means you accept the new policy.</value></data>
+  <data name="Privacy_Contact_Heading" xml:space="preserve"><value>Contact</value></data>
+  <data name="Privacy_Contact_Body" xml:space="preserve"><value>Questions about this policy or how Minesweeper handles data can be sent to: nguyenquynhvp.ictu@gmail.com</value></data>
+</root>

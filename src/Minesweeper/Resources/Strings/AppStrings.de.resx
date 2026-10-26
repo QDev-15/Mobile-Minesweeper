@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- ===== Common / shared across pages ===== -->
+  <data name="AppName" xml:space="preserve"><value>Minesweeper</value></data>
+  <data name="Common_Play" xml:space="preserve"><value>Spielen</value></data>
+  <data name="Common_PlayAgain" xml:space="preserve"><value>Erneut spielen</value></data>
+  <data name="Common_PlayNow" xml:space="preserve"><value>Jetzt spielen</value></data>
+  <data name="Common_PlayOnDate" xml:space="preserve"><value>Am {0} spielen</value></data>
+  <data name="Common_Back" xml:space="preserve"><value>Zurück</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>Schließen</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Abbrechen</value></data>
+  <data name="Common_Continue" xml:space="preserve"><value>Weiter</value></data>
+  <data name="Common_Daily" xml:space="preserve"><value>Heutige Herausforderung</value></data>
+  <data name="Common_PrivacyPolicy" xml:space="preserve"><value>Datenschutzerklärung</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>Einstellungen</value></data>
+  <data name="Common_Version" xml:space="preserve"><value>Version {0} · Build {1}</value></data>
+
+  <!-- ===== Difficulty names ===== -->
+  <data name="Difficulty_Easy" xml:space="preserve"><value>Leicht</value></data>
+  <data name="Difficulty_Medium" xml:space="preserve"><value>Mittel</value></data>
+  <data name="Difficulty_Hard" xml:space="preserve"><value>Schwer</value></data>
+
+  <!-- ===== HomePage ===== -->
+  <data name="Home_ResumeTitle" xml:space="preserve"><value>Laufende Partie</value></data>
+  <data name="Home_Today" xml:space="preserve"><value>HEUTE</value></data>
+  <data name="Home_DailyDescription" xml:space="preserve"><value>Für alle das gleiche Feld, zu 100 % durch Logik lösbar — nie geraten.</value></data>
+  <data name="Home_Tutorial" xml:space="preserve"><value>Tutorial</value></data>
+  <data name="Home_NormalPlay" xml:space="preserve"><value>KLASSISCHER MODUS</value></data>
+  <data name="Home_ExitToast" xml:space="preserve"><value>Nochmal drücken, um zu beenden</value></data>
+  <data name="Home_TutorialProgress" xml:space="preserve"><value>{0}/{1} freigeschaltet · {2}★</value></data>
+  <data name="Home_DifficultyBest" xml:space="preserve"><value>{0} · Bestzeit {1}</value></data>
+  <data name="Home_MineCount" xml:space="preserve"><value>{0} Minen</value></data>
+
+  <!-- ===== GamePage ===== -->
+  <data name="Game_GeneratingBoard" xml:space="preserve"><value>Spielfeld wird erstellt…</value></data>
+  <data name="Game_Won" xml:space="preserve"><value>Du hast gewonnen!</value></data>
+  <data name="Game_Lost" xml:space="preserve"><value>Du bist auf eine Mine getreten!</value></data>
+  <data name="Game_LevelResult" xml:space="preserve"><value>Level {0} · {1}</value></data>
+  <data name="Game_NewRecord" xml:space="preserve"><value>Neuer Rekord: {0}</value></data>
+  <data name="Game_TimeResult" xml:space="preserve"><value>Zeit: {0}</value></data>
+  <data name="Game_NoHintYet" xml:space="preserve"><value>Momentan kein Hinweis verfügbar</value></data>
+  <data name="Game_RestartConfirmTitle" xml:space="preserve"><value>Erneut spielen?</value></data>
+  <data name="Game_RestartConfirmMessage" xml:space="preserve"><value>Das aktuelle Spielfeld geht verloren.</value></data>
+  <data name="Game_LeaveConfirmTitle" xml:space="preserve"><value>Aktuelle Partie verlassen?</value></data>
+  <data name="Game_LeaveConfirmMessage" xml:space="preserve"><value>Dein Fortschritt wird gespeichert, du kannst vom Startbildschirm aus weiterspielen.</value></data>
+  <data name="Game_Leave" xml:space="preserve"><value>Verlassen</value></data>
+  <data name="Game_Stay" xml:space="preserve"><value>Bleiben</value></data>
+
+  <!-- ===== AboutPage ===== -->
+  <data name="About_Title" xml:space="preserve"><value>Über</value></data>
+  <data name="About_Description" xml:space="preserve"><value>Klassisches Minesweeper mit zwei Besonderheiten: dem No-Guess-Modus (jedes Feld ist durch reine Logik lösbar) und der heutigen Herausforderung (jeden Tag für alle das gleiche Feld).</value></data>
+  <data name="About_Author" xml:space="preserve"><value>Entwickelt von Nguyen Huu Quynh.</value></data>
+
+  <!-- ===== SettingsPage ===== -->
+  <data name="Settings_ProTier" xml:space="preserve"><value>PRO-VERSION</value></data>
+  <data name="Settings_BuyPro" xml:space="preserve"><value>Pro kaufen</value></data>
+  <data name="Settings_RestorePurchase" xml:space="preserve"><value>Kauf wiederherstellen</value></data>
+  <data name="Settings_ProFeature1" xml:space="preserve"><value>• Keine Werbung mehr</value></data>
+  <data name="Settings_ProFeature2" xml:space="preserve"><value>• Unbegrenzte Hinweise</value></data>
+  <data name="Settings_ProFeature3" xml:space="preserve"><value>• Einmaliger Kauf, für immer nutzbar</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>DARSTELLUNG</value></data>
+  <data name="Settings_ThemeSystem" xml:space="preserve"><value>System</value></data>
+  <data name="Settings_ThemeLight" xml:space="preserve"><value>Hell</value></data>
+  <data name="Settings_ThemeDark" xml:space="preserve"><value>Dunkel</value></data>
+  <data name="Settings_ThemeHighContrast" xml:space="preserve"><value>Hoher Kontrast</value></data>
+  <data name="Settings_SoundVibration" xml:space="preserve"><value>TON &amp; VIBRATION</value></data>
+  <data name="Settings_Sound" xml:space="preserve"><value>Ton</value></data>
+  <data name="Settings_Vibration" xml:space="preserve"><value>Vibration</value></data>
+  <data name="Settings_App" xml:space="preserve"><value>APP</value></data>
+  <data name="Settings_AppInfo" xml:space="preserve"><value>App-Informationen</value></data>
+  <data name="Settings_Error" xml:space="preserve"><value>Fehler</value></data>
+  <data name="Settings_PurchaseFailed" xml:space="preserve"><value>Der Kauf konnte jetzt nicht abgeschlossen werden.</value></data>
+  <data name="Settings_RestoreSuccess" xml:space="preserve"><value>Pro-Version wiederhergestellt.</value></data>
+  <data name="Settings_RestoreFailed" xml:space="preserve"><value>Der Kauf konnte nicht wiederhergestellt werden.</value></data>
+  <data name="Settings_RestoreNotFound" xml:space="preserve"><value>Kein früherer Pro-Kauf gefunden.</value></data>
+  <data name="Settings_RestoreTitle" xml:space="preserve"><value>Wiederherstellen</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>SPRACHE</value></data>
+
+  <!-- ===== LevelsPage ===== -->
+  <data name="Levels_Progress" xml:space="preserve"><value>{0}/{1} freigeschaltet · {2}★</value></data>
+
+  <!-- ===== DailyCalendarPage ===== -->
+  <data name="Daily_CalendarTitle" xml:space="preserve"><value>Kalender der täglichen Herausforderungen</value></data>
+  <data name="Daily_Completed" xml:space="preserve"><value>Herausforderung dieses Tages abgeschlossen</value></data>
+  <data name="Daily_NotCompleted" xml:space="preserve"><value>Nicht abgeschlossen</value></data>
+
+  <!-- ===== Licensing ===== -->
+  <data name="License_Pro" xml:space="preserve"><value>Auf Pro aktualisiert (werbefrei)</value></data>
+  <data name="License_Free" xml:space="preserve"><value>Kostenlose Version wird verwendet (mit Werbung)</value></data>
+  <data name="License_ConnectRetryError" xml:space="preserve"><value>Verbindung zu Google Play nicht möglich. Verbindung prüfen und erneut versuchen.</value></data>
+  <data name="License_ConnectError" xml:space="preserve"><value>Verbindung zu Google Play nicht möglich.</value></data>
+
+  <!-- ===== PrivacyPolicyPage ===== -->
+  <data name="Privacy_LastUpdated" xml:space="preserve"><value>Zuletzt aktualisiert: {0}</value></data>
+  <data name="Privacy_Overview_Heading" xml:space="preserve"><value>Überblick</value></data>
+  <data name="Privacy_Overview_Body" xml:space="preserve"><value>Minesweeper ist ein Minesweeper-Spiel, das vollständig auf deinem Gerät läuft. Die App erfordert kein Konto und keine Anmeldung. Dieses Dokument erläutert die geringe Menge an Daten, auf die die App sowie die von ihr genutzten Drittanbieterdienste (Werbung, Zahlungsabwicklung) zugreifen können.</value></data>
+  <data name="Privacy_DirectData_Heading" xml:space="preserve"><value>Informationen, die wir direkt erfassen</value></data>
+  <data name="Privacy_DirectData_Body" xml:space="preserve"><value>Keiner unserer Server erhält deinen Spielfortschritt oder persönliche Informationen. Alles — freigeschaltete Level, Sternezahl, Bestzeiten, die laufende Partie, No-Guess-Einstellungen — wird ausschließlich lokal auf deinem Gerät gespeichert (im eigenen privaten Speicher der App). Diese Daten gehen verloren, wenn du die App deinstallierst oder ihre Daten in den Android-Einstellungen löschst, und wir besitzen keine Kopie davon.</value></data>
+  <data name="Privacy_ThirdParty_Heading" xml:space="preserve"><value>Von Dritten erfasste Informationen</value></data>
+  <data name="Privacy_ThirdParty_Intro" xml:space="preserve"><value>Minesweeper verwendet einige SDKs von Drittanbietern, um Werbung anzuzeigen und Pro-Käufe zu verarbeiten. Diese Dienste können gemäß ihren eigenen Richtlinien Daten erfassen:</value></data>
+  <data name="Privacy_LevelPlay_Title" xml:space="preserve"><value>Unity LevelPlay (ironSource) und verbundene Werbenetzwerke</value></data>
+  <data name="Privacy_LevelPlay_Body" xml:space="preserve"><value>Zeigt Banner-/Interstitial-Werbung in der kostenlosen Version an. Mögliche Erfassung: Werbe-ID (Advertising ID), Geräte-/Betriebssysteminformationen, ungefährer Standort (über die IP-Adresse) sowie werbebezogene App-Nutzungsaktivitäten.</value></data>
+  <data name="Privacy_Billing_Title" xml:space="preserve"><value>Google Play Billing</value></data>
+  <data name="Privacy_Billing_Body" xml:space="preserve"><value>Verarbeitet den Pro-Kauf (einmalig, entfernt Werbung). Zahlungsinformationen werden vollständig von Google verarbeitet; wir erhalten nur die Bestätigung eines erfolgreichen Kaufs.</value></data>
+  <data name="Privacy_ThirdParty_Outro" xml:space="preserve"><value>Wir haben keinen Einfluss darauf, wie diese Dritten die erfassten Daten anschließend verwenden. Du kannst ihre jeweiligen Richtlinien hier einsehen:</value></data>
+  <data name="Privacy_UnityLink" xml:space="preserve"><value>• Unity (LevelPlay/ironSource): unity.com/legal/privacy-policy</value></data>
+  <data name="Privacy_GoogleLink" xml:space="preserve"><value>• Google: policies.google.com/privacy</value></data>
+  <data name="Privacy_Permissions_Heading" xml:space="preserve"><value>Von der App angeforderte Berechtigungen</value></data>
+  <data name="Privacy_Permissions_Body" xml:space="preserve"><value>Internet &amp; Netzwerkstatus — zum Laden von Werbung und zur Verarbeitung von Pro-Käufen. Werbe-ID (Advertising ID) — ab Android 13 erforderlich, damit Werbung korrekt funktioniert, genutzt für Werbe-Targeting/-Messung. Die App fordert KEINE Kamera, kein Mikrofon, keine Kontakte und keinen genauen Standort an.</value></data>
+  <data name="Privacy_Children_Heading" xml:space="preserve"><value>Kinder</value></data>
+  <data name="Privacy_Children_Body" xml:space="preserve"><value>Minesweeper richtet sich nicht an Kinder unter 13 Jahren, und wir erfassen wissentlich keine personenbezogenen Daten von Kindern. Angezeigte Werbung richtet sich nach den auf Google Play verfügbaren Einstellungen für Werbeinhalte.</value></data>
+  <data name="Privacy_DataRetention_Heading" xml:space="preserve"><value>Datenspeicherung &amp; -löschung</value></data>
+  <data name="Privacy_DataRetention_Body" xml:space="preserve"><value>Da deine Daten ausschließlich auf deinem Gerät liegen, hast du die volle Kontrolle: Das Deinstallieren der App oder das Löschen ihrer Daten in den Android-Einstellungen entfernt alles, was die App gespeichert hat. Es gibt kein Konto und keine serverseitige Kopie, die wir in deinem Namen löschen könnten.</value></data>
+  <data name="Privacy_PolicyChanges_Heading" xml:space="preserve"><value>Änderungen der Richtlinie</value></data>
+  <data name="Privacy_PolicyChanges_Body" xml:space="preserve"><value>Falls sich diese Richtlinie ändert, wird die Aktualisierung direkt auf dieser Seite in der App mit einem neuen Aktualisierungsdatum angezeigt. Die weitere Nutzung der App nach einer Änderung bedeutet, dass du die neue Richtlinie akzeptierst.</value></data>
+  <data name="Privacy_Contact_Heading" xml:space="preserve"><value>Kontakt</value></data>
+  <data name="Privacy_Contact_Body" xml:space="preserve"><value>Fragen zu dieser Richtlinie oder zur Art, wie Minesweeper mit Daten umgeht, können an folgende Adresse gesendet werden: nguyenquynhvp.ictu@gmail.com</value></data>
+</root>

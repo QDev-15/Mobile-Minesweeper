@@ -1,6 +1,7 @@
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using Minesweeper.Core;
+using Minesweeper.Resources.Strings;
 using Minesweeper.Services;
 
 namespace Minesweeper.Views;
@@ -726,7 +727,7 @@ public partial class GamePage : ContentPage
 			ResultIconLabel.Text = Icons.CheckCircle;
 			ResultIconLabel.TextColor = (Color)Application.Current!.Resources["Success"];
 			ResultTitleLabel.TextColor = (Color)Application.Current!.Resources["Success"];
-			ResultTitleLabel.Text = "Bạn đã thắng!";
+			ResultTitleLabel.Text = AppStrings.Game_Won;
 
 			if (_levelNumber > 0)
 			{
@@ -734,16 +735,15 @@ public partial class GamePage : ContentPage
 				_levels.RecordCompletion(_levelNumber, stars);
 				StarsLabel.Text = new string('★', stars) + new string('☆', 3 - stars);
 				StarsLabel.IsVisible = true;
-				ResultDetailLabel.Text = $"Màn {_levelNumber} · {_elapsedSeconds / 60}:{_elapsedSeconds % 60:00}";
+				ResultDetailLabel.Text = AppStrings.Game_LevelResult(_levelNumber, $"{_elapsedSeconds / 60}:{_elapsedSeconds % 60:00}");
 			}
 			else
 			{
 				bool isRecord = !_isDaily && _stats.RecordWin(_level, _elapsedSeconds);
 				if (_isDaily) _dailyProgress.MarkCompleted(_dailyDate ?? DateOnly.FromDateTime(DateTime.UtcNow));
 				StarsLabel.IsVisible = false;
-				ResultDetailLabel.Text = isRecord
-					? $"Kỷ lục mới: {_elapsedSeconds / 60}:{_elapsedSeconds % 60:00}"
-					: $"Thời gian: {_elapsedSeconds / 60}:{_elapsedSeconds % 60:00}";
+				string elapsed = $"{_elapsedSeconds / 60}:{_elapsedSeconds % 60:00}";
+				ResultDetailLabel.Text = isRecord ? AppStrings.Game_NewRecord(elapsed) : AppStrings.Game_TimeResult(elapsed);
 			}
 		}
 		else
@@ -761,8 +761,8 @@ public partial class GamePage : ContentPage
 			ResultIconLabel.Text = Icons.MoodBad;
 			ResultIconLabel.TextColor = (Color)Application.Current!.Resources["Danger"];
 			ResultTitleLabel.TextColor = (Color)Application.Current!.Resources["OffBlack"];
-			ResultTitleLabel.Text = "Trúng mìn rồi!";
-			ResultDetailLabel.Text = $"Thời gian: {_elapsedSeconds / 60}:{_elapsedSeconds % 60:00}";
+			ResultTitleLabel.Text = AppStrings.Game_Lost;
+			ResultDetailLabel.Text = AppStrings.Game_TimeResult($"{_elapsedSeconds / 60}:{_elapsedSeconds % 60:00}");
 			StarsLabel.IsVisible = false;
 		}
 
@@ -844,7 +844,7 @@ public partial class GamePage : ContentPage
 			// legitimately has nothing provable yet on plenty of real boards (e.g. right after the first
 			// reveal, before enough numbers are exposed for any deduction) -- that is a normal outcome, not
 			// an error, so it gets its own distinct feedback rather than none at all.
-			_ = Toast.Make("Chưa có gợi ý nào lúc này", ToastDuration.Short).Show();
+			_ = Toast.Make(AppStrings.Game_NoHintYet, ToastDuration.Short).Show();
 			return;
 		}
 
@@ -858,7 +858,7 @@ public partial class GamePage : ContentPage
 		if (!_nav.TryEnter(sender as View)) return;
 		try
 		{
-			bool confirm = await DisplayAlertAsync("Chơi lại?", "Bàn hiện tại sẽ mất.", "Chơi lại", "Huỷ");
+			bool confirm = await DisplayAlertAsync(AppStrings.Game_RestartConfirmTitle, AppStrings.Game_RestartConfirmMessage, AppStrings.Common_PlayAgain, AppStrings.Common_Cancel);
 			if (confirm) RestartBoard();
 		}
 		finally { _nav.Exit(sender as View); }
@@ -907,9 +907,9 @@ public partial class GamePage : ContentPage
 		if (IsMidGame())
 		{
 			bool leave = await DisplayAlertAsync(
-				"Thoát ván đang chơi?",
-				"Tiến trình sẽ được lưu lại, bạn có thể vào lại chơi tiếp từ trang chủ.",
-				"Thoát", "Ở lại");
+				AppStrings.Game_LeaveConfirmTitle,
+				AppStrings.Game_LeaveConfirmMessage,
+				AppStrings.Game_Leave, AppStrings.Game_Stay);
 			if (!leave) return;
 			SaveProgressIfPlaying();
 		}

@@ -1,3 +1,4 @@
+using Minesweeper.Resources.Strings;
 using Minesweeper.Services;
 
 namespace Minesweeper.Views;
@@ -9,7 +10,10 @@ public partial class AboutPage : ContentPage
 	public AboutPage()
 	{
 		InitializeComponent();
-		VersionLabel.Text = $"Phiên bản {AppInfo.Current.VersionString} (bản dựng {AppInfo.Current.BuildString})";
+		// Same resx key/format as SettingsPage's own version caption (the two used different punctuation for
+		// identical content before this -- consolidated to one key, 2026-10-26, so a translator only has to
+		// get this phrase right once).
+		VersionLabel.Text = AppStrings.Common_Version(AppInfo.Current.VersionString, AppInfo.Current.BuildString);
 	}
 
 	private async void OnBackClicked(object? sender, EventArgs e)

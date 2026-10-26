@@ -1,15 +1,19 @@
+using System.Globalization;
+using Minesweeper.Resources.Strings;
 using Minesweeper.Services;
 
 namespace Minesweeper.Views;
 
 public partial class PrivacyPolicyPage : ContentPage
 {
+	private static readonly DateOnly LastUpdated = new(2026, 10, 19);
 	private readonly ActionGuard _nav = new();
 
 	public PrivacyPolicyPage()
 	{
 		InitializeComponent();
-		UpdatedLabel.Text = "Cập nhật lần cuối: 19/10/2026";
+		string date = LastUpdated.ToDateTime(TimeOnly.MinValue).ToString("d", CultureInfo.CurrentUICulture);
+		UpdatedLabel.Text = AppStrings.Privacy_LastUpdated(date);
 	}
 
 	private async void OnBackClicked(object? sender, EventArgs e)

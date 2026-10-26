@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- ===== Common / shared across pages ===== -->
+  <data name="AppName" xml:space="preserve"><value>Dò Mìn</value></data>
+  <data name="Common_Play" xml:space="preserve"><value>Chơi</value></data>
+  <data name="Common_PlayAgain" xml:space="preserve"><value>Chơi lại</value></data>
+  <data name="Common_PlayNow" xml:space="preserve"><value>Chơi ngay</value></data>
+  <data name="Common_PlayOnDate" xml:space="preserve"><value>Chơi ngày {0}</value></data>
+  <data name="Common_Back" xml:space="preserve"><value>Quay lại</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>Đóng</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Huỷ</value></data>
+  <data name="Common_Continue" xml:space="preserve"><value>Tiếp tục</value></data>
+  <data name="Common_Daily" xml:space="preserve"><value>Thử thách hôm nay</value></data>
+  <data name="Common_PrivacyPolicy" xml:space="preserve"><value>Chính sách quyền riêng tư</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>Cài đặt</value></data>
+  <data name="Common_Version" xml:space="preserve"><value>Phiên bản {0} · Bản dựng {1}</value></data>
+
+  <!-- ===== Difficulty names ===== -->
+  <data name="Difficulty_Easy" xml:space="preserve"><value>Dễ</value></data>
+  <data name="Difficulty_Medium" xml:space="preserve"><value>Vừa</value></data>
+  <data name="Difficulty_Hard" xml:space="preserve"><value>Khó</value></data>
+
+  <!-- ===== HomePage ===== -->
+  <data name="Home_ResumeTitle" xml:space="preserve"><value>Ván đang chơi dở</value></data>
+  <data name="Home_Today" xml:space="preserve"><value>HÔM NAY</value></data>
+  <data name="Home_DailyDescription" xml:space="preserve"><value>Bàn giống nhau cho mọi người, giải được 100% bằng suy luận — không phải đoán.</value></data>
+  <data name="Home_Tutorial" xml:space="preserve"><value>Tutorial</value></data>
+  <data name="Home_NormalPlay" xml:space="preserve"><value>CHƠI THƯỜNG</value></data>
+  <data name="Home_ExitToast" xml:space="preserve"><value>Nhấn lần nữa để thoát</value></data>
+  <data name="Home_TutorialProgress" xml:space="preserve"><value>Đã mở màn {0}/{1} · {2}★</value></data>
+  <data name="Home_DifficultyBest" xml:space="preserve"><value>{0} · Kỷ lục {1}</value></data>
+  <data name="Home_MineCount" xml:space="preserve"><value>{0} mìn</value></data>
+
+  <!-- ===== GamePage ===== -->
+  <data name="Game_GeneratingBoard" xml:space="preserve"><value>Đang tạo bàn chơi…</value></data>
+  <data name="Game_Won" xml:space="preserve"><value>Bạn đã thắng!</value></data>
+  <data name="Game_Lost" xml:space="preserve"><value>Trúng mìn rồi!</value></data>
+  <data name="Game_LevelResult" xml:space="preserve"><value>Màn {0} · {1}</value></data>
+  <data name="Game_NewRecord" xml:space="preserve"><value>Kỷ lục mới: {0}</value></data>
+  <data name="Game_TimeResult" xml:space="preserve"><value>Thời gian: {0}</value></data>
+  <data name="Game_NoHintYet" xml:space="preserve"><value>Chưa có gợi ý nào lúc này</value></data>
+  <data name="Game_RestartConfirmTitle" xml:space="preserve"><value>Chơi lại?</value></data>
+  <data name="Game_RestartConfirmMessage" xml:space="preserve"><value>Bàn hiện tại sẽ mất.</value></data>
+  <data name="Game_LeaveConfirmTitle" xml:space="preserve"><value>Thoát ván đang chơi?</value></data>
+  <data name="Game_LeaveConfirmMessage" xml:space="preserve"><value>Tiến trình sẽ được lưu lại, bạn có thể vào lại chơi tiếp từ trang chủ.</value></data>
+  <data name="Game_Leave" xml:space="preserve"><value>Thoát</value></data>
+  <data name="Game_Stay" xml:space="preserve"><value>Ở lại</value></data>
+
+  <!-- ===== AboutPage ===== -->
+  <data name="About_Title" xml:space="preserve"><value>Giới thiệu</value></data>
+  <data name="About_Description" xml:space="preserve"><value>Minesweeper cổ điển với 2 điểm khác: chế độ Không đoán mù (mọi bàn giải được bằng logic thuần) và Thử thách hôm nay (bàn giống nhau cho mọi người mỗi ngày).</value></data>
+  <data name="About_Author" xml:space="preserve"><value>Phát triển bởi Nguyễn Hữu Quỳnh.</value></data>
+
+  <!-- ===== SettingsPage ===== -->
+  <data name="Settings_ProTier" xml:space="preserve"><value>GÓI PRO</value></data>
+  <data name="Settings_BuyPro" xml:space="preserve"><value>Mua Pro</value></data>
+  <data name="Settings_RestorePurchase" xml:space="preserve"><value>Khôi phục giao dịch</value></data>
+  <data name="Settings_ProFeature1" xml:space="preserve"><value>• Không còn quảng cáo</value></data>
+  <data name="Settings_ProFeature2" xml:space="preserve"><value>• Gợi ý (Hint) không giới hạn</value></data>
+  <data name="Settings_ProFeature3" xml:space="preserve"><value>• Mua một lần, dùng vĩnh viễn</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>GIAO DIỆN</value></data>
+  <data name="Settings_ThemeSystem" xml:space="preserve"><value>Hệ thống</value></data>
+  <data name="Settings_ThemeLight" xml:space="preserve"><value>Sáng</value></data>
+  <data name="Settings_ThemeDark" xml:space="preserve"><value>Tối</value></data>
+  <data name="Settings_ThemeHighContrast" xml:space="preserve"><value>Độ tương phản cao</value></data>
+  <data name="Settings_SoundVibration" xml:space="preserve"><value>ÂM THANH &amp; RUNG</value></data>
+  <data name="Settings_Sound" xml:space="preserve"><value>Âm thanh</value></data>
+  <data name="Settings_Vibration" xml:space="preserve"><value>Rung</value></data>
+  <data name="Settings_App" xml:space="preserve"><value>ỨNG DỤNG</value></data>
+  <data name="Settings_AppInfo" xml:space="preserve"><value>Thông tin ứng dụng</value></data>
+  <data name="Settings_Error" xml:space="preserve"><value>Lỗi</value></data>
+  <data name="Settings_PurchaseFailed" xml:space="preserve"><value>Không thể mua lúc này.</value></data>
+  <data name="Settings_RestoreSuccess" xml:space="preserve"><value>Đã khôi phục gói Pro.</value></data>
+  <data name="Settings_RestoreFailed" xml:space="preserve"><value>Không khôi phục được.</value></data>
+  <data name="Settings_RestoreNotFound" xml:space="preserve"><value>Không tìm thấy giao dịch Pro nào trước đó.</value></data>
+  <data name="Settings_RestoreTitle" xml:space="preserve"><value>Khôi phục</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>NGÔN NGỮ</value></data>
+
+  <!-- ===== LevelsPage ===== -->
+  <data name="Levels_Progress" xml:space="preserve"><value>Đã mở {0}/{1} · {2}★</value></data>
+
+  <!-- ===== DailyCalendarPage ===== -->
+  <data name="Daily_CalendarTitle" xml:space="preserve"><value>Lịch thử thách hằng ngày</value></data>
+  <data name="Daily_Completed" xml:space="preserve"><value>Đã hoàn thành thử thách ngày đó</value></data>
+  <data name="Daily_NotCompleted" xml:space="preserve"><value>Chưa hoàn thành</value></data>
+
+  <!-- ===== Licensing ===== -->
+  <data name="License_Pro" xml:space="preserve"><value>Đã nâng cấp Pro (không quảng cáo)</value></data>
+  <data name="License_Free" xml:space="preserve"><value>Đang dùng bản miễn phí (có quảng cáo)</value></data>
+  <data name="License_ConnectRetryError" xml:space="preserve"><value>Không kết nối được với Google Play. Kiểm tra mạng rồi thử lại.</value></data>
+  <data name="License_ConnectError" xml:space="preserve"><value>Không kết nối được với Google Play.</value></data>
+
+  <!-- ===== PrivacyPolicyPage ===== -->
+  <data name="Privacy_LastUpdated" xml:space="preserve"><value>Cập nhật lần cuối: {0}</value></data>
+  <data name="Privacy_Overview_Heading" xml:space="preserve"><value>Tổng quan</value></data>
+  <data name="Privacy_Overview_Body" xml:space="preserve"><value>Dò Mìn là trò chơi Minesweeper chơi hoàn toàn trên máy của bạn. Ứng dụng không yêu cầu tài khoản, không yêu cầu đăng nhập. Tài liệu này giải thích những dữ liệu ít ỏi mà ứng dụng, cùng các dịch vụ bên thứ ba nó dùng (quảng cáo, thanh toán), có thể truy cập.</value></data>
+  <data name="Privacy_DirectData_Heading" xml:space="preserve"><value>Thông tin chúng tôi thu thập trực tiếp</value></data>
+  <data name="Privacy_DirectData_Body" xml:space="preserve"><value>Không có máy chủ nào của chúng tôi nhận tiến trình chơi hay thông tin cá nhân của bạn. Mọi thứ — màn đã mở, số sao, thời gian kỷ lục, ván đang chơi dở, cài đặt No-guess — chỉ lưu cục bộ trên máy (bộ nhớ riêng của ứng dụng). Dữ liệu này mất khi gỡ ứng dụng hoặc xoá dữ liệu ứng dụng trong Cài đặt Android, và chúng tôi không có bản sao nào.</value></data>
+  <data name="Privacy_ThirdParty_Heading" xml:space="preserve"><value>Thông tin do bên thứ ba thu thập</value></data>
+  <data name="Privacy_ThirdParty_Intro" xml:space="preserve"><value>Dò Mìn dùng một số SDK bên thứ ba để hiện quảng cáo và xử lý giao dịch mua Pro. Các dịch vụ này có thể thu thập dữ liệu theo chính sách riêng của họ:</value></data>
+  <data name="Privacy_LevelPlay_Title" xml:space="preserve"><value>Unity LevelPlay (ironSource) và các mạng quảng cáo liên kết</value></data>
+  <data name="Privacy_LevelPlay_Body" xml:space="preserve"><value>Hiện banner/quảng cáo xen kẽ cho bản miễn phí. Có thể thu thập: Mã quảng cáo (Advertising ID), thông tin thiết bị/hệ điều hành, vị trí gần đúng (qua IP), hoạt động dùng app liên quan đến quảng cáo.</value></data>
+  <data name="Privacy_Billing_Title" xml:space="preserve"><value>Google Play Billing</value></data>
+  <data name="Privacy_Billing_Body" xml:space="preserve"><value>Xử lý giao dịch mua Pro (một lần, bỏ quảng cáo). Thông tin thanh toán do Google xử lý toàn bộ; chúng tôi chỉ nhận xác nhận đã mua thành công.</value></data>
+  <data name="Privacy_ThirdParty_Outro" xml:space="preserve"><value>Chúng tôi không kiểm soát cách các bên này dùng dữ liệu sau khi thu thập. Bạn có thể xem chính sách của họ:</value></data>
+  <data name="Privacy_UnityLink" xml:space="preserve"><value>• Unity (LevelPlay/ironSource): unity.com/legal/privacy-policy</value></data>
+  <data name="Privacy_GoogleLink" xml:space="preserve"><value>• Google: policies.google.com/privacy</value></data>
+  <data name="Privacy_Permissions_Heading" xml:space="preserve"><value>Quyền truy cập ứng dụng yêu cầu</value></data>
+  <data name="Privacy_Permissions_Body" xml:space="preserve"><value>Internet &amp; trạng thái mạng — để tải quảng cáo và xử lý mua Pro. Mã quảng cáo (Advertising ID) — bắt buộc từ Android 13 để quảng cáo hoạt động đúng, dùng cho việc nhắm/đo lường quảng cáo. Ứng dụng KHÔNG yêu cầu camera, micro, danh bạ hay vị trí chính xác.</value></data>
+  <data name="Privacy_Children_Heading" xml:space="preserve"><value>Trẻ em</value></data>
+  <data name="Privacy_Children_Body" xml:space="preserve"><value>Dò Mìn không hướng tới trẻ em dưới 13 tuổi và chúng tôi không cố ý thu thập thông tin cá nhân từ trẻ em. Quảng cáo hiển thị tuân theo cài đặt nội dung quảng cáo có sẵn trên Google Play.</value></data>
+  <data name="Privacy_DataRetention_Heading" xml:space="preserve"><value>Lưu trữ &amp; xoá dữ liệu</value></data>
+  <data name="Privacy_DataRetention_Body" xml:space="preserve"><value>Vì dữ liệu chỉ nằm trên máy bạn, bạn tự kiểm soát việc này: gỡ ứng dụng hoặc xoá dữ liệu ứng dụng trong Cài đặt Android sẽ xoá sạch mọi thứ app đã lưu. Không có tài khoản hay bản sao trên máy chủ để chúng tôi xoá thay bạn.</value></data>
+  <data name="Privacy_PolicyChanges_Heading" xml:space="preserve"><value>Thay đổi chính sách</value></data>
+  <data name="Privacy_PolicyChanges_Body" xml:space="preserve"><value>Nếu chính sách này thay đổi, bản cập nhật sẽ hiện ngay tại trang này trong ứng dụng với ngày cập nhật mới. Tiếp tục dùng ứng dụng sau khi có thay đổi nghĩa là bạn chấp nhận chính sách mới.</value></data>
+  <data name="Privacy_Contact_Heading" xml:space="preserve"><value>Liên hệ</value></data>
+  <data name="Privacy_Contact_Body" xml:space="preserve"><value>Câu hỏi về chính sách này hoặc cách Dò Mìn xử lý dữ liệu, gửi về: nguyenquynhvp.ictu@gmail.com</value></data>
+</root>

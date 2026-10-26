@@ -5,6 +5,4 @@ namespace Minesweeper.Core.Licensing;
 public sealed record LicenseState(bool IsPro)
 {
     public static readonly LicenseState Initial = new(false);
-
-    public string SummaryText => IsPro ? "Đã nâng cấp Pro (không quảng cáo)" : "Đang dùng bản miễn phí (có quảng cáo)";
 }

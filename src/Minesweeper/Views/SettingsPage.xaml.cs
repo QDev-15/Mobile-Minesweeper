@@ -1,4 +1,5 @@
 using Minesweeper.Core.Licensing;
+using Minesweeper.Resources.Strings;
 using Minesweeper.Services;
 
 namespace Minesweeper.Views;
@@ -7,12 +8,15 @@ public partial class SettingsPage : ContentPage
 {
 	private readonly ILicenseService _license;
 	private readonly ActionGuard _nav = new();
+	private bool _suppressLanguagePickerEvent;
 
 	public SettingsPage(ILicenseService license)
 	{
 		InitializeComponent();
 		_license = license;
-		VersionCaptionLabel.Text = $"Phiên bản {AppInfo.Current.VersionString} · Bản dựng {AppInfo.Current.BuildString}";
+		VersionCaptionLabel.Text = AppStrings.Common_Version(AppInfo.Current.VersionString, AppInfo.Current.BuildString);
+
+		LanguagePicker.ItemsSource = AppLanguage.Supported.Select(l => l.NativeName).ToList();
 	}
 
 	protected override void OnAppearing()
@@ -22,10 +26,33 @@ public partial class SettingsPage : ContentPage
 		RefreshThemeButtons();
 		SoundSwitch.IsToggled = AppPreferences.SoundEnabled;
 		VibrationSwitch.IsToggled = AppPreferences.VibrationEnabled;
+		RefreshLanguagePicker();
 		_ = _license.RefreshAsync();
 	}
 
-	private void Refresh() => LicenseLabel.Text = _license.State.SummaryText;
+	private void Refresh() => LicenseLabel.Text = _license.State.IsPro ? AppStrings.License_Pro : AppStrings.License_Free;
+
+	// ===== Language picker =====
+
+	private void RefreshLanguagePicker()
+	{
+		int index = Array.FindIndex(AppLanguage.Supported, l => l.Code == AppLanguage.CurrentCode);
+		_suppressLanguagePickerEvent = true;
+		LanguagePicker.SelectedIndex = index;
+		_suppressLanguagePickerEvent = false;
+	}
+
+	// Rebuilds AppShell (AppLanguage.SetOverride) so every {x:Static}-bound label across the app re-resolves
+	// in the new language -- this page itself is replaced as part of that, so nothing further to refresh here.
+	private void OnLanguagePickerChanged(object? sender, EventArgs e)
+	{
+		if (_suppressLanguagePickerEvent) return;
+		int index = LanguagePicker.SelectedIndex;
+		if (index < 0 || index >= AppLanguage.Supported.Length) return;
+		string code = AppLanguage.Supported[index].Code;
+		if (code == AppLanguage.CurrentCode) return;
+		AppLanguage.SetOverride(code);
+	}
 
 	private void OnSoundToggled(object? sender, ToggledEventArgs e) => AppPreferences.SoundEnabled = e.Value;
 	private void OnVibrationToggled(object? sender, ToggledEventArgs e) => AppPreferences.VibrationEnabled = e.Value;
@@ -79,7 +106,7 @@ public partial class SettingsPage : ContentPage
 			Refresh();
 
 			if (outcome == PurchaseOutcome.Error)
-				await DisplayAlertAsync("Lỗi", _license.LastError ?? "Không thể mua lúc này.", "OK");
+				await DisplayAlertAsync(AppStrings.Settings_Error, _license.LastError ?? AppStrings.Settings_PurchaseFailed, "OK");
 		}
 		finally { _nav.Exit(sender as View); }
 	}
@@ -98,11 +125,11 @@ public partial class SettingsPage : ContentPage
 
 			string message = outcome switch
 			{
-				PurchaseOutcome.AlreadyOwned or PurchaseOutcome.Purchased => "Đã khôi phục gói Pro.",
-				PurchaseOutcome.Error => _license.LastError ?? "Không khôi phục được.",
-				_ => "Không tìm thấy giao dịch Pro nào trước đó.",
+				PurchaseOutcome.AlreadyOwned or PurchaseOutcome.Purchased => AppStrings.Settings_RestoreSuccess,
+				PurchaseOutcome.Error => _license.LastError ?? AppStrings.Settings_RestoreFailed,
+				_ => AppStrings.Settings_RestoreNotFound,
 			};
-			await DisplayAlertAsync("Khôi phục", message, "OK");
+			await DisplayAlertAsync(AppStrings.Settings_RestoreTitle, message, "OK");
 		}
 		finally { _nav.Exit(sender as View); }
 	}

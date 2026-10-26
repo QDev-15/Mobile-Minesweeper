@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- ===== Common / shared across pages ===== -->
+  <data name="AppName" xml:space="preserve"><value>Campo Minado</value></data>
+  <data name="Common_Play" xml:space="preserve"><value>Jogar</value></data>
+  <data name="Common_PlayAgain" xml:space="preserve"><value>Jogar de novo</value></data>
+  <data name="Common_PlayNow" xml:space="preserve"><value>Jogar agora</value></data>
+  <data name="Common_PlayOnDate" xml:space="preserve"><value>Jogar em {0}</value></data>
+  <data name="Common_Back" xml:space="preserve"><value>Voltar</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>Fechar</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Cancelar</value></data>
+  <data name="Common_Continue" xml:space="preserve"><value>Continuar</value></data>
+  <data name="Common_Daily" xml:space="preserve"><value>Desafio de hoje</value></data>
+  <data name="Common_PrivacyPolicy" xml:space="preserve"><value>Política de Privacidade</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>Configurações</value></data>
+  <data name="Common_Version" xml:space="preserve"><value>Versão {0} · Build {1}</value></data>
+
+  <!-- ===== Difficulty names ===== -->
+  <data name="Difficulty_Easy" xml:space="preserve"><value>Fácil</value></data>
+  <data name="Difficulty_Medium" xml:space="preserve"><value>Médio</value></data>
+  <data name="Difficulty_Hard" xml:space="preserve"><value>Difícil</value></data>
+
+  <!-- ===== HomePage ===== -->
+  <data name="Home_ResumeTitle" xml:space="preserve"><value>Partida em andamento</value></data>
+  <data name="Home_Today" xml:space="preserve"><value>HOJE</value></data>
+  <data name="Home_DailyDescription" xml:space="preserve"><value>O mesmo tabuleiro para todos, 100% solucionável por lógica — nunca é preciso adivinhar.</value></data>
+  <data name="Home_Tutorial" xml:space="preserve"><value>Tutorial</value></data>
+  <data name="Home_NormalPlay" xml:space="preserve"><value>JOGO CLÁSSICO</value></data>
+  <data name="Home_ExitToast" xml:space="preserve"><value>Toque novamente para sair</value></data>
+  <data name="Home_TutorialProgress" xml:space="preserve"><value>Desbloqueados {0}/{1} · {2}★</value></data>
+  <data name="Home_DifficultyBest" xml:space="preserve"><value>{0} · Melhor tempo {1}</value></data>
+  <data name="Home_MineCount" xml:space="preserve"><value>{0} minas</value></data>
+
+  <!-- ===== GamePage ===== -->
+  <data name="Game_GeneratingBoard" xml:space="preserve"><value>Gerando tabuleiro…</value></data>
+  <data name="Game_Won" xml:space="preserve"><value>Você venceu!</value></data>
+  <data name="Game_Lost" xml:space="preserve"><value>Você pisou em uma mina!</value></data>
+  <data name="Game_LevelResult" xml:space="preserve"><value>Nível {0} · {1}</value></data>
+  <data name="Game_NewRecord" xml:space="preserve"><value>Novo recorde: {0}</value></data>
+  <data name="Game_TimeResult" xml:space="preserve"><value>Tempo: {0}</value></data>
+  <data name="Game_NoHintYet" xml:space="preserve"><value>Nenhuma dica disponível agora</value></data>
+  <data name="Game_RestartConfirmTitle" xml:space="preserve"><value>Jogar de novo?</value></data>
+  <data name="Game_RestartConfirmMessage" xml:space="preserve"><value>O tabuleiro atual será perdido.</value></data>
+  <data name="Game_LeaveConfirmTitle" xml:space="preserve"><value>Sair da partida atual?</value></data>
+  <data name="Game_LeaveConfirmMessage" xml:space="preserve"><value>Seu progresso será salvo e você pode continuar pela tela inicial.</value></data>
+  <data name="Game_Leave" xml:space="preserve"><value>Sair</value></data>
+  <data name="Game_Stay" xml:space="preserve"><value>Ficar</value></data>
+
+  <!-- ===== AboutPage ===== -->
+  <data name="About_Title" xml:space="preserve"><value>Sobre</value></data>
+  <data name="About_Description" xml:space="preserve"><value>Campo Minado clássico com duas novidades: modo Sem Adivinhação (todo tabuleiro é solucionável por pura lógica) e Desafio de hoje (o mesmo tabuleiro para todos, todos os dias).</value></data>
+  <data name="About_Author" xml:space="preserve"><value>Desenvolvido por Nguyen Huu Quynh.</value></data>
+
+  <!-- ===== SettingsPage ===== -->
+  <data name="Settings_ProTier" xml:space="preserve"><value>PLANO PRO</value></data>
+  <data name="Settings_BuyPro" xml:space="preserve"><value>Comprar Pro</value></data>
+  <data name="Settings_RestorePurchase" xml:space="preserve"><value>Restaurar compra</value></data>
+  <data name="Settings_ProFeature1" xml:space="preserve"><value>• Sem anúncios</value></data>
+  <data name="Settings_ProFeature2" xml:space="preserve"><value>• Dicas ilimitadas</value></data>
+  <data name="Settings_ProFeature3" xml:space="preserve"><value>• Compra única, para sempre</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>APARÊNCIA</value></data>
+  <data name="Settings_ThemeSystem" xml:space="preserve"><value>Sistema</value></data>
+  <data name="Settings_ThemeLight" xml:space="preserve"><value>Claro</value></data>
+  <data name="Settings_ThemeDark" xml:space="preserve"><value>Escuro</value></data>
+  <data name="Settings_ThemeHighContrast" xml:space="preserve"><value>Alto contraste</value></data>
+  <data name="Settings_SoundVibration" xml:space="preserve"><value>SOM E VIBRAÇÃO</value></data>
+  <data name="Settings_Sound" xml:space="preserve"><value>Som</value></data>
+  <data name="Settings_Vibration" xml:space="preserve"><value>Vibração</value></data>
+  <data name="Settings_App" xml:space="preserve"><value>APLICATIVO</value></data>
+  <data name="Settings_AppInfo" xml:space="preserve"><value>Informações do app</value></data>
+  <data name="Settings_Error" xml:space="preserve"><value>Erro</value></data>
+  <data name="Settings_PurchaseFailed" xml:space="preserve"><value>Não foi possível concluir a compra agora.</value></data>
+  <data name="Settings_RestoreSuccess" xml:space="preserve"><value>Plano Pro restaurado.</value></data>
+  <data name="Settings_RestoreFailed" xml:space="preserve"><value>Não foi possível restaurar a compra.</value></data>
+  <data name="Settings_RestoreNotFound" xml:space="preserve"><value>Nenhuma compra Pro anterior foi encontrada.</value></data>
+  <data name="Settings_RestoreTitle" xml:space="preserve"><value>Restaurar</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>IDIOMA</value></data>
+
+  <!-- ===== LevelsPage ===== -->
+  <data name="Levels_Progress" xml:space="preserve"><value>Desbloqueados {0}/{1} · {2}★</value></data>
+
+  <!-- ===== DailyCalendarPage ===== -->
+  <data name="Daily_CalendarTitle" xml:space="preserve"><value>Calendário de Desafios Diários</value></data>
+  <data name="Daily_Completed" xml:space="preserve"><value>Desafio daquele dia concluído</value></data>
+  <data name="Daily_NotCompleted" xml:space="preserve"><value>Não concluído</value></data>
+
+  <!-- ===== Licensing ===== -->
+  <data name="License_Pro" xml:space="preserve"><value>Atualizado para o Pro (sem anúncios)</value></data>
+  <data name="License_Free" xml:space="preserve"><value>Usando a versão gratuita (com anúncios)</value></data>
+  <data name="License_ConnectRetryError" xml:space="preserve"><value>Não foi possível conectar ao Google Play. Verifique sua conexão e tente novamente.</value></data>
+  <data name="License_ConnectError" xml:space="preserve"><value>Não foi possível conectar ao Google Play.</value></data>
+
+  <!-- ===== PrivacyPolicyPage ===== -->
+  <data name="Privacy_LastUpdated" xml:space="preserve"><value>Última atualização: {0}</value></data>
+  <data name="Privacy_Overview_Heading" xml:space="preserve"><value>Visão geral</value></data>
+  <data name="Privacy_Overview_Body" xml:space="preserve"><value>Campo Minado é um jogo de Campo Minado que roda inteiramente no seu dispositivo. O app não exige conta nem login. Este documento explica a pequena quantidade de dados que o app, junto com os serviços de terceiros que ele usa (anúncios, cobrança), pode acessar.</value></data>
+  <data name="Privacy_DirectData_Heading" xml:space="preserve"><value>Informações que coletamos diretamente</value></data>
+  <data name="Privacy_DirectData_Body" xml:space="preserve"><value>Nenhum dos nossos servidores recebe seu progresso de jogo ou informações pessoais. Tudo — níveis desbloqueados, número de estrelas, melhores tempos, a partida em andamento, configurações do modo Sem Adivinhação — é armazenado apenas localmente no seu dispositivo (o armazenamento privado do próprio app). Esses dados são perdidos se você desinstalar o app ou limpar seus dados nas Configurações do Android, e não mantemos nenhuma cópia.</value></data>
+  <data name="Privacy_ThirdParty_Heading" xml:space="preserve"><value>Informações coletadas por terceiros</value></data>
+  <data name="Privacy_ThirdParty_Intro" xml:space="preserve"><value>O Campo Minado usa alguns SDKs de terceiros para exibir anúncios e processar compras do Pro. Esses serviços podem coletar dados de acordo com suas próprias políticas:</value></data>
+  <data name="Privacy_LevelPlay_Title" xml:space="preserve"><value>Unity LevelPlay (ironSource) e redes de anúncios conectadas</value></data>
+  <data name="Privacy_LevelPlay_Body" xml:space="preserve"><value>Exibe anúncios em banner/intersticiais na versão gratuita. Pode coletar: ID de publicidade (Advertising ID), informações do dispositivo/sistema operacional, localização aproximada (via IP) e atividade de uso do app relacionada a anúncios.</value></data>
+  <data name="Privacy_Billing_Title" xml:space="preserve"><value>Google Play Billing</value></data>
+  <data name="Privacy_Billing_Body" xml:space="preserve"><value>Processa a compra do Pro (única, remove os anúncios). As informações de pagamento são tratadas integralmente pelo Google; recebemos apenas a confirmação de que a compra foi concluída com sucesso.</value></data>
+  <data name="Privacy_ThirdParty_Outro" xml:space="preserve"><value>Não controlamos como essas partes usam os dados depois de coletados. Você pode consultar as políticas de cada uma:</value></data>
+  <data name="Privacy_UnityLink" xml:space="preserve"><value>• Unity (LevelPlay/ironSource): unity.com/legal/privacy-policy</value></data>
+  <data name="Privacy_GoogleLink" xml:space="preserve"><value>• Google: policies.google.com/privacy</value></data>
+  <data name="Privacy_Permissions_Heading" xml:space="preserve"><value>Permissões solicitadas pelo app</value></data>
+  <data name="Privacy_Permissions_Body" xml:space="preserve"><value>Internet e estado da rede — para carregar anúncios e processar compras do Pro. ID de publicidade (Advertising ID) — obrigatório a partir do Android 13 para que os anúncios funcionem corretamente, usado para segmentação/medição de anúncios. O app NÃO solicita câmera, microfone, contatos ou localização precisa.</value></data>
+  <data name="Privacy_Children_Heading" xml:space="preserve"><value>Crianças</value></data>
+  <data name="Privacy_Children_Body" xml:space="preserve"><value>O Campo Minado não é direcionado a crianças com menos de 13 anos, e não coletamos intencionalmente informações pessoais de crianças. Os anúncios exibidos seguem as configurações de conteúdo de anúncios disponíveis no Google Play.</value></data>
+  <data name="Privacy_DataRetention_Heading" xml:space="preserve"><value>Armazenamento e exclusão de dados</value></data>
+  <data name="Privacy_DataRetention_Body" xml:space="preserve"><value>Como os dados ficam apenas no seu dispositivo, você tem controle total: desinstalar o app ou limpar seus dados nas Configurações do Android apaga tudo o que o app salvou. Não existe conta ou cópia no servidor para excluirmos em seu nome.</value></data>
+  <data name="Privacy_PolicyChanges_Heading" xml:space="preserve"><value>Mudanças na política</value></data>
+  <data name="Privacy_PolicyChanges_Body" xml:space="preserve"><value>Se esta política mudar, a atualização aparecerá diretamente nesta página do app, com uma nova data de atualização. Continuar usando o app após uma mudança significa que você aceita a nova política.</value></data>
+  <data name="Privacy_Contact_Heading" xml:space="preserve"><value>Contato</value></data>
+  <data name="Privacy_Contact_Body" xml:space="preserve"><value>Perguntas sobre esta política ou sobre como o Campo Minado trata os dados podem ser enviadas para: nguyenquynhvp.ictu@gmail.com</value></data>
+</root>

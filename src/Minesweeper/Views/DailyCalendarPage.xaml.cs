@@ -1,16 +1,12 @@
+using System.Globalization;
 using Minesweeper.Core;
+using Minesweeper.Resources.Strings;
 using Minesweeper.Services;
 
 namespace Minesweeper.Views;
 
 public partial class DailyCalendarPage : ContentPage
 {
-	private static readonly string[] MonthNames =
-	[
-		"Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
-		"Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12",
-	];
-
 	private readonly DailyProgressStore _progress;
 	private readonly ActionGuard _nav = new();
 	private DateOnly _currentMonth;
@@ -23,6 +19,14 @@ public partial class DailyCalendarPage : ContentPage
 	{
 		InitializeComponent();
 		_progress = progress;
+
+		// Monday-first order to match the grid below (same Sunday=0 -> Monday=0 shift as LoadMonth's
+		// firstWeekday calculation) -- locale day-name DATA, not translatable app copy, so this reads from
+		// CultureInfo instead of a resx key.
+		var dayNames = CultureInfo.CurrentUICulture.DateTimeFormat.AbbreviatedDayNames;
+		Label[] weekdayLabels = [Weekday0Label, Weekday1Label, Weekday2Label, Weekday3Label, Weekday4Label, Weekday5Label, Weekday6Label];
+		for (int i = 0; i < 7; i++)
+			weekdayLabels[i].Text = dayNames[(i + 1) % 7];
 	}
 
 	protected override void OnAppearing()
@@ -36,7 +40,8 @@ public partial class DailyCalendarPage : ContentPage
 	private void LoadMonth(DateOnly monthStart)
 	{
 		_currentMonth = monthStart;
-		MonthLabel.Text = $"{MonthNames[_currentMonth.Month - 1]}, {_currentMonth.Year}";
+		string monthName = CultureInfo.CurrentUICulture.DateTimeFormat.GetMonthName(_currentMonth.Month);
+		MonthLabel.Text = $"{monthName}, {_currentMonth.Year}";
 
 		int daysInMonth = DateTime.DaysInMonth(_currentMonth.Year, _currentMonth.Month);
 		int firstWeekday = ((int)_currentMonth.DayOfWeek + 6) % 7; // DayOfWeek has Sunday=0; this shifts to Monday=0 to match the T2..CN header
@@ -61,7 +66,7 @@ public partial class DailyCalendarPage : ContentPage
 		}
 
 		DaysCollection.ItemsSource = items;
-		PlayNowButton.Text = _selectedDate == today ? "Chơi ngay" : $"Chơi ngày {_selectedDate:dd/MM}";
+		PlayNowButton.Text = _selectedDate == today ? AppStrings.Common_PlayNow : AppStrings.Common_PlayOnDate(_selectedDate.ToString("dd/MM"));
 
 		DateOnly thisMonthStart = new(today.Year, today.Month, 1);
 		NextMonthButton.IsEnabled = _currentMonth < thisMonthStart;

@@ -1,4 +1,5 @@
 using Minesweeper.Core;
+using Minesweeper.Resources.Strings;
 using Minesweeper.Services;
 
 namespace Minesweeper.Views;
@@ -27,7 +28,7 @@ public partial class LevelsPage : ContentPage
 			items.Add(new LevelItem { Number = n, Unlocked = n <= unlocked, Stars = stars, IsNext = n == unlocked });
 		}
 		LevelsCollection.ItemsSource = items;
-		StatsLabel.Text = $"Đã mở {unlocked}/{LevelCatalog.MaxLevel} · {totalStars}★";
+		StatsLabel.Text = AppStrings.Levels_Progress(unlocked, LevelCatalog.MaxLevel, totalStars);
 	}
 
 	private async void OnLevelTapped(object? sender, EventArgs e)

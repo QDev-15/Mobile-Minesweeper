@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- ===== Common / shared across pages ===== -->
+  <data name="AppName" xml:space="preserve"><value>지뢰찾기</value></data>
+  <data name="Common_Play" xml:space="preserve"><value>플레이</value></data>
+  <data name="Common_PlayAgain" xml:space="preserve"><value>다시 플레이</value></data>
+  <data name="Common_PlayNow" xml:space="preserve"><value>지금 플레이</value></data>
+  <data name="Common_PlayOnDate" xml:space="preserve"><value>{0} 플레이</value></data>
+  <data name="Common_Back" xml:space="preserve"><value>뒤로</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>닫기</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>취소</value></data>
+  <data name="Common_Continue" xml:space="preserve"><value>계속</value></data>
+  <data name="Common_Daily" xml:space="preserve"><value>오늘의 챌린지</value></data>
+  <data name="Common_PrivacyPolicy" xml:space="preserve"><value>개인정보 처리방침</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>설정</value></data>
+  <data name="Common_Version" xml:space="preserve"><value>버전 {0} · 빌드 {1}</value></data>
+
+  <!-- ===== Difficulty names ===== -->
+  <data name="Difficulty_Easy" xml:space="preserve"><value>쉬움</value></data>
+  <data name="Difficulty_Medium" xml:space="preserve"><value>보통</value></data>
+  <data name="Difficulty_Hard" xml:space="preserve"><value>어려움</value></data>
+
+  <!-- ===== HomePage ===== -->
+  <data name="Home_ResumeTitle" xml:space="preserve"><value>진행 중인 게임</value></data>
+  <data name="Home_Today" xml:space="preserve"><value>오늘</value></data>
+  <data name="Home_DailyDescription" xml:space="preserve"><value>모두에게 같은 보드, 논리만으로 100% 풀 수 있습니다 — 추측은 필요 없습니다.</value></data>
+  <data name="Home_Tutorial" xml:space="preserve"><value>튜토리얼</value></data>
+  <data name="Home_NormalPlay" xml:space="preserve"><value>일반 플레이</value></data>
+  <data name="Home_ExitToast" xml:space="preserve"><value>한 번 더 누르면 종료됩니다</value></data>
+  <data name="Home_TutorialProgress" xml:space="preserve"><value>{0}/{1} 해금 · {2}★</value></data>
+  <data name="Home_DifficultyBest" xml:space="preserve"><value>{0} · 최고 기록 {1}</value></data>
+  <data name="Home_MineCount" xml:space="preserve"><value>지뢰 {0}개</value></data>
+
+  <!-- ===== GamePage ===== -->
+  <data name="Game_GeneratingBoard" xml:space="preserve"><value>보드 생성 중…</value></data>
+  <data name="Game_Won" xml:space="preserve"><value>승리했습니다!</value></data>
+  <data name="Game_Lost" xml:space="preserve"><value>지뢰를 밟았습니다!</value></data>
+  <data name="Game_LevelResult" xml:space="preserve"><value>{0} 단계 · {1}</value></data>
+  <data name="Game_NewRecord" xml:space="preserve"><value>신기록: {0}</value></data>
+  <data name="Game_TimeResult" xml:space="preserve"><value>시간: {0}</value></data>
+  <data name="Game_NoHintYet" xml:space="preserve"><value>지금은 힌트가 없습니다</value></data>
+  <data name="Game_RestartConfirmTitle" xml:space="preserve"><value>다시 플레이할까요?</value></data>
+  <data name="Game_RestartConfirmMessage" xml:space="preserve"><value>현재 보드는 사라집니다.</value></data>
+  <data name="Game_LeaveConfirmTitle" xml:space="preserve"><value>현재 게임을 종료할까요?</value></data>
+  <data name="Game_LeaveConfirmMessage" xml:space="preserve"><value>진행 상황은 저장되며, 홈 화면에서 다시 이어서 플레이할 수 있습니다.</value></data>
+  <data name="Game_Leave" xml:space="preserve"><value>종료</value></data>
+  <data name="Game_Stay" xml:space="preserve"><value>계속하기</value></data>
+
+  <!-- ===== AboutPage ===== -->
+  <data name="About_Title" xml:space="preserve"><value>소개</value></data>
+  <data name="About_Description" xml:space="preserve"><value>클래식 지뢰찾기에 두 가지 특별한 모드를 추가했습니다: 노게스 모드(모든 보드가 순수한 논리로 풀립니다)와 오늘의 챌린지(매일 모두에게 같은 보드가 주어집니다).</value></data>
+  <data name="About_Author" xml:space="preserve"><value>개발자: Nguyen Huu Quynh</value></data>
+
+  <!-- ===== SettingsPage ===== -->
+  <data name="Settings_ProTier" xml:space="preserve"><value>프로 버전</value></data>
+  <data name="Settings_BuyPro" xml:space="preserve"><value>프로 구매</value></data>
+  <data name="Settings_RestorePurchase" xml:space="preserve"><value>구매 복원</value></data>
+  <data name="Settings_ProFeature1" xml:space="preserve"><value>• 광고 제거</value></data>
+  <data name="Settings_ProFeature2" xml:space="preserve"><value>• 힌트 무제한</value></data>
+  <data name="Settings_ProFeature3" xml:space="preserve"><value>• 한 번 구매로 영구 사용</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>화면 설정</value></data>
+  <data name="Settings_ThemeSystem" xml:space="preserve"><value>시스템</value></data>
+  <data name="Settings_ThemeLight" xml:space="preserve"><value>밝게</value></data>
+  <data name="Settings_ThemeDark" xml:space="preserve"><value>어둡게</value></data>
+  <data name="Settings_ThemeHighContrast" xml:space="preserve"><value>고대비</value></data>
+  <data name="Settings_SoundVibration" xml:space="preserve"><value>소리 및 진동</value></data>
+  <data name="Settings_Sound" xml:space="preserve"><value>소리</value></data>
+  <data name="Settings_Vibration" xml:space="preserve"><value>진동</value></data>
+  <data name="Settings_App" xml:space="preserve"><value>앱</value></data>
+  <data name="Settings_AppInfo" xml:space="preserve"><value>앱 정보</value></data>
+  <data name="Settings_Error" xml:space="preserve"><value>오류</value></data>
+  <data name="Settings_PurchaseFailed" xml:space="preserve"><value>지금은 구매를 완료할 수 없습니다.</value></data>
+  <data name="Settings_RestoreSuccess" xml:space="preserve"><value>프로 버전이 복원되었습니다.</value></data>
+  <data name="Settings_RestoreFailed" xml:space="preserve"><value>구매를 복원할 수 없습니다.</value></data>
+  <data name="Settings_RestoreNotFound" xml:space="preserve"><value>이전에 구매한 프로 버전을 찾을 수 없습니다.</value></data>
+  <data name="Settings_RestoreTitle" xml:space="preserve"><value>복원</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>언어</value></data>
+
+  <!-- ===== LevelsPage ===== -->
+  <data name="Levels_Progress" xml:space="preserve"><value>{0}/{1} 해금 · {2}★</value></data>
+
+  <!-- ===== DailyCalendarPage ===== -->
+  <data name="Daily_CalendarTitle" xml:space="preserve"><value>데일리 챌린지 캘린더</value></data>
+  <data name="Daily_Completed" xml:space="preserve"><value>그날의 챌린지 완료</value></data>
+  <data name="Daily_NotCompleted" xml:space="preserve"><value>미완료</value></data>
+
+  <!-- ===== Licensing ===== -->
+  <data name="License_Pro" xml:space="preserve"><value>프로 버전으로 업그레이드됨 (광고 없음)</value></data>
+  <data name="License_Free" xml:space="preserve"><value>무료 버전 사용 중 (광고 포함)</value></data>
+  <data name="License_ConnectRetryError" xml:space="preserve"><value>Google Play에 연결할 수 없습니다. 네트워크를 확인한 후 다시 시도해 주세요.</value></data>
+  <data name="License_ConnectError" xml:space="preserve"><value>Google Play에 연결할 수 없습니다.</value></data>
+
+  <!-- ===== PrivacyPolicyPage ===== -->
+  <data name="Privacy_LastUpdated" xml:space="preserve"><value>최종 업데이트: {0}</value></data>
+  <data name="Privacy_Overview_Heading" xml:space="preserve"><value>개요</value></data>
+  <data name="Privacy_Overview_Body" xml:space="preserve"><value>지뢰찾기는 사용자의 기기에서 완전히 실행되는 지뢰찾기 게임입니다. 앱은 계정이나 로그인이 필요하지 않습니다. 이 문서는 앱과 앱이 사용하는 제3자 서비스(광고, 결제)가 접근할 수 있는 적은 양의 데이터에 대해 설명합니다.</value></data>
+  <data name="Privacy_DirectData_Heading" xml:space="preserve"><value>당사가 직접 수집하는 정보</value></data>
+  <data name="Privacy_DirectData_Body" xml:space="preserve"><value>당사의 서버는 사용자의 게임 진행 상황이나 개인정보를 받지 않습니다. 해금한 레벨, 별 개수, 최고 기록, 진행 중인 게임, 노게스 설정 등 모든 정보는 기기에만 로컬로 저장됩니다(앱 전용 저장 공간). 앱을 제거하거나 Android 설정에서 앱 데이터를 삭제하면 이 데이터는 사라지며, 당사는 그 어떤 사본도 보관하지 않습니다.</value></data>
+  <data name="Privacy_ThirdParty_Heading" xml:space="preserve"><value>제3자가 수집하는 정보</value></data>
+  <data name="Privacy_ThirdParty_Intro" xml:space="preserve"><value>지뢰찾기는 광고를 표시하고 프로 버전 구매를 처리하기 위해 몇 가지 제3자 SDK를 사용합니다. 이러한 서비스는 자체 정책에 따라 데이터를 수집할 수 있습니다:</value></data>
+  <data name="Privacy_LevelPlay_Title" xml:space="preserve"><value>Unity LevelPlay(ironSource) 및 연결된 광고 네트워크</value></data>
+  <data name="Privacy_LevelPlay_Body" xml:space="preserve"><value>무료 버전에서 배너/전면 광고를 표시합니다. 수집 가능한 정보: 광고 ID(Advertising ID), 기기/OS 정보, 대략적인 위치(IP 기반), 광고 관련 앱 사용 활동.</value></data>
+  <data name="Privacy_Billing_Title" xml:space="preserve"><value>Google Play Billing</value></data>
+  <data name="Privacy_Billing_Body" xml:space="preserve"><value>프로 버전 구매(1회성, 광고 제거)를 처리합니다. 결제 정보는 전적으로 Google이 처리하며, 당사는 구매 성공 확인만 받습니다.</value></data>
+  <data name="Privacy_ThirdParty_Outro" xml:space="preserve"><value>당사는 이러한 제3자가 수집한 데이터를 어떻게 사용하는지 관리하지 않습니다. 각 서비스의 정책은 아래에서 확인할 수 있습니다:</value></data>
+  <data name="Privacy_UnityLink" xml:space="preserve"><value>• Unity (LevelPlay/ironSource): unity.com/legal/privacy-policy</value></data>
+  <data name="Privacy_GoogleLink" xml:space="preserve"><value>• Google: policies.google.com/privacy</value></data>
+  <data name="Privacy_Permissions_Heading" xml:space="preserve"><value>앱이 요청하는 권한</value></data>
+  <data name="Privacy_Permissions_Body" xml:space="preserve"><value>인터넷 및 네트워크 상태 — 광고를 불러오고 프로 버전 구매를 처리하는 데 사용됩니다. 광고 ID(Advertising ID) — Android 13부터 광고가 올바르게 작동하도록 필수이며, 광고 타겟팅/측정에 사용됩니다. 이 앱은 카메라, 마이크, 연락처 또는 정확한 위치 정보를 요청하지 않습니다.</value></data>
+  <data name="Privacy_Children_Heading" xml:space="preserve"><value>아동</value></data>
+  <data name="Privacy_Children_Body" xml:space="preserve"><value>지뢰찾기는 13세 미만 아동을 대상으로 하지 않으며, 당사는 아동으로부터 개인정보를 의도적으로 수집하지 않습니다. 표시되는 광고는 Google Play에서 제공하는 광고 콘텐츠 설정을 따릅니다.</value></data>
+  <data name="Privacy_DataRetention_Heading" xml:space="preserve"><value>데이터 저장 및 삭제</value></data>
+  <data name="Privacy_DataRetention_Body" xml:space="preserve"><value>데이터는 사용자의 기기에만 저장되므로, 사용자가 전적으로 관리할 수 있습니다: 앱을 제거하거나 Android 설정에서 앱 데이터를 삭제하면 앱이 저장한 모든 정보가 삭제됩니다. 당사가 대신 삭제해야 할 계정이나 서버 측 사본은 존재하지 않습니다.</value></data>
+  <data name="Privacy_PolicyChanges_Heading" xml:space="preserve"><value>정책 변경</value></data>
+  <data name="Privacy_PolicyChanges_Body" xml:space="preserve"><value>이 정책이 변경되면 앱 내 이 페이지에 새로운 업데이트 날짜와 함께 변경 내용이 바로 표시됩니다. 변경 후에도 앱을 계속 사용하면 새 정책에 동의하는 것으로 간주됩니다.</value></data>
+  <data name="Privacy_Contact_Heading" xml:space="preserve"><value>문의하기</value></data>
+  <data name="Privacy_Contact_Body" xml:space="preserve"><value>이 정책이나 지뢰찾기의 데이터 처리 방식에 대한 문의는 nguyenquynhvp.ictu@gmail.com 으로 보내 주세요.</value></data>
+</root>

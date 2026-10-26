@@ -2,6 +2,7 @@ using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using Minesweeper.Core;
 using Minesweeper.Core.Licensing;
+using Minesweeper.Resources.Strings;
 using Minesweeper.Services;
 
 namespace Minesweeper.Views;
@@ -35,7 +36,7 @@ public partial class HomePage : ContentPage
 		int unlocked = _levels.UnlockedLevel;
 		int totalStars = 0;
 		for (int n = 1; n <= unlocked; n++) totalStars += _levels.StarsFor(n);
-		TutorialProgressLabel.Text = $"Đã mở màn {unlocked}/{LevelCatalog.MaxLevel} · {totalStars}★";
+		TutorialProgressLabel.Text = AppStrings.Home_TutorialProgress(unlocked, LevelCatalog.MaxLevel, totalStars);
 	}
 
 	private void RefreshResumeCard()
@@ -44,7 +45,7 @@ public partial class HomePage : ContentPage
 		ResumeCard.IsVisible = save != null;
 		if (save == null) return;
 
-		string name = save.IsDaily ? "Thử thách hôm nay" : Difficulty.For((DifficultyLevel)save.DifficultyLevel).Name;
+		string name = save.IsDaily ? AppStrings.Common_Daily : DifficultyLocalization.NameFor((DifficultyLevel)save.DifficultyLevel);
 		ResumeDetailLabel.Text = $"{name} · {save.ElapsedSeconds / 60}:{save.ElapsedSeconds % 60:00}";
 	}
 
@@ -54,8 +55,8 @@ public partial class HomePage : ContentPage
 	private string BestTimeText(DifficultyLevel level)
 	{
 		int? best = _stats.BestTime(level);
-		string size = $"{Difficulty.For(level).MineCount} mìn";
-		return best is { } s ? $"{size} · Kỷ lục {s / 60:0}:{s % 60:00}" : size;
+		string size = AppStrings.Home_MineCount(Difficulty.For(level).MineCount);
+		return best is { } s ? AppStrings.Home_DifficultyBest(size, $"{s / 60:0}:{s % 60:00}") : size;
 	}
 
 	// Every navigation handler below goes through _nav (owner's report, 2026-10-20: no loading feedback meant
@@ -104,7 +105,7 @@ public partial class HomePage : ContentPage
 		if (now - _lastBackPressUtc < BackPressExitWindow) return base.OnBackButtonPressed(); // really exit this time
 
 		_lastBackPressUtc = now;
-		_ = Toast.Make("Nhấn lần nữa để thoát", ToastDuration.Short).Show();
+		_ = Toast.Make(AppStrings.Home_ExitToast, ToastDuration.Short).Show();
 		return true; // swallow this first press
 	}
 }

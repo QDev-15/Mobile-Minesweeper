@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:views="clr-namespace:Minesweeper.Views"
+             xmlns:strings="clr-namespace:Minesweeper.Resources.Strings"
              x:Class="Minesweeper.Views.DailyCalendarPage"
              BackgroundColor="{DynamicResource MilkBackground}"
              Shell.NavBarIsVisible="False">
@@ -9,7 +10,7 @@
     <Grid RowDefinitions="Auto,*,Auto">
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*" Padding="6,8">
             <Button Grid.Column="0" Text="{x:Static views:Icons.ArrowBack}" Padding="0, 0" Margin="0, 0" FontSize="22" Style="{StaticResource IconButton}" Clicked="OnBackClicked" />
-            <Label Grid.Column="1" Text="Lịch thử thách hằng ngày" Style="{StaticResource TitleText}" FontSize="17" VerticalOptions="Center" Margin="6,0,0,0" />
+            <Label Grid.Column="1" Text="{x:Static strings:AppStrings.Daily_CalendarTitle}" Style="{StaticResource TitleText}" FontSize="17" VerticalOptions="Center" Margin="6,0,0,0" />
         </Grid>
 
         <ScrollView Grid.Row="1">
@@ -26,14 +27,16 @@
                             Style="{StaticResource IconButton}" Clicked="OnNextMonthClicked" />
                 </Grid>
 
+                <!-- Text for these 7 is set in code-behind from CultureInfo.CurrentUICulture.DateTimeFormat
+                     (not resx) since they are locale day-name data, not translatable app copy. -->
                 <Grid ColumnDefinitions="*,*,*,*,*,*,*">
-                    <Label Grid.Column="0" Text="T2" Style="{StaticResource Hint}" HorizontalOptions="Center" />
-                    <Label Grid.Column="1" Text="T3" Style="{StaticResource Hint}" HorizontalOptions="Center" />
-                    <Label Grid.Column="2" Text="T4" Style="{StaticResource Hint}" HorizontalOptions="Center" />
-                    <Label Grid.Column="3" Text="T5" Style="{StaticResource Hint}" HorizontalOptions="Center" />
-                    <Label Grid.Column="4" Text="T6" Style="{StaticResource Hint}" HorizontalOptions="Center" />
-                    <Label Grid.Column="5" Text="T7" Style="{StaticResource Hint}" HorizontalOptions="Center" />
-                    <Label Grid.Column="6" Text="CN" Style="{StaticResource Hint}" HorizontalOptions="Center" />
+                    <Label Grid.Column="0" x:Name="Weekday0Label" Style="{StaticResource Hint}" HorizontalOptions="Center" />
+                    <Label Grid.Column="1" x:Name="Weekday1Label" Style="{StaticResource Hint}" HorizontalOptions="Center" />
+                    <Label Grid.Column="2" x:Name="Weekday2Label" Style="{StaticResource Hint}" HorizontalOptions="Center" />
+                    <Label Grid.Column="3" x:Name="Weekday3Label" Style="{StaticResource Hint}" HorizontalOptions="Center" />
+                    <Label Grid.Column="4" x:Name="Weekday4Label" Style="{StaticResource Hint}" HorizontalOptions="Center" />
+                    <Label Grid.Column="5" x:Name="Weekday5Label" Style="{StaticResource Hint}" HorizontalOptions="Center" />
+                    <Label Grid.Column="6" x:Name="Weekday6Label" Style="{StaticResource Hint}" HorizontalOptions="Center" />
                 </Grid>
 
                 <CollectionView x:Name="DaysCollection">
@@ -86,11 +89,11 @@
                     <VerticalStackLayout Spacing="8">
                         <HorizontalStackLayout Spacing="10">
                             <Label Text="{x:Static views:Icons.CheckCircle}" FontFamily="Icons" FontSize="16" TextColor="#3FAE5C" VerticalOptions="Center" />
-                            <Label Text="Đã hoàn thành thử thách ngày đó" VerticalOptions="Center" FontSize="13.5" />
+                            <Label Text="{x:Static strings:AppStrings.Daily_Completed}" VerticalOptions="Center" FontSize="13.5" />
                         </HorizontalStackLayout>
                         <HorizontalStackLayout Spacing="10">
                             <Label Text="{x:Static views:Icons.FiberManualRecord}" FontFamily="Icons" FontSize="12" TextColor="{DynamicResource Danger}" VerticalOptions="Center" />
-                            <Label Text="Chưa hoàn thành" VerticalOptions="Center" FontSize="13.5" />
+                            <Label Text="{x:Static strings:AppStrings.Daily_NotCompleted}" VerticalOptions="Center" FontSize="13.5" />
                         </HorizontalStackLayout>
                     </VerticalStackLayout>
                 </Border>
@@ -101,7 +104,7 @@
         <!-- Pick a day above, then play it from here — outside the ScrollView so it stays reachable without
              scrolling down past the legend card (owner's direction, 2026-10-20: tapping a day used to jump
              straight into it; now picking and playing are two separate, explicit steps). -->
-        <Button x:Name="PlayNowButton" Grid.Row="2" Text="Chơi ngay" Clicked="OnPlayNowClicked" Style="{StaticResource PrimaryButton}"
+        <Button x:Name="PlayNowButton" Grid.Row="2" Text="{x:Static strings:AppStrings.Common_PlayNow}" Clicked="OnPlayNowClicked" Style="{StaticResource PrimaryButton}"
                 Margin="16,0,16,16" HeightRequest="48" FontFamily="OpenSansSemibold" />
     </Grid>
 </ContentPage>

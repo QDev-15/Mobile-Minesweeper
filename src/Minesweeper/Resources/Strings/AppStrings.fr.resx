@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- ===== Common / shared across pages ===== -->
+  <data name="AppName" xml:space="preserve"><value>Démineur</value></data>
+  <data name="Common_Play" xml:space="preserve"><value>Jouer</value></data>
+  <data name="Common_PlayAgain" xml:space="preserve"><value>Rejouer</value></data>
+  <data name="Common_PlayNow" xml:space="preserve"><value>Jouer maintenant</value></data>
+  <data name="Common_PlayOnDate" xml:space="preserve"><value>Jouer le {0}</value></data>
+  <data name="Common_Back" xml:space="preserve"><value>Retour</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>Fermer</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Annuler</value></data>
+  <data name="Common_Continue" xml:space="preserve"><value>Continuer</value></data>
+  <data name="Common_Daily" xml:space="preserve"><value>Défi du jour</value></data>
+  <data name="Common_PrivacyPolicy" xml:space="preserve"><value>Politique de confidentialité</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>Réglages</value></data>
+  <data name="Common_Version" xml:space="preserve"><value>Version {0} · Build {1}</value></data>
+
+  <!-- ===== Difficulty names ===== -->
+  <data name="Difficulty_Easy" xml:space="preserve"><value>Facile</value></data>
+  <data name="Difficulty_Medium" xml:space="preserve"><value>Moyen</value></data>
+  <data name="Difficulty_Hard" xml:space="preserve"><value>Difficile</value></data>
+
+  <!-- ===== HomePage ===== -->
+  <data name="Home_ResumeTitle" xml:space="preserve"><value>Partie en cours</value></data>
+  <data name="Home_Today" xml:space="preserve"><value>AUJOURD'HUI</value></data>
+  <data name="Home_DailyDescription" xml:space="preserve"><value>La même grille pour tout le monde, résoluble à 100 % par la logique — jamais besoin de deviner.</value></data>
+  <data name="Home_Tutorial" xml:space="preserve"><value>Tutoriel</value></data>
+  <data name="Home_NormalPlay" xml:space="preserve"><value>MODE CLASSIQUE</value></data>
+  <data name="Home_ExitToast" xml:space="preserve"><value>Appuyez à nouveau pour quitter</value></data>
+  <data name="Home_TutorialProgress" xml:space="preserve"><value>{0}/{1} débloqués · {2}★</value></data>
+  <data name="Home_DifficultyBest" xml:space="preserve"><value>{0} · Meilleur temps {1}</value></data>
+  <data name="Home_MineCount" xml:space="preserve"><value>{0} mines</value></data>
+
+  <!-- ===== GamePage ===== -->
+  <data name="Game_GeneratingBoard" xml:space="preserve"><value>Génération de la grille…</value></data>
+  <data name="Game_Won" xml:space="preserve"><value>Vous avez gagné !</value></data>
+  <data name="Game_Lost" xml:space="preserve"><value>Vous avez touché une mine !</value></data>
+  <data name="Game_LevelResult" xml:space="preserve"><value>Niveau {0} · {1}</value></data>
+  <data name="Game_NewRecord" xml:space="preserve"><value>Nouveau record : {0}</value></data>
+  <data name="Game_TimeResult" xml:space="preserve"><value>Temps : {0}</value></data>
+  <data name="Game_NoHintYet" xml:space="preserve"><value>Aucun indice disponible pour le moment</value></data>
+  <data name="Game_RestartConfirmTitle" xml:space="preserve"><value>Rejouer ?</value></data>
+  <data name="Game_RestartConfirmMessage" xml:space="preserve"><value>La grille actuelle sera perdue.</value></data>
+  <data name="Game_LeaveConfirmTitle" xml:space="preserve"><value>Quitter la partie en cours ?</value></data>
+  <data name="Game_LeaveConfirmMessage" xml:space="preserve"><value>Votre progression sera enregistrée, vous pourrez la reprendre depuis l'écran d'accueil.</value></data>
+  <data name="Game_Leave" xml:space="preserve"><value>Quitter</value></data>
+  <data name="Game_Stay" xml:space="preserve"><value>Rester</value></data>
+
+  <!-- ===== AboutPage ===== -->
+  <data name="About_Title" xml:space="preserve"><value>À propos</value></data>
+  <data name="About_Description" xml:space="preserve"><value>Démineur classique avec deux particularités : le mode Sans Supposition (chaque grille se résout par pure logique) et le Défi du jour (la même grille pour tout le monde, chaque jour).</value></data>
+  <data name="About_Author" xml:space="preserve"><value>Développé par Nguyen Huu Quynh.</value></data>
+
+  <!-- ===== SettingsPage ===== -->
+  <data name="Settings_ProTier" xml:space="preserve"><value>FORMULE PRO</value></data>
+  <data name="Settings_BuyPro" xml:space="preserve"><value>Acheter Pro</value></data>
+  <data name="Settings_RestorePurchase" xml:space="preserve"><value>Restaurer l'achat</value></data>
+  <data name="Settings_ProFeature1" xml:space="preserve"><value>• Plus de publicités</value></data>
+  <data name="Settings_ProFeature2" xml:space="preserve"><value>• Indices illimités</value></data>
+  <data name="Settings_ProFeature3" xml:space="preserve"><value>• Achat unique, à vie</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>APPARENCE</value></data>
+  <data name="Settings_ThemeSystem" xml:space="preserve"><value>Système</value></data>
+  <data name="Settings_ThemeLight" xml:space="preserve"><value>Clair</value></data>
+  <data name="Settings_ThemeDark" xml:space="preserve"><value>Sombre</value></data>
+  <data name="Settings_ThemeHighContrast" xml:space="preserve"><value>Contraste élevé</value></data>
+  <data name="Settings_SoundVibration" xml:space="preserve"><value>SON ET VIBRATION</value></data>
+  <data name="Settings_Sound" xml:space="preserve"><value>Son</value></data>
+  <data name="Settings_Vibration" xml:space="preserve"><value>Vibration</value></data>
+  <data name="Settings_App" xml:space="preserve"><value>APPLICATION</value></data>
+  <data name="Settings_AppInfo" xml:space="preserve"><value>Informations sur l'application</value></data>
+  <data name="Settings_Error" xml:space="preserve"><value>Erreur</value></data>
+  <data name="Settings_PurchaseFailed" xml:space="preserve"><value>Impossible de finaliser l'achat pour le moment.</value></data>
+  <data name="Settings_RestoreSuccess" xml:space="preserve"><value>Formule Pro restaurée.</value></data>
+  <data name="Settings_RestoreFailed" xml:space="preserve"><value>Impossible de restaurer l'achat.</value></data>
+  <data name="Settings_RestoreNotFound" xml:space="preserve"><value>Aucun achat Pro antérieur n'a été trouvé.</value></data>
+  <data name="Settings_RestoreTitle" xml:space="preserve"><value>Restaurer</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>LANGUE</value></data>
+
+  <!-- ===== LevelsPage ===== -->
+  <data name="Levels_Progress" xml:space="preserve"><value>{0}/{1} débloqués · {2}★</value></data>
+
+  <!-- ===== DailyCalendarPage ===== -->
+  <data name="Daily_CalendarTitle" xml:space="preserve"><value>Calendrier des défis quotidiens</value></data>
+  <data name="Daily_Completed" xml:space="preserve"><value>Défi du jour terminé</value></data>
+  <data name="Daily_NotCompleted" xml:space="preserve"><value>Non terminé</value></data>
+
+  <!-- ===== Licensing ===== -->
+  <data name="License_Pro" xml:space="preserve"><value>Passé à la version Pro (sans publicité)</value></data>
+  <data name="License_Free" xml:space="preserve"><value>Version gratuite en cours d'utilisation (avec publicités)</value></data>
+  <data name="License_ConnectRetryError" xml:space="preserve"><value>Impossible de se connecter à Google Play. Vérifiez votre connexion puis réessayez.</value></data>
+  <data name="License_ConnectError" xml:space="preserve"><value>Impossible de se connecter à Google Play.</value></data>
+
+  <!-- ===== PrivacyPolicyPage ===== -->
+  <data name="Privacy_LastUpdated" xml:space="preserve"><value>Dernière mise à jour : {0}</value></data>
+  <data name="Privacy_Overview_Heading" xml:space="preserve"><value>Présentation</value></data>
+  <data name="Privacy_Overview_Body" xml:space="preserve"><value>Démineur est un jeu de démineur qui fonctionne entièrement sur votre appareil. L'application ne nécessite aucun compte ni connexion. Ce document explique les rares données auxquelles l'application, ainsi que les services tiers qu'elle utilise (publicité, facturation), peuvent accéder.</value></data>
+  <data name="Privacy_DirectData_Heading" xml:space="preserve"><value>Informations que nous collectons directement</value></data>
+  <data name="Privacy_DirectData_Body" xml:space="preserve"><value>Aucun de nos serveurs ne reçoit votre progression de jeu ni vos informations personnelles. Tout — niveaux débloqués, nombre d'étoiles, meilleurs temps, partie en cours, réglages du mode Sans Supposition — est stocké uniquement en local sur votre appareil (l'espace de stockage privé de l'application). Ces données sont perdues si vous désinstallez l'application ou effacez ses données dans les Réglages Android, et nous n'en conservons aucune copie.</value></data>
+  <data name="Privacy_ThirdParty_Heading" xml:space="preserve"><value>Informations collectées par des tiers</value></data>
+  <data name="Privacy_ThirdParty_Intro" xml:space="preserve"><value>Démineur utilise quelques SDK tiers pour afficher des publicités et traiter les achats de la version Pro. Ces services peuvent collecter des données selon leurs propres politiques :</value></data>
+  <data name="Privacy_LevelPlay_Title" xml:space="preserve"><value>Unity LevelPlay (ironSource) et les réseaux publicitaires associés</value></data>
+  <data name="Privacy_LevelPlay_Body" xml:space="preserve"><value>Affiche des bannières/publicités interstitielles dans la version gratuite. Peut collecter : l'identifiant publicitaire (Advertising ID), des informations sur l'appareil/le système d'exploitation, une localisation approximative (via l'IP) et l'activité d'utilisation de l'application liée à la publicité.</value></data>
+  <data name="Privacy_Billing_Title" xml:space="preserve"><value>Google Play Billing</value></data>
+  <data name="Privacy_Billing_Body" xml:space="preserve"><value>Traite l'achat de la version Pro (achat unique, supprime les publicités). Les informations de paiement sont entièrement gérées par Google ; nous ne recevons qu'une confirmation que l'achat a réussi.</value></data>
+  <data name="Privacy_ThirdParty_Outro" xml:space="preserve"><value>Nous ne contrôlons pas la façon dont ces tiers utilisent les données une fois collectées. Vous pouvez consulter leurs propres politiques :</value></data>
+  <data name="Privacy_UnityLink" xml:space="preserve"><value>• Unity (LevelPlay/ironSource) : unity.com/legal/privacy-policy</value></data>
+  <data name="Privacy_GoogleLink" xml:space="preserve"><value>• Google : policies.google.com/privacy</value></data>
+  <data name="Privacy_Permissions_Heading" xml:space="preserve"><value>Autorisations demandées par l'application</value></data>
+  <data name="Privacy_Permissions_Body" xml:space="preserve"><value>Internet et état du réseau — pour charger les publicités et traiter les achats de la version Pro. Identifiant publicitaire (Advertising ID) — obligatoire à partir d'Android 13 pour que les publicités fonctionnent correctement, utilisé pour le ciblage/la mesure publicitaire. L'application NE demande PAS l'accès à la caméra, au microphone, aux contacts ni à la localisation précise.</value></data>
+  <data name="Privacy_Children_Heading" xml:space="preserve"><value>Enfants</value></data>
+  <data name="Privacy_Children_Body" xml:space="preserve"><value>Démineur ne s'adresse pas aux enfants de moins de 13 ans et nous ne collectons pas intentionnellement d'informations personnelles auprès d'enfants. Les publicités affichées suivent les réglages de contenu publicitaire disponibles sur Google Play.</value></data>
+  <data name="Privacy_DataRetention_Heading" xml:space="preserve"><value>Conservation et suppression des données</value></data>
+  <data name="Privacy_DataRetention_Body" xml:space="preserve"><value>Puisque les données ne se trouvent que sur votre appareil, vous gardez un contrôle total : désinstaller l'application ou effacer ses données dans les Réglages Android supprime tout ce que l'application a enregistré. Il n'existe aucun compte ni copie côté serveur que nous devrions supprimer en votre nom.</value></data>
+  <data name="Privacy_PolicyChanges_Heading" xml:space="preserve"><value>Modifications de la politique</value></data>
+  <data name="Privacy_PolicyChanges_Body" xml:space="preserve"><value>Si cette politique change, la mise à jour apparaîtra directement sur cette page dans l'application avec une nouvelle date de mise à jour. Continuer à utiliser l'application après un changement signifie que vous acceptez la nouvelle politique.</value></data>
+  <data name="Privacy_Contact_Heading" xml:space="preserve"><value>Contact</value></data>
+  <data name="Privacy_Contact_Body" xml:space="preserve"><value>Les questions concernant cette politique ou la façon dont Démineur traite les données peuvent être envoyées à : nguyenquynhvp.ictu@gmail.com</value></data>
+</root>
