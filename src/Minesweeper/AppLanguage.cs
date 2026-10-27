@@ -55,17 +55,29 @@ public static class AppLanguage
         return "vi";
     }
 
-    /// <summary>Sets CultureInfo.CurrentUICulture/CurrentCulture (and the per-thread defaults, so a later
-    /// background Task.Run still sees the right language too) to CurrentCode -- call once at startup
-    /// (App's own constructor, mirroring ApplyColorTheme) and this is all a fresh page's {x:Static
-    /// strings:AppStrings.X} bindings or a Toast's AppStrings.X call needs to come out right.</summary>
+    /// <summary>Sets CultureInfo.CurrentUICulture (and its per-thread default, so a later background
+    /// Task.Run still sees the right language too) to CurrentCode -- call once at startup (App's own
+    /// constructor, mirroring ApplyColorTheme) and this is all a fresh page's {x:Static strings:AppStrings.X}
+    /// bindings or a Toast's AppStrings.X call needs to come out right. Deliberately leaves CurrentCulture
+    /// (number/date formatting) alone: nothing in this app reads it -- AppStrings and the calendar's month/day
+    /// names both read CurrentUICulture explicitly -- and mutating it app-wide risks upsetting ad SDK/billing
+    /// code that was never exercised under a non-Vietnamese CurrentCulture before this feature existed.
+    /// Called from App()'s constructor with nothing else having run yet, so a bad/unsupported culture code
+    /// (e.g. a device-reported locale .NET's globalization data can't construct, or any other globalization
+    /// quirk specific to this device/Android build) must never be allowed to take the whole app down on
+    /// launch -- caught and ignored (deliberately broad: this is the single most load-bearing line in the
+    /// app, run before anything else, for a feature that is a nice-to-have, not essential), leaving whatever
+    /// culture was already in effect (still a correct, working language, just not necessarily the preferred
+    /// one).</summary>
     public static void Apply()
     {
-        var culture = new CultureInfo(CurrentCode);
-        CultureInfo.CurrentUICulture = culture;
-        CultureInfo.CurrentCulture = culture;
-        CultureInfo.DefaultThreadCurrentUICulture = culture;
-        CultureInfo.DefaultThreadCurrentCulture = culture;
+        try
+        {
+            var culture = CultureInfo.GetCultureInfo(CurrentCode);
+            CultureInfo.CurrentUICulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+        }
+        catch { /* keep whatever culture was already in effect -- see remark above */ }
     }
 
     /// <summary>SettingsPage's picker calls this. Persists the choice, applies it immediately (so anything
