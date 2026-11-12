@@ -123,6 +123,16 @@
   <data name="License_ConnectRetryError" xml:space="preserve"><value>Tidak dapat terhubung ke Google Play. Periksa koneksi Anda lalu coba lagi.</value></data>
   <data name="License_ConnectError" xml:space="preserve"><value>Tidak dapat terhubung ke Google Play.</value></data>
 
+  <!-- ===== TermsGatePage (startup consent gate, added 2026-11-12) ===== -->
+  <data name="TermsGate_Heading" xml:space="preserve"><value>Ketentuan Penggunaan &amp; Privasi</value></data>
+  <data name="TermsGate_Paragraph1" xml:space="preserve"><value>Penyapu Ranjau tidak mengumpulkan, menyimpan, atau mengirimkan informasi pribadi Anda dalam bentuk apa pun. Semua data permainan Anda hanya disimpan di perangkat ini.</value></data>
+  <data name="TermsGate_Paragraph2" xml:space="preserve"><value>Aplikasi ini menampilkan iklan agar tetap gratis, melalui Unity LevelPlay (ironSource) dan jaringan iklan terkait. Jaringan iklan ini dapat mengumpulkan: ID iklan (Advertising ID) Anda, informasi perangkat/sistem operasi, lokasi perkiraan (melalui IP), dan aktivitas terkait iklan — berdasarkan kebijakan mereka sendiri, bukan kebijakan Penyapu Ranjau.</value></data>
+  <data name="TermsGate_Paragraph3" xml:space="preserve"><value>Tingkatkan ke Pro: menghapus iklan secara total. Dengan Pro, tidak ada SDK iklan yang berjalan di dalam aplikasi — artinya tidak ada satu pun informasi di atas yang dikumpulkan oleh siapa pun.</value></data>
+  <data name="TermsGate_Checkbox" xml:space="preserve"><value>Saya telah membaca dan menyetujui isi di atas</value></data>
+  <data name="TermsGate_BuyPro" xml:space="preserve"><value>Beli Pro Sekarang</value></data>
+  <data name="TermsGate_AgreeContinue" xml:space="preserve"><value>Setuju &amp; Lanjutkan</value></data>
+  <data name="TermsGate_DeclineExit" xml:space="preserve"><value>Tolak &amp; Keluar</value></data>
+
   <!-- ===== PrivacyPolicyPage ===== -->
   <data name="Privacy_LastUpdated" xml:space="preserve"><value>Terakhir diperbarui: {0}</value></data>
   <data name="Privacy_Overview_Heading" xml:space="preserve"><value>Ringkasan</value></data>

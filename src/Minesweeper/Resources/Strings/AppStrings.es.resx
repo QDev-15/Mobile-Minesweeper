@@ -123,6 +123,16 @@
   <data name="License_ConnectRetryError" xml:space="preserve"><value>No se pudo conectar con Google Play. Revisa tu conexión e inténtalo de nuevo.</value></data>
   <data name="License_ConnectError" xml:space="preserve"><value>No se pudo conectar con Google Play.</value></data>
 
+  <!-- ===== TermsGatePage (startup consent gate, added 2026-11-12) ===== -->
+  <data name="TermsGate_Heading" xml:space="preserve"><value>Términos de uso y privacidad</value></data>
+  <data name="TermsGate_Paragraph1" xml:space="preserve"><value>Buscaminas no recopila, no almacena ni envía ninguna información personal tuya. Todos los datos de tu partida se guardan únicamente en este dispositivo.</value></data>
+  <data name="TermsGate_Paragraph2" xml:space="preserve"><value>La app muestra anuncios para mantenerse gratuita, a través de Unity LevelPlay (ironSource) y redes publicitarias asociadas. Estas redes publicitarias pueden recopilar: tu ID de publicidad (Advertising ID), información del dispositivo/sistema operativo, ubicación aproximada (mediante IP) y actividad relacionada con anuncios — según sus propias políticas, no las de Buscaminas.</value></data>
+  <data name="TermsGate_Paragraph3" xml:space="preserve"><value>Mejora a Pro: elimina por completo los anuncios. Con Pro, ningún SDK publicitario se ejecuta dentro de la app — es decir, nadie recopila ninguna de la información mencionada arriba.</value></data>
+  <data name="TermsGate_Checkbox" xml:space="preserve"><value>He leído y acepto lo anterior</value></data>
+  <data name="TermsGate_BuyPro" xml:space="preserve"><value>Comprar Pro ahora</value></data>
+  <data name="TermsGate_AgreeContinue" xml:space="preserve"><value>Aceptar y continuar</value></data>
+  <data name="TermsGate_DeclineExit" xml:space="preserve"><value>Rechazar y salir</value></data>
+
   <!-- ===== PrivacyPolicyPage ===== -->
   <data name="Privacy_LastUpdated" xml:space="preserve"><value>Última actualización: {0}</value></data>
   <data name="Privacy_Overview_Heading" xml:space="preserve"><value>Resumen</value></data>

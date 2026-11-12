@@ -8,6 +8,10 @@ public static class AppPreferences
     private const string SoundEnabledKey = "pref_sound_enabled";
     private const string VibrationEnabledKey = "pref_vibration_enabled";
 
+    // "_v1": bumping this key later re-prompts everyone with TermsGatePage if its content ever changes
+    // meaningfully (added 2026-11-12 alongside the startup terms/ads-disclosure gate).
+    private const string TermsAcceptedKey = "terms_accepted_v1";
+
     public static bool SoundEnabled
     {
         get => Preferences.Default.Get(SoundEnabledKey, true);
@@ -18,5 +22,11 @@ public static class AppPreferences
     {
         get => Preferences.Default.Get(VibrationEnabledKey, true);
         set => Preferences.Default.Set(VibrationEnabledKey, value);
+    }
+
+    public static bool TermsAccepted
+    {
+        get => Preferences.Default.Get(TermsAcceptedKey, false);
+        set => Preferences.Default.Set(TermsAcceptedKey, value);
     }
 }

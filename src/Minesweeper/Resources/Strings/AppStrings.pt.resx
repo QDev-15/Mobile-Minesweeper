@@ -123,6 +123,16 @@
   <data name="License_ConnectRetryError" xml:space="preserve"><value>Não foi possível conectar ao Google Play. Verifique sua conexão e tente novamente.</value></data>
   <data name="License_ConnectError" xml:space="preserve"><value>Não foi possível conectar ao Google Play.</value></data>
 
+  <!-- ===== TermsGatePage (startup consent gate, added 2026-11-12) ===== -->
+  <data name="TermsGate_Heading" xml:space="preserve"><value>Termos de Uso e Privacidade</value></data>
+  <data name="TermsGate_Paragraph1" xml:space="preserve"><value>Campo Minado não coleta, não armazena e não transmite nenhuma informação pessoal sua. Todos os dados do seu jogo são armazenados apenas neste dispositivo.</value></data>
+  <data name="TermsGate_Paragraph2" xml:space="preserve"><value>O app exibe anúncios para continuar gratuito, por meio do Unity LevelPlay (ironSource) e redes de anúncios parceiras. Essas redes de anúncios podem coletar: seu ID de publicidade (Advertising ID), informações do dispositivo/sistema operacional, localização aproximada (via IP) e atividades relacionadas a anúncios — de acordo com as políticas próprias delas, não as do Campo Minado.</value></data>
+  <data name="TermsGate_Paragraph3" xml:space="preserve"><value>Atualize para o Pro: remove os anúncios por completo. Com o Pro, nenhum SDK de anúncios é executado dentro do app — ou seja, nenhuma das informações acima é coletada por ninguém.</value></data>
+  <data name="TermsGate_Checkbox" xml:space="preserve"><value>Li e concordo com o conteúdo acima</value></data>
+  <data name="TermsGate_BuyPro" xml:space="preserve"><value>Comprar Pro agora</value></data>
+  <data name="TermsGate_AgreeContinue" xml:space="preserve"><value>Concordar e continuar</value></data>
+  <data name="TermsGate_DeclineExit" xml:space="preserve"><value>Rejeitar e sair</value></data>
+
   <!-- ===== PrivacyPolicyPage ===== -->
   <data name="Privacy_LastUpdated" xml:space="preserve"><value>Última atualização: {0}</value></data>
   <data name="Privacy_Overview_Heading" xml:space="preserve"><value>Visão geral</value></data>

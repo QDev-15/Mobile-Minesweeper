@@ -1,3 +1,7 @@
+using Minesweeper.Core.Licensing;
+using Minesweeper.Services;
+using Minesweeper.Views;
+
 namespace Minesweeper;
 
 public partial class App : Application
@@ -70,8 +74,27 @@ public partial class App : Application
 		Resources.MergedDictionaries.Add(dictionary);
 	}
 
+	/// <summary>Startup terms/ads-disclosure gate (added 2026-11-12, see TermsGatePage's own header comment
+	/// for the full behavior contract). This app has no SplashPage/Func&lt;Page&gt; handoff chain to extend
+	/// (confirmed: none exists anywhere in this repo) -- CreateWindow just decides directly which page
+	/// becomes the window's root, same as it always has, one `if` earlier than before.
+	///
+	/// ILicenseService is resolved via IPlatformApplication.Current rather than constructor injection:
+	/// App itself is still constructed by the MAUI bootstrapper (via UseMauiApp&lt;App&gt;()) before
+	/// CreateWindow runs, by which point the DI container backing IPlatformApplication.Current is already
+	/// up (MauiProgram registers ILicenseService as a singleton) -- this is the documented fallback for
+	/// exactly this situation when nothing more specific is available. If resolution somehow still returns
+	/// null, fail OPEN straight to AppShell rather than risk crashing/blocking every single launch over a
+	/// consent screen -- a missed gate on a never-observed DI failure is a much smaller problem than an
+	/// unbootable app.</summary>
 	protected override Window CreateWindow(IActivationState? activationState)
 	{
+		ILicenseService? license = IPlatformApplication.Current?.Services.GetService<ILicenseService>();
+		bool needsGate = license != null && !AppPreferences.TermsAccepted && !license.State.IsPro;
+
+		if (needsGate)
+			return new Window(new TermsGatePage(license!, () => new AppShell()));
+
 		return new Window(new AppShell());
 	}
 }

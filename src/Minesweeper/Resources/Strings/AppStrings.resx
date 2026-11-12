@@ -123,6 +123,16 @@
   <data name="License_ConnectRetryError" xml:space="preserve"><value>Không kết nối được với Google Play. Kiểm tra mạng rồi thử lại.</value></data>
   <data name="License_ConnectError" xml:space="preserve"><value>Không kết nối được với Google Play.</value></data>
 
+  <!-- ===== TermsGatePage (startup consent gate, added 2026-11-12) ===== -->
+  <data name="TermsGate_Heading" xml:space="preserve"><value>Điều khoản sử dụng &amp; Quyền riêng tư</value></data>
+  <data name="TermsGate_Paragraph1" xml:space="preserve"><value>Dò Mìn không thu thập, không lưu trữ và không gửi đi bất kỳ thông tin cá nhân nào của bạn. Toàn bộ dữ liệu chơi game của bạn chỉ lưu trên máy này.</value></data>
+  <data name="TermsGate_Paragraph2" xml:space="preserve"><value>Ứng dụng có hiển thị quảng cáo để duy trì miễn phí, thông qua Unity LevelPlay (ironSource) và các mạng quảng cáo liên kết. Các mạng quảng cáo này có thể thu thập: mã quảng cáo (Advertising ID), thông tin thiết bị/hệ điều hành, vị trí gần đúng (qua IP), và hoạt động liên quan đến quảng cáo — theo chính sách riêng của họ, không phải của Dò Mìn.</value></data>
+  <data name="TermsGate_Paragraph3" xml:space="preserve"><value>Nâng cấp Pro: gỡ bỏ hoàn toàn quảng cáo. Khi đó không có SDK quảng cáo nào chạy trong ứng dụng — nghĩa là không ai thu thập bất kỳ thông tin nào kể trên.</value></data>
+  <data name="TermsGate_Checkbox" xml:space="preserve"><value>Tôi đã đọc và đồng ý với nội dung trên</value></data>
+  <data name="TermsGate_BuyPro" xml:space="preserve"><value>Mua Pro ngay</value></data>
+  <data name="TermsGate_AgreeContinue" xml:space="preserve"><value>Đồng ý &amp; Tiếp tục</value></data>
+  <data name="TermsGate_DeclineExit" xml:space="preserve"><value>Từ chối &amp; Thoát</value></data>
+
   <!-- ===== PrivacyPolicyPage ===== -->
   <data name="Privacy_LastUpdated" xml:space="preserve"><value>Cập nhật lần cuối: {0}</value></data>
   <data name="Privacy_Overview_Heading" xml:space="preserve"><value>Tổng quan</value></data>

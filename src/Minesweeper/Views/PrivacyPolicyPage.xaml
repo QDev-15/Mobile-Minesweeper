@@ -37,6 +37,10 @@
                 <Label Style="{StaticResource PolicyBody}" Text="{x:Static strings:AppStrings.Privacy_DirectData_Body}" />
 
                 <Label Text="{x:Static strings:AppStrings.Privacy_ThirdParty_Heading}" Style="{StaticResource PolicyHeading}" />
+                <!-- Reuses TermsGate_Paragraph3 verbatim (same fact, same already-localized string in all 11
+                     locales, added 2026-11-12 for the terms gate) instead of a new Privacy_* resx key —
+                     avoids touching all 11 AppStrings*.resx files again for an identical sentence. -->
+                <Label Style="{StaticResource PolicyBody}" Text="{x:Static strings:AppStrings.TermsGate_Paragraph3}" TextColor="{DynamicResource OffBlack}" Margin="0,0,0,6" />
                 <Label Style="{StaticResource PolicyBody}" Text="{x:Static strings:AppStrings.Privacy_ThirdParty_Intro}" />
                 <VerticalStackLayout Spacing="10" Margin="0,8,0,0">
                     <Border Style="{StaticResource Card}">

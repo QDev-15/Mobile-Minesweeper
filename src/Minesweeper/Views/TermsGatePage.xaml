@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:strings="clr-namespace:Minesweeper.Resources.Strings"
+             x:Class="Minesweeper.Views.TermsGatePage"
+             BackgroundColor="{DynamicResource MilkBackground}">
+
+    <!-- No Shell.NavBarIsVisible / no Shell chrome at all here on purpose: this page is constructed
+         directly as Window.Page by App.CreateWindow, before AppShell exists — see this page's own
+         code-behind header comment. -->
+    <ScrollView>
+        <VerticalStackLayout Padding="24,36,24,20" Spacing="16">
+
+            <Label Text="{x:Static strings:AppStrings.TermsGate_Heading}" Style="{StaticResource TitleText}" FontSize="22" TextColor="{DynamicResource OffBlack}" />
+
+            <Label Text="{x:Static strings:AppStrings.TermsGate_Paragraph1}" FontSize="14" />
+            <Label Text="{x:Static strings:AppStrings.TermsGate_Paragraph2}" FontSize="14" />
+
+            <!-- Paragraph 3 (the Pro upsell) made visually distinct with the same PrimarySoft tonal
+                 surface this app already uses for "large surface, stays tonal" cards (HomePage's own
+                 Resume card) — no new color token needed, Semibold text is the only other difference. -->
+            <Border BackgroundColor="{DynamicResource PrimarySoft}" Stroke="Transparent" StrokeShape="RoundRectangle 14" Padding="14">
+                <Label Text="{x:Static strings:AppStrings.TermsGate_Paragraph3}" FontSize="14" FontFamily="OpenSansSemibold" TextColor="{DynamicResource OffBlack}" />
+            </Border>
+
+            <!-- The native CheckBox glyph alone is well under the 44dp touch-target floor, so the whole
+                 row (checkbox + label) is the real tap target via OnAgreeRowTapped, not just the box —
+                 MinimumHeightRequest=44 on the row, not the CheckBox itself. -->
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" MinimumHeightRequest="44" Margin="0,4,0,0">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnAgreeRowTapped" />
+                </Grid.GestureRecognizers>
+                <CheckBox x:Name="AgreeCheckBox" Color="{DynamicResource Primary}" VerticalOptions="Center" CheckedChanged="OnAgreeCheckBoxChanged" />
+                <Label Grid.Column="1" Text="{x:Static strings:AppStrings.TermsGate_Checkbox}" FontSize="13.5" VerticalOptions="Center" />
+            </Grid>
+
+            <!-- Text set in code-behind (constructor): appends " · {ProPriceText}" when the store price
+                 is already known, same " · " separator Common_Version already uses elsewhere in this app. -->
+            <Button x:Name="BuyProButton" Style="{StaticResource PrimaryButton}" Clicked="OnBuyClicked" Margin="0,8,0,0" />
+            <ActivityIndicator x:Name="Busy" IsRunning="False" IsVisible="False" Color="{DynamicResource Primary}" />
+
+            <!-- Secondary/outlined, disabled (Opacity 0.45 + IsEnabled=False) until the checkbox above is
+                 ticked — both a non-interactive AND a dimmed state, never color alone, for the disabled
+                 signal (see OnAgreeCheckBoxChanged). -->
+            <Button x:Name="AgreeButton" Text="{x:Static strings:AppStrings.TermsGate_AgreeContinue}" Clicked="OnAgreeClicked"
+                    BackgroundColor="Transparent" BorderWidth="1.5" BorderColor="{DynamicResource Primary}" TextColor="{DynamicResource Primary}"
+                    FontFamily="OpenSansSemibold" FontSize="15" CornerRadius="22" HeightRequest="46" IsEnabled="False" Opacity="0.45" />
+
+            <!-- Tertiary/least-emphasized of the three actions on purpose: flat text button, no fill/border,
+                 Danger-colored text pairs with its own already-distinct label text (never color alone). -->
+            <Button Text="{x:Static strings:AppStrings.TermsGate_DeclineExit}" Clicked="OnDeclineClicked"
+                    BackgroundColor="Transparent" TextColor="{DynamicResource Danger}" FontSize="13" HeightRequest="44" Margin="0,4,0,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

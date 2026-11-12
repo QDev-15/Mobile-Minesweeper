@@ -123,6 +123,16 @@
   <data name="License_ConnectRetryError" xml:space="preserve"><value>Не удалось подключиться к Google Play. Проверьте соединение и попробуйте снова.</value></data>
   <data name="License_ConnectError" xml:space="preserve"><value>Не удалось подключиться к Google Play.</value></data>
 
+  <!-- ===== TermsGatePage (startup consent gate, added 2026-11-12) ===== -->
+  <data name="TermsGate_Heading" xml:space="preserve"><value>Условия использования и конфиденциальность</value></data>
+  <data name="TermsGate_Paragraph1" xml:space="preserve"><value>Сапёр не собирает, не хранит и не передаёт никакую вашу личную информацию. Все данные об игре сохраняются только на этом устройстве.</value></data>
+  <data name="TermsGate_Paragraph2" xml:space="preserve"><value>Приложение показывает рекламу, чтобы оставаться бесплатным, через Unity LevelPlay (ironSource) и связанные рекламные сети. Эти рекламные сети могут собирать: ваш рекламный идентификатор (Advertising ID), информацию об устройстве/ОС, примерное местоположение (по IP) и активность, связанную с рекламой — согласно их собственным политикам, а не политике Сапёра.</value></data>
+  <data name="TermsGate_Paragraph3" xml:space="preserve"><value>Обновление до Pro: полностью убирает рекламу. С Pro внутри приложения не работает ни один рекламный SDK — то есть никто не собирает ни одну из перечисленных выше данных.</value></data>
+  <data name="TermsGate_Checkbox" xml:space="preserve"><value>Я прочитал(а) и согласен(на) с указанным выше</value></data>
+  <data name="TermsGate_BuyPro" xml:space="preserve"><value>Купить Pro сейчас</value></data>
+  <data name="TermsGate_AgreeContinue" xml:space="preserve"><value>Согласен и продолжить</value></data>
+  <data name="TermsGate_DeclineExit" xml:space="preserve"><value>Отклонить и выйти</value></data>
+
   <!-- ===== PrivacyPolicyPage ===== -->
   <data name="Privacy_LastUpdated" xml:space="preserve"><value>Последнее обновление: {0}</value></data>
   <data name="Privacy_Overview_Heading" xml:space="preserve"><value>Обзор</value></data>

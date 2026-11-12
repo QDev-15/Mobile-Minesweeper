@@ -123,6 +123,16 @@
   <data name="License_ConnectRetryError" xml:space="preserve"><value>Verbindung zu Google Play nicht möglich. Verbindung prüfen und erneut versuchen.</value></data>
   <data name="License_ConnectError" xml:space="preserve"><value>Verbindung zu Google Play nicht möglich.</value></data>
 
+  <!-- ===== TermsGatePage (startup consent gate, added 2026-11-12) ===== -->
+  <data name="TermsGate_Heading" xml:space="preserve"><value>Nutzungsbedingungen &amp; Datenschutz</value></data>
+  <data name="TermsGate_Paragraph1" xml:space="preserve"><value>Minesweeper erfasst, speichert und übermittelt keine deiner persönlichen Informationen. Alle deine Spieldaten werden ausschließlich auf diesem Gerät gespeichert.</value></data>
+  <data name="TermsGate_Paragraph2" xml:space="preserve"><value>Die App zeigt Werbung an, um kostenlos zu bleiben, über Unity LevelPlay (ironSource) und verbundene Werbenetzwerke. Diese Werbenetzwerke können erfassen: deine Werbe-ID (Advertising ID), Geräte-/Betriebssysteminformationen, deinen ungefähren Standort (über die IP-Adresse) und werbebezogene Aktivitäten — gemäß ihrer eigenen Richtlinien, nicht denen von Minesweeper.</value></data>
+  <data name="TermsGate_Paragraph3" xml:space="preserve"><value>Auf Pro upgraden: entfernt Werbung vollständig. Mit Pro läuft überhaupt kein Werbe-SDK mehr in der App — das heißt, keine der oben genannten Informationen wird von irgendjemandem erfasst.</value></data>
+  <data name="TermsGate_Checkbox" xml:space="preserve"><value>Ich habe das Obige gelesen und stimme zu</value></data>
+  <data name="TermsGate_BuyPro" xml:space="preserve"><value>Jetzt Pro kaufen</value></data>
+  <data name="TermsGate_AgreeContinue" xml:space="preserve"><value>Zustimmen &amp; Fortfahren</value></data>
+  <data name="TermsGate_DeclineExit" xml:space="preserve"><value>Ablehnen &amp; Beenden</value></data>
+
   <!-- ===== PrivacyPolicyPage ===== -->
   <data name="Privacy_LastUpdated" xml:space="preserve"><value>Zuletzt aktualisiert: {0}</value></data>
   <data name="Privacy_Overview_Heading" xml:space="preserve"><value>Überblick</value></data>

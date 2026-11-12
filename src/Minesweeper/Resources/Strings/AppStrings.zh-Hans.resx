@@ -123,6 +123,16 @@
   <data name="License_ConnectRetryError" xml:space="preserve"><value>无法连接 Google Play，请检查网络后重试。</value></data>
   <data name="License_ConnectError" xml:space="preserve"><value>无法连接 Google Play。</value></data>
 
+  <!-- ===== TermsGatePage (startup consent gate, added 2026-11-12) ===== -->
+  <data name="TermsGate_Heading" xml:space="preserve"><value>使用条款与隐私</value></data>
+  <data name="TermsGate_Paragraph1" xml:space="preserve"><value>扫雷不会收集、存储或发送您的任何个人信息。您的全部游戏数据仅保存在本设备上。</value></data>
+  <data name="TermsGate_Paragraph2" xml:space="preserve"><value>为保持免费，本应用会通过 Unity LevelPlay（ironSource）及其关联的广告网络展示广告。这些广告网络可能会收集：广告标识符（Advertising ID）、设备/操作系统信息、大致位置（通过 IP）以及与广告相关的使用活动——这些均依据它们各自的政策，而非扫雷的政策。</value></data>
+  <data name="TermsGate_Paragraph3" xml:space="preserve"><value>升级到专业版：完全移除广告。升级后，应用内将不会运行任何广告 SDK——也就是说，上述任何信息都不会被任何人收集。</value></data>
+  <data name="TermsGate_Checkbox" xml:space="preserve"><value>我已阅读并同意以上内容</value></data>
+  <data name="TermsGate_BuyPro" xml:space="preserve"><value>立即购买专业版</value></data>
+  <data name="TermsGate_AgreeContinue" xml:space="preserve"><value>同意并继续</value></data>
+  <data name="TermsGate_DeclineExit" xml:space="preserve"><value>拒绝并退出</value></data>
+
   <!-- ===== PrivacyPolicyPage ===== -->
   <data name="Privacy_LastUpdated" xml:space="preserve"><value>最后更新：{0}</value></data>
   <data name="Privacy_Overview_Heading" xml:space="preserve"><value>概述</value></data>

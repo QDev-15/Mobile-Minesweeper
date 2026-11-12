@@ -123,6 +123,16 @@
   <data name="License_ConnectRetryError" xml:space="preserve"><value>Couldn't connect to Google Play. Check your connection and try again.</value></data>
   <data name="License_ConnectError" xml:space="preserve"><value>Couldn't connect to Google Play.</value></data>
 
+  <!-- ===== TermsGatePage (startup consent gate, added 2026-11-12) ===== -->
+  <data name="TermsGate_Heading" xml:space="preserve"><value>Terms of Use &amp; Privacy</value></data>
+  <data name="TermsGate_Paragraph1" xml:space="preserve"><value>Minesweeper does not collect, store, or transmit any of your personal information. All of your gameplay data is stored only on this device.</value></data>
+  <data name="TermsGate_Paragraph2" xml:space="preserve"><value>The app shows ads to stay free, through Unity LevelPlay (ironSource) and connected ad networks. These ad networks may collect: your advertising ID, device/OS information, approximate location (via IP), and ad-related activity — under their own policies, not Minesweeper's.</value></data>
+  <data name="TermsGate_Paragraph3" xml:space="preserve"><value>Upgrade to Pro: completely removes ads. With Pro, no ad SDK runs inside the app at all — meaning none of the information above is collected by anyone.</value></data>
+  <data name="TermsGate_Checkbox" xml:space="preserve"><value>I have read and agree to the above</value></data>
+  <data name="TermsGate_BuyPro" xml:space="preserve"><value>Buy Pro Now</value></data>
+  <data name="TermsGate_AgreeContinue" xml:space="preserve"><value>Agree &amp; Continue</value></data>
+  <data name="TermsGate_DeclineExit" xml:space="preserve"><value>Decline &amp; Exit</value></data>
+
   <!-- ===== PrivacyPolicyPage ===== -->
   <data name="Privacy_LastUpdated" xml:space="preserve"><value>Last updated: {0}</value></data>
   <data name="Privacy_Overview_Heading" xml:space="preserve"><value>Overview</value></data>

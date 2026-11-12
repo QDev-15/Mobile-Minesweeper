@@ -123,6 +123,16 @@
   <data name="License_ConnectRetryError" xml:space="preserve"><value>Google Playに接続できません。接続を確認して再試行してください。</value></data>
   <data name="License_ConnectError" xml:space="preserve"><value>Google Playに接続できません。</value></data>
 
+  <!-- ===== TermsGatePage (startup consent gate, added 2026-11-12) ===== -->
+  <data name="TermsGate_Heading" xml:space="preserve"><value>利用規約とプライバシー</value></data>
+  <data name="TermsGate_Paragraph1" xml:space="preserve"><value>マインスイーパーは、あなたの個人情報を収集・保存・送信しません。ゲームの進行データはすべてこの端末上にのみ保存されます。</value></data>
+  <data name="TermsGate_Paragraph2" xml:space="preserve"><value>本アプリは無料を維持するため、Unity LevelPlay（ironSource）および連携する広告ネットワークを通じて広告を表示します。これらの広告ネットワークは、広告ID（Advertising ID）、端末・OS情報、おおよその位置情報（IPアドレス経由）、広告関連の利用状況を収集する場合があります——これはマインスイーパーのポリシーではなく、各広告ネットワーク自身のポリシーに基づきます。</value></data>
+  <data name="TermsGate_Paragraph3" xml:space="preserve"><value>プロ版にアップグレード：広告を完全に削除します。プロ版では、広告SDKがアプリ内で一切動作しません——つまり、上記のいずれの情報も誰にも収集されません。</value></data>
+  <data name="TermsGate_Checkbox" xml:space="preserve"><value>上記の内容を読み、同意します</value></data>
+  <data name="TermsGate_BuyPro" xml:space="preserve"><value>今すぐプロ版を購入</value></data>
+  <data name="TermsGate_AgreeContinue" xml:space="preserve"><value>同意して続ける</value></data>
+  <data name="TermsGate_DeclineExit" xml:space="preserve"><value>拒否して終了</value></data>
+
   <!-- ===== PrivacyPolicyPage ===== -->
   <data name="Privacy_LastUpdated" xml:space="preserve"><value>最終更新日：{0}</value></data>
   <data name="Privacy_Overview_Heading" xml:space="preserve"><value>概要</value></data>

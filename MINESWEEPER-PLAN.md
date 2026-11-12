@@ -80,7 +80,10 @@ Giữ nguyên pattern đã chứng minh: LevelPlay, banner hiện khi chưa mua 
 - [ ] **Làm proof-of-concept riêng cho No-guess solver trước** (console/unit test thuần, chưa đụng UI) — xác nhận tốc độ sinh bàn chấp nhận được trên cả 3 độ khó, trước khi commit sâu vào kiến trúc game
 - [ ] Tạo app mới + AppKey + 2 ad unit (banner/interstitial) trên LevelPlay dashboard (không dùng chung ID với 2 app kia)
 - [ ] Tạo keystore ký riêng
-- [ ] Tạo app mới trên Play Console, xác nhận có bị bắt lại vòng 12 tester/14 ngày không (như đã từng hỏi cho PdfReader)
+- [ ] Tạo app mới trên Play Console — **cập nhật 06/11/2026**: dựa trên kinh nghiệm thật của DocScanner (xem
+      `Mobile-doc-scanner/update test 06112026.md`), 3 app dùng chung 1 tài khoản Play Console nên nhiều khả
+      năng Minesweeper CŨNG phải qua đủ 12 tester/14 ngày — mức soi xét nằm ở cấp tài khoản (tài khoản AdMob bị
+      đóng 2 lần), không phải lỗi riêng của từng app. Không trông chờ được miễn trừ.
 
 ## 8. Roadmap đề xuất (theo đúng pattern M0–M4 đã dùng)
 

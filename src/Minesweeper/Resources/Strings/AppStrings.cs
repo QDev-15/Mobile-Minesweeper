@@ -129,6 +129,16 @@ public static class AppStrings
     public static string License_ConnectRetryError => Get(nameof(License_ConnectRetryError));
     public static string License_ConnectError => Get(nameof(License_ConnectError));
 
+    // ===== TermsGatePage (startup consent gate, added 2026-11-12) =====
+    public static string TermsGate_Heading => Get(nameof(TermsGate_Heading));
+    public static string TermsGate_Paragraph1 => Get(nameof(TermsGate_Paragraph1));
+    public static string TermsGate_Paragraph2 => Get(nameof(TermsGate_Paragraph2));
+    public static string TermsGate_Paragraph3 => Get(nameof(TermsGate_Paragraph3));
+    public static string TermsGate_Checkbox => Get(nameof(TermsGate_Checkbox));
+    public static string TermsGate_BuyPro => Get(nameof(TermsGate_BuyPro));
+    public static string TermsGate_AgreeContinue => Get(nameof(TermsGate_AgreeContinue));
+    public static string TermsGate_DeclineExit => Get(nameof(TermsGate_DeclineExit));
+
     // ===== PrivacyPolicyPage =====
     /// <summary>{0} = formatted date.</summary>
     public static string Privacy_LastUpdated(object date) => Format(nameof(Privacy_LastUpdated), date);

@@ -123,6 +123,16 @@
   <data name="License_ConnectRetryError" xml:space="preserve"><value>Impossible de se connecter à Google Play. Vérifiez votre connexion puis réessayez.</value></data>
   <data name="License_ConnectError" xml:space="preserve"><value>Impossible de se connecter à Google Play.</value></data>
 
+  <!-- ===== TermsGatePage (startup consent gate, added 2026-11-12) ===== -->
+  <data name="TermsGate_Heading" xml:space="preserve"><value>Conditions d'utilisation et confidentialité</value></data>
+  <data name="TermsGate_Paragraph1" xml:space="preserve"><value>Démineur ne collecte, ne stocke ni ne transmet aucune de vos informations personnelles. Toutes vos données de jeu sont stockées uniquement sur cet appareil.</value></data>
+  <data name="TermsGate_Paragraph2" xml:space="preserve"><value>L'application affiche des publicités pour rester gratuite, via Unity LevelPlay (ironSource) et des réseaux publicitaires partenaires. Ces réseaux publicitaires peuvent collecter : votre identifiant publicitaire (Advertising ID), des informations sur l'appareil/le système, une localisation approximative (via l'IP) et une activité liée aux publicités — selon leurs propres politiques, et non celles de Démineur.</value></data>
+  <data name="TermsGate_Paragraph3" xml:space="preserve"><value>Passez à Pro : supprime entièrement les publicités. Avec Pro, aucun SDK publicitaire ne s'exécute dans l'application — ce qui signifie qu'aucune des informations ci-dessus n'est collectée par personne.</value></data>
+  <data name="TermsGate_Checkbox" xml:space="preserve"><value>J'ai lu et j'accepte ce qui précède</value></data>
+  <data name="TermsGate_BuyPro" xml:space="preserve"><value>Acheter Pro maintenant</value></data>
+  <data name="TermsGate_AgreeContinue" xml:space="preserve"><value>Accepter et continuer</value></data>
+  <data name="TermsGate_DeclineExit" xml:space="preserve"><value>Refuser et quitter</value></data>
+
   <!-- ===== PrivacyPolicyPage ===== -->
   <data name="Privacy_LastUpdated" xml:space="preserve"><value>Dernière mise à jour : {0}</value></data>
   <data name="Privacy_Overview_Heading" xml:space="preserve"><value>Présentation</value></data>

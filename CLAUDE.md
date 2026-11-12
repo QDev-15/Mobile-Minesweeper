@@ -93,8 +93,14 @@ không cần copy tay nữa.
    placeholder, cần tạo product thật trên Play Console trước khi build bản Pro thật.
 4. **`LevelStars` par-time chưa tune bằng người chơi thật** — công thức hiện tại (~2.5 ô an toàn/giây, sàn
    15s) là heuristic đầu tiên, ghi rõ trong code comment là cần chỉnh lại sau khi có dữ liệu người chơi thật.
-5. **Privacy Policy / store listing** — chưa làm cho Minesweeper (đã làm mẫu cho PdfReader, có thể tái dùng
-   cấu trúc, đổi nội dung).
+5. **Privacy Policy / store listing** — **cập nhật 06/11/2026**: ĐÃ XONG. Trang Google Sites
+   (`https://sites.google.com/view/do-min-nprivacypolicy/home`) đã có đầy đủ nội dung đúng, khớp với
+   `Minesweeper Privacy Policy.html` và `PrivacyPolicyPage` trong app (xác nhận bằng ảnh chụp màn hình thật
+   của owner, sau khi 1 lần kiểm tra bằng WebFetch báo nhầm "trang trống" — WebFetch không chạy JavaScript nên
+   không thấy nội dung Google Sites tải động, đừng tin kết quả WebFetch cho domain `sites.google.com`, luôn
+   xin ảnh chụp màn hình thật hoặc tự mở trình duyệt để xác nhận). Việc còn lại: dán URL này vào Play Console →
+   Policy → Privacy policy (ngoài tầm code, owner tự làm trên Play Console) + chuẩn bị phần store listing
+   khác (screenshot, mô tả).
 6. (Tuỳ chọn, không chặn) — long-press hiện ra **2 lá cờ cùng lúc** khi test bằng `adb shell input swipe`
    mô phỏng giữ ngón tay — nghi là do công cụ test (`adb`) mô phỏng không chuẩn, không phải bug thật (chưa
    tự tay test lại để xác nhận 100%). Nếu tự tay test thấy đúng là bug thật (2 ô bị cắm cờ từ 1 lần giữ
@@ -134,3 +140,96 @@ adb shell am start -n com.tonyq.minesweeper/crc643ce297ba4b79dbfb.MainActivity
 - **Build nhiều lệnh `dotnet` song song dễ đụng độ MSBuild node** (file bị khóa, lỗi `CS2012`/`XARLP7024`).
   Nếu build lỗi kiểu "cannot access file ... used by another process", kiểm tra có Visual Studio/dotnet build
   khác đang chạy không, dùng `-nodeReuse:false -m:1` để build đơn luồng.
+- **Máy test thật (Samsung SM-N975F, `RF8M81MKLTA`) là máy DÙNG CHUNG giữa nhiều agent/task trong cùng
+  ngày** (xác nhận 2026-11-12: `adb shell dumpsys window | grep mCurrentFocus` lúc đang test Minesweeper
+  bất ngờ trả về `com.tonyq.pdfreader` đang có focus — một agent khác đang test PdfReader trên CHÍNH máy
+  này cùng lúc). Một lần `adb shell input tap` của phiên này đã vô tình tích vào checkbox của màn hình
+  terms-gate bên PdfReader (vô hại — chỉ là toggle UI, không phải mua hàng/xoá dữ liệu — nhưng là lời nhắc
+  thật). **Luôn `adb shell dumpsys window | grep mCurrentFocus` để xác nhận đúng app đang có focus TRƯỚC
+  MỖI lần `input tap`/`screencap`** khi máy có khả năng đang dùng chung, đừng giả định lệnh `am start` của
+  mình là lệnh adb duy nhất chạy trên máy lúc đó.
+- **`adb install -r` báo `INSTALL_FAILED_VERSION_DOWNGRADE`** nếu máy đang có bản cài với `versionCode` cao
+  hơn `ApplicationVersion` hiện tại trong `.csproj` (gặp 2026-11-12: máy có sẵn versionCode=5 từ lần test
+  trước, csproj lúc đó đang là 3). **Đừng gỡ cài đặt để né lỗi này** — dùng `adb install -r -d` (`-d` cho
+  phép hạ version) vẫn giữ nguyên toàn bộ dữ liệu app đã lưu, không mất gì, không cần đổi `ApplicationVersion`
+  trong `.csproj`.
+
+## 2026-11-12 — Thêm màn hình "terms gate" chặn ở khởi động (đồng ý điều khoản/quảng cáo trước khi vào Home)
+
+Port tính năng đã làm cho PdfReader/DocScanner/LogoExtract cùng ngày, theo đúng idiom riêng của app này
+(không có `SplashPage`/`Func<Page>` nào để nối vào — `App.CreateWindow` tự quyết định thẳng giữa
+`TermsGatePage` và `AppShell`).
+
+- **File mới**: `src/Minesweeper/Views/TermsGatePage.xaml` + `.xaml.cs` — trang chặn hiển thị khi
+  `!AppPreferences.TermsAccepted && !license.State.IsPro`. 3 lối ra: mua Pro (Purchased/AlreadyOwned) → vào
+  thẳng, KHÔNG set `TermsAccepted` (để một lần hoàn tiền sau này tự nhiên hiện lại gate thay vì kẹt mãi ở
+  cờ cũ); tích checkbox + "Đồng ý & Tiếp tục" → set `TermsAccepted=true`, vào `AppShell` bình thường; "Từ
+  chối & Thoát" hoặc nút Back cứng → `Platform.CurrentActivity?.FinishAffinity()`. `OnAppearing` bắn nền
+  `license.RefreshAsync()` với timeout ~2.5s (không chặn UI), nếu phát hiện đã Pro (mua từ máy khác) thì tự
+  vào thẳng, không set cờ.
+- **Sửa**: `src/Minesweeper/App.xaml.cs` (`CreateWindow` tự quyết định `TermsGatePage` hay `AppShell`,
+  resolve `ILicenseService` qua `IPlatformApplication.Current?.Services` vì `App` không nhận DI theo
+  constructor cho việc này; nếu resolve ra `null` thì fail-open thẳng vào `AppShell` thay vì có rủi ro crash
+  mỗi lần mở app vì 1 màn hình đồng ý); `src/Minesweeper/Services/AppPreferences.cs` (thêm
+  `TermsAcceptedKey = "terms_accepted_v1"` + property `TermsAccepted`, cùng idiom với `SoundEnabled`/
+  `VibrationEnabled` đã có).
+- **Chuỗi/đa ngôn ngữ**: app này có ĐẦY ĐỦ 11 file resx (`vi` là file gốc không hậu tố + `en/de/es/fr/id/
+  ja/ko/pt/ru/zh-Hans`), khác hẳn giả định ban đầu là "có thể chỉ có 1 ngôn ngữ" — đã thêm 8 khoá
+  `TermsGate_*` (Heading/Paragraph1-3/Checkbox/BuyPro/AgreeContinue/DeclineExit) vào **cả 11 file** +
+  property tương ứng trong `AppStrings.cs` (file này hand-written, không phải designer tự sinh — xem comment
+  đầu file). Quyết định có chủ đích: tên app được "bản xứ hoá" theo đúng quy ước đã có sẵn trong các resx
+  khác của chính app này (vd `Minesweeper` tiếng Anh/Đức, `Dò Mìn` tiếng Việt, `Buscaminas` tiếng Tây Ban
+  Nha, `扫雷` tiếng Trung...) chứ không viết cứng "Minesweeper" như bản tiếng Việt owner đưa — khớp cách
+  `Privacy_Overview_Body` đã làm từ trước. "Pro" được giữ nguyên La-tinh ở hầu hết ngôn ngữ (đúng quy ước
+  `Settings_BuyPro` đã có), riêng ja/ko/zh-Hans bản xứ hoá thành "プロ版"/"프로(버전)"/"专业版" vì đó cũng là
+  quy ước sẵn có của 3 ngôn ngữ này trong app.
+- **Mâu thuẫn ads config đã được dặn KHÔNG tự giải quyết** (giữa comment code "còn placeholder" và
+  `RealAdsConfig.cs` có vẻ đã có id thật) — không đụng tới, không cố gỡ mâu thuẫn, đúng như yêu cầu.
+  `license.State.IsPro` tắt quảng cáo đúng logic bất kể app key/ad unit nào đang cấu hình.
+- **Build**: `dotnet build src/Minesweeper/Minesweeper.csproj -c Debug -nodeReuse:false -m:1` → **0 lỗi**
+  (chỉ còn các warning NuGet/binding-generator đã tồn tại từ trước, không phát sinh warning mới ngoài 1 cái
+  `CS1734` tự gây ra rồi tự sửa ngay). Một lỗi gặp giữa chừng đáng ghi lại: comment trong
+  `TermsGatePage.xaml` ban đầu có 4 chỗ dùng `--` (vd "... exists -- see ...") → `MAUIG1001` lúc parse XAML,
+  y hệt bẫy đã ghi ở mục "Bẫy hay gặp" phía trên — sửa thành `—` (em dash) là qua.
+- **Test trên máy thật**: publish Release (`dotnet publish ... -c Release -f net10.0-android
+  -p:AndroidPackageFormat=apk`) rồi `adb install -r -d` (không uninstall — máy có dữ liệu chơi thật: Dễ
+  20 ván/kỷ lục 0:24, Vừa 50 ván/kỷ lục 1:46, Khó 99 ván, Tutorial 29/100 màn/84 sao, xác nhận còn nguyên sau
+  khi cài). Đã xác nhận bằng ảnh chụp màn hình thật (dark theme, theo system theme mặc định): gate hiện đúng
+  lúc chưa đồng ý; tích checkbox bật đúng nút "Đồng ý & Tiếp tục" (disabled → enabled, đổi cả `Opacity`);
+  giá Pro thật lấy được từ Google Play Billing hiện đúng ("Mua Pro ngay · 26.000 đ"); bấm "Đồng ý & Tiếp
+  tục" vào đúng `HomePage` với dữ liệu cũ còn nguyên; force-stop + mở lại app **không** hiện gate nữa (cờ
+  `TermsAccepted` lưu đúng); `adb logcat -d -b crash` sạch, không crash. **Chưa test**: nút "Mua Pro ngay"
+  (sẽ kích hoạt giao dịch Google Play Billing thật trên tài khoản thật của owner — cố tình không bấm, đúng
+  tinh thần tránh giao dịch thật như sự cố LogoExtract cùng ngày); nút "Từ chối & Thoát"/nút Back cứng (bỏ
+  qua để giảm thao tác trên máy đang dùng chung với agent khác, logic `FinishAffinity()` giống hệt
+  `GamePage`/`HomePage` đã dùng ở nơi khác trong chính app này nên rủi ro thấp); light theme (máy test đang
+  ở dark theme theo hệ thống, đổi theme OS giữa lúc máy dùng chung có thể ảnh hưởng tới agent kia nên không
+  đổi — đã soát bằng mắt cả `Colors.Light.xaml`/`Colors.Dark.xaml` đều có đủ cặp màu `PrimarySoft`/`OffBlack`/
+  `Danger`/`Primary` dùng trong trang này).
+
+## 2026-11-12 (tiếp) — Privacy Policy thiếu câu "mua Pro thì không ai thu thập gì", owner tự phát hiện
+
+Lúc giao việc terms-gate, agent build đã được dặn **không đụng** Privacy Policy của app này vì agent khảo sát
+trước đó (Explore) báo đã đầy đủ (đã khai đúng Billing + LevelPlay, không có claim sai "không có billing"). Đúng
+về nội dung kỹ thuật, nhưng owner tự mở `Minesweeper Privacy Policy.html` lên xem và chỉ ra: **thiếu đúng 1 câu**
+mà 3 app kia (LogoExtract/DocScanner/PdfReader) đều mới được thêm cùng ngày — câu nói rõ "mua Pro thì SDK quảng
+cáo không còn chạy, nên không ai thu thập gì nữa" (không chỉ "mua Pro thì tắt quảng cáo" như bản cũ đã có).
+
+- `Minesweeper Privacy Policy.html`: thêm 1 đoạn ngay dưới "Tổng quan" (nói thẳng "chính Dò Mìn không thu thập
+  gì, chỉ SDK quảng cáo mới có thể, mua Pro thì tắt hẳn SDK đó") + sửa câu dẫn vào bảng bên thứ ba (thêm "chỉ khi
+  bạn chưa mua Pro"), đúng khuôn đã dùng cho 3 app kia. Đổi "Ngày cập nhật" 19/10/2026 → 12/11/2026.
+- `src/Minesweeper/Views/PrivacyPolicyPage.xaml` (trang trong app): thêm 1 `Label` ngay dưới heading "Bên thứ ba",
+  **tái dùng đúng chuỗi `AppStrings.TermsGate_Paragraph3`** (đã dịch sẵn cả 11 ngôn ngữ từ lúc làm terms-gate,
+  cùng nội dung "mua Pro thì không ai thu thập gì") — không thêm key `Privacy_*` mới, không phải sửa lại 11 file
+  resx lần nữa cho đúng 1 câu đã dịch sẵn. Phải thêm `TextColor="{DynamicResource OffBlack}"` rõ ràng cho label
+  này: style `PolicyBody` của trang này không tự đặt `TextColor` (khác `Hint`/implicit Label style của app có đặt),
+  IDE báo contrast 1.18:1 nếu không set tay — các Label khác dùng `PolicyBody` trong cùng trang nhiều khả năng
+  cũng có vấn đề tương tự nhưng ngoài phạm vi sửa hôm nay (không đổi style chung).
+- **Tự mắc đúng bẫy `--` trong XML comment đã ghi sẵn trong mục "Bẫy hay gặp" của chính file này** khi viết
+  comment giải thích cho đoạn tái dùng chuỗi trên — build lỗi `InitializeComponent`/`UpdatedLabel` không tồn tại
+  (lỗi phái sinh từ XAML không compile được, không phải lỗi logic C#). Sửa `--` thành `—`, build lại sạch.
+- Build xác nhận: `dotnet build src/Minesweeper/Minesweeper.csproj -c Debug -nodeReuse:false -m:1` → **0 lỗi**.
+- **Chưa cập nhật**: trang Google Sites ngoài (`https://sites.google.com/view/do-min-nprivacypolicy/home`) —
+  mục "Việc cần làm tiếp" #5 phía trên ghi là đã khớp nội dung từ 06/11/2026, nhưng giờ nội dung local vừa đổi
+  thêm 1 đoạn mới nên **lại lệch với trang ngoài đó** cho tới khi owner tự cập nhật tay (ngoài khả năng sửa từ
+  repo, giống tình huống PdfReader/DocScanner cùng ngày).
