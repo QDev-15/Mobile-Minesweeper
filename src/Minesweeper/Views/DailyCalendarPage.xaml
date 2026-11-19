@@ -46,7 +46,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="views:CalendarDayItem">
                             <Border BackgroundColor="{DynamicResource SurfaceTonal}" Stroke="Transparent" StrokeThickness="2"
-                                    StrokeShape="RoundRectangle 10" Padding="0" HeightRequest="52">
+                                    StrokeShape="RoundRectangle 10" Padding="0" HeightRequest="60">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnDayTapped" CommandParameter="{Binding .}" />
                                 </Border.GestureRecognizers>
@@ -67,7 +67,15 @@
                                         <Setter Property="BackgroundColor" Value="{DynamicResource Primary}" />
                                     </DataTrigger>
                                 </Border.Triggers>
-                                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="2">
+                                <!-- Completion mark sits ABOVE the day number, and the day's best time (if any)
+                                     sits BELOW it (owner's direction, 2026-11-19) — swapped from the original
+                                     "number, then mark" order so the per-day record time has a dedicated line
+                                     of its own under the number instead of competing with the mark for it. -->
+                                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="1">
+                                    <Label Text="{x:Static views:Icons.CheckCircle}" FontFamily="Icons" FontSize="10" TextColor="#3FAE5C"
+                                           HorizontalOptions="Center" IsVisible="{Binding IsCompleted}" />
+                                    <Label Text="{x:Static views:Icons.FiberManualRecord}" FontFamily="Icons" FontSize="8" TextColor="{DynamicResource Danger}"
+                                           HorizontalOptions="Center" IsVisible="{Binding IsMissed}" />
                                     <Label Text="{Binding DayText}" FontFamily="OpenSansSemibold" FontSize="14" HorizontalOptions="Center">
                                         <Label.Triggers>
                                             <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
@@ -75,10 +83,14 @@
                                             </DataTrigger>
                                         </Label.Triggers>
                                     </Label>
-                                    <Label Text="{x:Static views:Icons.CheckCircle}" FontFamily="Icons" FontSize="11" TextColor="#3FAE5C"
-                                           HorizontalOptions="Center" IsVisible="{Binding IsCompleted}" />
-                                    <Label Text="{x:Static views:Icons.FiberManualRecord}" FontFamily="Icons" FontSize="9" TextColor="{DynamicResource Danger}"
-                                           HorizontalOptions="Center" IsVisible="{Binding IsMissed}" />
+                                    <Label Text="{Binding BestTimeText}" FontSize="9" TextColor="{DynamicResource InkSoft}"
+                                           HorizontalOptions="Center" IsVisible="{Binding HasBestTime}">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
+                                                <Setter Property="TextColor" Value="White" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
                                 </VerticalStackLayout>
                             </Border>
                         </DataTemplate>

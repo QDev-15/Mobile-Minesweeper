@@ -32,7 +32,7 @@ public partial class DailyCalendarPage : ContentPage
 	protected override void OnAppearing()
 	{
 		base.OnAppearing();
-		DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow);
+		DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 		_selectedDate = today;
 		LoadMonth(new DateOnly(today.Year, today.Month, 1));
 	}
@@ -46,7 +46,10 @@ public partial class DailyCalendarPage : ContentPage
 		int daysInMonth = DateTime.DaysInMonth(_currentMonth.Year, _currentMonth.Month);
 		int firstWeekday = ((int)_currentMonth.DayOfWeek + 6) % 7; // DayOfWeek has Sunday=0; this shifts to Monday=0 to match the T2..CN header
 
-		DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow);
+		// Local date, not UTC: the player's own midnight is the day boundary that should open a new Daily
+		// Challenge, not UTC midnight (bug report, 2026-11-18 -- UTC+7 players saw the new day open around
+		// 7am local instead of right after midnight).
+		DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 
 		var items = new List<CalendarDayItem>(firstWeekday + daysInMonth);
 		for (int i = 0; i < firstWeekday; i++)
@@ -61,7 +64,7 @@ public partial class DailyCalendarPage : ContentPage
 			items.Add(new CalendarDayItem
 			{
 				Day = d, Date = date, IsToday = date == today, IsCompleted = isCompleted, IsMissed = isMissed,
-				IsSelectable = date <= today, IsSelected = date == _selectedDate,
+				IsSelectable = date <= today, IsSelected = date == _selectedDate, BestTimeSeconds = _progress.BestTime(date),
 			});
 		}
 

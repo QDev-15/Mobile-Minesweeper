@@ -739,8 +739,12 @@ public partial class GamePage : ContentPage
 			}
 			else
 			{
-				bool isRecord = !_isDaily && _stats.RecordWin(_level, _elapsedSeconds);
-				if (_isDaily) _dailyProgress.MarkCompleted(_dailyDate ?? DateOnly.FromDateTime(DateTime.UtcNow));
+				// Local date, not UTC, so this lines up with the day DailyCalendarPage/DailyProgressStore are
+				// now keyed on (bug report, 2026-11-18). DailyProgressStore.RecordWin keeps only each date's
+				// own shortest time (a tie does not count as a new record), same rule GameStatsStore already
+				// uses per difficulty -- Daily now gets the same "Kỷ lục mới" moment the other modes do.
+				DateOnly dailyDate = _dailyDate ?? DateOnly.FromDateTime(DateTime.Now);
+				bool isRecord = _isDaily ? _dailyProgress.RecordWin(dailyDate, _elapsedSeconds) : _stats.RecordWin(_level, _elapsedSeconds);
 				StarsLabel.IsVisible = false;
 				string elapsed = $"{_elapsedSeconds / 60}:{_elapsedSeconds % 60:00}";
 				ResultDetailLabel.Text = isRecord ? AppStrings.Game_NewRecord(elapsed) : AppStrings.Game_TimeResult(elapsed);

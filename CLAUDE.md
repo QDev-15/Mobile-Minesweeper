@@ -233,3 +233,61 @@ cáo không còn chạy, nên không ai thu thập gì nữa" (không chỉ "mua
   mục "Việc cần làm tiếp" #5 phía trên ghi là đã khớp nội dung từ 06/11/2026, nhưng giờ nội dung local vừa đổi
   thêm 1 đoạn mới nên **lại lệch với trang ngoài đó** cho tới khi owner tự cập nhật tay (ngoài khả năng sửa từ
   repo, giống tình huống PdfReader/DocScanner cùng ngày).
+
+## 2026-11-18 — Daily Challenge: sửa bug ngày mới mở theo UTC + lưu kỷ lục thời gian theo từng ngày
+
+Owner báo 2 việc cùng lúc: (1) sau 12h đêm (giờ VN) ngày mới của Daily Challenge không mở ngay mà phải đợi tới
+gần giữa ngày; (2) Daily Challenge chưa lưu kỷ lục thời gian theo từng ngày như Dễ/Vừa/Khó đã có.
+
+- **Nguyên nhân bug (1)**: `DailyProgressStore.cs`, `DailyCalendarPage.xaml.cs`, và `GamePage.xaml.cs` (chỗ
+  `HandleGameEndIfNeeded` ghi nhận thắng Daily) đều tính "hôm nay" bằng `DateOnly.FromDateTime(DateTime.UtcNow)`
+  — lệch với label ngày hiển thị trên `HomePage` (`DateTime.Now`, giờ máy). Việt Nam là UTC+7 nên ngày mới của
+  Daily chỉ thật sự mở lúc 7:00 sáng giờ địa phương, không phải 0:00 — đúng như owner mô tả "giữa ngày mới mở".
+  **Đã sửa**: đổi cả 5 chỗ sang `DateTime.Now` (giờ địa phương máy), để biên ngày khớp đúng nửa đêm người chơi
+  thực sự trải qua, không phải nửa đêm UTC.
+- **Tính năng (2)**: `DailyProgressStore` thêm `BestTimesKey` (lưu dạng `yyyy-MM-dd:giây`, nối bằng `,`, cùng
+  idiom với `CompletedKey` đã có) + 2 method mới: `BestTime(DateOnly)` (đọc kỷ lục ngày đó, null nếu chưa thắng
+  ngày đó bao giờ) và `RecordWin(DateOnly, int elapsedSeconds)` (gọi `MarkCompleted` rồi chỉ ghi đè thời gian nếu
+  THẤP HƠN kỷ lục cũ của đúng ngày đó — bằng nhau không tính là kỷ lục mới, cùng rule `GameStatsStore.RecordWin`
+  đã dùng cho Dễ/Vừa/Khó — trả về `true` nếu vừa lập kỷ lục mới cho ngày đó).
+  `GamePage.xaml.cs` (`HandleGameEndIfNeeded`): thay `bool isRecord = !_isDaily && _stats.RecordWin(...)` +
+  gọi `_dailyProgress.MarkCompleted(...)` riêng, bằng 1 nhánh `isRecord = _isDaily ? _dailyProgress.RecordWin(dailyDate, _elapsedSeconds) : _stats.RecordWin(...)` —
+  Daily giờ cũng hiện đúng chuỗi "Kỷ lục mới!" (`AppStrings.Game_NewRecord`) trên banner kết quả khi phá kỷ lục
+  ngày đó, y hệt 3 độ khó khác, **không cần thêm string/resx mới** (tái dùng đúng 2 chuỗi `Game_NewRecord`/
+  `Game_TimeResult` đã có sẵn cho cả 11 ngôn ngữ).
+- **Build xác nhận**: `dotnet build src/Minesweeper/Minesweeper.csproj -c Debug -nodeReuse:false -m:1` → **0 lỗi**
+  (chỉ warning cũ từ `AdsService.LevelPlay`, không phát sinh warning mới). Đã cài bản Release lên Samsung
+  SM-N975F (WiFi debug, `adb-RF8M81MKLTA-Y7Cea1._adb-tls-connect._tcp`) — mở được, không crash
+  (`adb logcat -d -b crash` sạch, `mCurrentFocus` đúng app).
+
+## 2026-11-19 (tiếp) — DailyCalendarPage: hiện kỷ lục thời gian của từng ngày ngay trên lưới lịch
+
+Owner xem lưới lịch, gửi ảnh chụp màn hình khoanh vùng ngay dưới số ngày (ô ngày 19, đang chọn) và yêu cầu hiện
+thời gian hoàn thành của ngày đó ở đúng chỗ đó, đồng thời dời dấu check xanh/chấm đỏ (đang nằm dưới số) lên
+phía trên số để nhường chỗ.
+
+- `CalendarDayItem.cs`: thêm `BestTimeSeconds` (int?, không `required` vì ô trống đầu tháng không set) +
+  2 property tính sẵn `HasBestTime`/`BestTimeText` (format `m:ss`, cùng kiểu với `ResultDetailLabel` ở
+  `GamePage`).
+- `DailyCalendarPage.xaml.cs` (`LoadMonth`): mỗi ngày thật gọi thêm `_progress.BestTime(date)` (method mới
+  thêm trong `DailyProgressStore` ở mục 2026-11-18 phía trên) để nạp vào `BestTimeSeconds`.
+- `DailyCalendarPage.xaml`: đổi thứ tự trong `VerticalStackLayout` của mỗi ô — icon check/chấm đỏ lên TRÊN số
+  ngày (FontSize giảm 11→10 / 9→8 để gọn), số ngày ở giữa, thêm 1 `Label` mới cho `BestTimeText` NGAY DƯỚI số
+  (FontSize 9, `IsVisible="{Binding HasBestTime}"`, đổi màu trắng khi ô đang chọn giống style số ngày). Tăng
+  `HeightRequest` của `Border` mỗi ô từ 52→60 để đủ chỗ cho 4 dòng xếp chồng (icon/chấm, số, giờ) mà không bị
+  Border tự clip mất chữ.
+  - Một ngày đã hoàn thành NHƯNG chưa có `BestTimeSeconds` (hoàn thành từ trước 2026-11-18, lúc
+    `DailyProgressStore` chưa lưu thời gian, chỉ có `MarkCompleted`) sẽ vẫn hiện dấu check xanh như cũ, chỉ
+    không có dòng giờ bên dưới (`HasBestTime=false`) — không retroactive, đúng bản chất dữ liệu cũ không có.
+  - Tự mắc lại đúng bẫy `--` trong XML comment (đã ghi trong mục "Bẫy hay gặp" của chính file này) khi viết
+    comment giải thích cho đoạn đổi thứ tự layout — lỗi `MAUIG1001` + hàng loạt `CS0103` (`InitializeComponent`/
+    `Weekday0Label`/...) phái sinh từ XAML không compile được. Sửa `--` thành `—`, build lại sạch.
+- Build xác nhận: `dotnet build` → **0 lỗi**. Publish Release + cài qua `adb install -r` lên **BlueStacks**
+  (owner tự mở, kết nối qua `adb connect 127.0.0.1:5555` — cổng adb mặc định của BlueStacks, không phải WiFi
+  debug thật) — mở app không crash. **Lưu ý khi test tiếp trên máy dùng chung/BlueStacks đang mở sẵn**: lúc
+  dùng `adb shell input tap` để tự điều hướng qua các màn hình, phát hiện bàn cờ Daily đang chơi dở tự thay đổi
+  (thêm cờ ở nhiều ô mới) giữa các lần chụp màn hình dù chỉ tap đúng 1 lần mỗi lượt — kết luận là owner đang
+  trực tiếp chơi ván đó trên chính BlueStacks cùng lúc, **đã dừng hẳn việc tự tap vào bàn cờ** để tránh đụng
+  nhầm ô của owner (giống bài học "máy dùng chung" đã ghi với Samsung SM-N975F ở trên, giờ áp dụng luôn cho
+  BlueStacks khi owner đang mở sẵn). **Owner tự tay test xong và xác nhận "ok"** (2026-11-19) — không có ảnh
+  chụp màn hình cuối cùng xác nhận bằng mắt từ phía agent, dựa hoàn toàn vào xác nhận bằng lời của owner.

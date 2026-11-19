@@ -17,6 +17,13 @@ public sealed class CalendarDayItem
     // straight into it -- tap selects it here first, Chơi ngay plays whichever day is selected).
     public required bool IsSelected { get; init; }
 
+    // Null for a blank filler cell, or a real day that was never completed (or was completed before
+    // 2026-11-18, when DailyProgressStore started recording per-day times at all) -- not `required` since
+    // the blank filler cells built in DailyCalendarPage.LoadMonth never set it.
+    public int? BestTimeSeconds { get; init; }
+
     public bool IsBlank => Day == 0;
     public string DayText => IsBlank ? string.Empty : Day.ToString();
+    public bool HasBestTime => BestTimeSeconds is not null;
+    public string BestTimeText => BestTimeSeconds is { } s ? $"{s / 60}:{s % 60:00}" : string.Empty;
 }
