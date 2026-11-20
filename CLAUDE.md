@@ -291,3 +291,39 @@ phía trên số để nhường chỗ.
   nhầm ô của owner (giống bài học "máy dùng chung" đã ghi với Samsung SM-N975F ở trên, giờ áp dụng luôn cho
   BlueStacks khi owner đang mở sẵn). **Owner tự tay test xong và xác nhận "ok"** (2026-11-19) — không có ảnh
   chụp màn hình cuối cùng xác nhận bằng mắt từ phía agent, dựa hoàn toàn vào xác nhận bằng lời của owner.
+
+## 2026-11-19 (tiếp) — Hard "không thể thắng nổi": giảm mật độ mìn + bật No-guess cho Hard
+
+Owner báo Hard quá khó, không thắng nổi. Điều tra ra đây KHÔNG phải do kỹ năng: Hard là độ khó DUY NHẤT chạy
+`BoardGenerator.GeneratePureRandom` (không bảo vệ cả nước đi đầu tiên) ở mật độ 99 mìn/288 ô ≈ **34.4%** — cao
+hơn hẳn Expert cổ điển (99/480 ≈ 20.6%). `NoGuessPerformanceTests` trong repo đã tự đo từ 2026-10-21 rằng mật
+độ này **thất bại No-guess 10/10 lần** kể cả với ngân sách 400 lần thử thật — tức bàn Hard gần như luôn rơi
+vào tình huống phải đoán mù thật sự, và nút Gợi ý (`GameEngine.FindHint`) cũng bó tay vì nó chỉ tìm được ô an
+toàn suy luận được bằng logic. Owner chọn làm cả 2 hướng gợi ý (giảm mật độ mìn + bật No-guess cho Hard).
+
+- `Difficulty.cs`: `Hard.MineCount` 99 → **60** (20.8%, đúng bằng `LevelCatalog.MaxDensity` đã có sẵn trong
+  code — hằng số này được đo thật từ trước: 60/288 tin cậy 0/10 fail, 65/288 "sát mép vực" nhưng vẫn 0/10,
+  70/288 đã fail 2/10 — chọn 60 vì đây là mode chính người chơi dùng thường xuyên nhất, nên ưu tiên độ tin cậy
+  hơn là giữ khoảng cách số với Tutorial level 100).
+- `GamePage.xaml.cs`: `_noGuess` giờ luôn `true` cho MỌI difficulty (bỏ nhánh ngoại lệ `_level !=
+  DifficultyLevel.Hard`) — Hard giờ cũng sinh bàn qua `GenerateNoGuess` (anchor ở tâm bàn), nghĩa là **nước đi
+  đầu tiên cũng được bảo vệ an toàn trở lại** cho Hard, hiệu ứng phụ tốt đi kèm (trước đây Hard dùng
+  `GeneratePureRandom`, có thể thua ngay cú chạm đầu tiên). Một ván Hard đang chơi dở TỪ TRƯỚC bản cập nhật
+  này (lưu với `NoGuess=false`) khi Resume vẫn tiếp tục đúng chế độ cũ nó được sinh ra — không đổi hồi tố.
+- **Hệ quả hệ số (đã cố ý giữ, không phải bug)**: `LevelCatalog.MaxDensity` (60/288) và `Difficulty.Hard`
+  (giờ cũng 60/288, cùng 12x24) khiến **Tutorial level 100 và Hard giờ là CÙNG MỘT bàn** (size + mine count
+  giống hệt) — cùng kiểu quan hệ "intentional, not a coincidence to resolve" mà `Difficulty.cs` đã ghi sẵn
+  giữa Medium và `DailyChallenge.Difficulty`. Sửa test `LevelCatalogTests.Level100_MatchesHardsSizeButNotItsMineCount`
+  → đổi tên `Level100_MatchesHardsSizeAndMineCount` + assert `MineCount` bằng nhau (trước đó assert `<`,
+  giờ sai vì 2 giá trị bằng nhau thật).
+- `NoGuessPerformanceTests.cs`: gộp Hard vào `Theory` `GenerateNoGuess_FinishesWithinBudget` (budget 5000ms,
+  giống Medium) — Hard giờ PHẢI assert sinh bàn thành công thật sự, không còn là test "measured not asserted"
+  nữa (xoá hẳn `GenerateNoGuess_Hard_MeasuredNotAsserted` cũ, không còn ý nghĩa khi Hard đã vào nhóm được
+  assert). `LevelCatalog.cs` + comment field `_noGuess` trong `GamePage.xaml.cs` cũng cập nhật lại cho khớp
+  thực tế mới (không còn nói "Hard là ngoại lệ" nữa).
+- Build + test xác nhận: `dotnet build Minesweeper.slnx` → **0 lỗi**; `dotnet test
+  tests/Minesweeper.Core.Tests` → **33/33 pass** (bao gồm case Hard mới trong Theory, xác nhận sinh bàn
+  No-guess cho Hard thành công thật, không chỉ lý thuyết).
+- **Chưa làm**: chưa cài bản Release lên máy thật/BlueStacks để owner tự tay chơi thử Hard sau khi đổi —
+  publish đang chạy nền lúc ghi dòng này, cần cài + chơi thử ít nhất 1 ván Hard để xác nhận cảm giác "khó
+  nhưng thắng được" đúng như kỳ vọng, không chỉ dừng ở build/test xanh.

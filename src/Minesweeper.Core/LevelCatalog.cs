@@ -10,13 +10,12 @@ public static class LevelCatalog
     public const int MinLevel = 1;
     public const int MaxLevel = 100;
 
-    // Tutorial is always No-guess (OnAppearing forces noGuess=true for every level), unlike Difficulty.Hard
-    // itself which no longer is (owner's direction, 2026-10-21: 99 mines on a 288-cell board measured as a
-    // reliable No-guess failure, 10/10 attempts even at the real 400-attempt budget -- Hard's own mine count
-    // is deliberately NOT what level 100 targets any more). 60 mines/288 cells (20.8%) is the top of the
-    // density range NoGuessPerformanceTests-style measurement actually confirmed reliable (0/10 failures,
-    // ~65ms/attempt average); 65 still passed 0/10 but close enough to the cliff (70 already failed 2/10)
-    // that this keeps a real margin rather than sitting right on the edge.
+    // Tutorial is always No-guess (OnAppearing forces noGuess=true for every level) -- and since 2026-11-19,
+    // so is Difficulty.Hard itself (see its own comment on why its mine count was lowered to match this
+    // exact density). 60 mines/288 cells (20.8%) is the top of the density range NoGuessPerformanceTests-style
+    // measurement actually confirmed reliable (0/10 failures, ~65ms/attempt average); 65 still passed 0/10 but
+    // close enough to the cliff (70 already failed 2/10) that this keeps a real margin rather than sitting
+    // right on the edge.
     private const double MaxDensity = 60.0 / 288.0;
 
     public static Difficulty DifficultyFor(int level)

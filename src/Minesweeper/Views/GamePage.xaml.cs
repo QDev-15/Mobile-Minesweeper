@@ -26,10 +26,12 @@ public partial class GamePage : ContentPage
 	private readonly ActionGuard _boardGen = new();
 
 	private DifficultyLevel _level = DifficultyLevel.Easy;
-	// No longer a player-facing toggle (owner's direction, 2026-10-21: removed from HomePage) -- true for
-	// everything except classic Hard, which measured as a reliable No-guess failure at 99 mines/288 cells
-	// (10/10 attempts, even at the real 400-attempt budget) and keeps pure random generation instead. Set in
-	// OnAppearing from _level/_isDaily/_levelNumber; ResumeFrom overrides it from the save's own NoGuess flag.
+	// No longer a player-facing toggle (owner's direction, 2026-10-21: removed from HomePage) -- always true
+	// now, every difficulty included (owner's report, 2026-11-19: Hard used to be the one exception, running
+	// pure-random generation instead, and its old 99-mine/288-cell density could force a genuine blind guess
+	// -- see Difficulty.cs's own comment). Set in OnAppearing from _level/_isDaily/_levelNumber; ResumeFrom
+	// overrides it from the save's own NoGuess flag, so an in-progress board from before this change keeps
+	// replaying under whichever mode it actually was generated with.
 	private bool _noGuess;
 	private bool _isDaily;
 	// Which calendar date's puzzle this is, when _isDaily -- null means "today" (the normal "Thử thách hôm
@@ -154,9 +156,12 @@ public partial class GamePage : ContentPage
 		}
 
 		if (_levelNumber > 0) _isDaily = false;
-		// No-guess for everything except classic Hard (see the _noGuess field comment) -- Tutorial/Daily are
-		// always No-guess regardless of _level, which is why those two are checked first.
-		_noGuess = _levelNumber > 0 || _isDaily || _level != DifficultyLevel.Hard;
+		// Every mode is No-guess now, Hard included (owner's report, 2026-11-19: Hard's old 99-mine/288-cell
+		// board, generated WITHOUT No-guess, could force a genuine blind guess with no recourse -- see
+		// Difficulty.cs's own comment on why Hard's mine count dropped alongside this). A resumed save (see
+		// ResumeFrom below) still replays whatever NoGuess value IT was generated with, which is the correct
+		// thing for an in-progress board that predates this change.
+		_noGuess = true;
 		_difficulty = CurrentPresetDifficulty();
 		StartNewBoard();
 	}

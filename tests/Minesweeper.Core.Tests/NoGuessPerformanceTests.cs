@@ -12,6 +12,10 @@ public class NoGuessPerformanceTests
     [Theory]
     [InlineData(DifficultyLevel.Easy, 2000)]
     [InlineData(DifficultyLevel.Medium, 5000)]
+    // Hard joined this Theory 2026-11-19, alongside Easy/Medium -- it is no longer the one difficulty that
+    // skips No-guess (see Difficulty.cs/GamePage.xaml.cs's own comments on why), and its mine count was
+    // lowered specifically so it belongs here instead of in its own "measured not asserted" test.
+    [InlineData(DifficultyLevel.Hard, 5000)]
     public void GenerateNoGuess_FinishesWithinBudget(DifficultyLevel level, int maxMilliseconds)
     {
         Difficulty difficulty = Difficulty.For(level);
@@ -26,23 +30,6 @@ public class NoGuessPerformanceTests
         Assert.NotNull(board);
         Assert.True(sw.ElapsedMilliseconds < maxMilliseconds,
             $"{level} No-guess generation took {sw.ElapsedMilliseconds} ms, over the {maxMilliseconds} ms budget.");
-    }
-
-    /// <summary>Hard itself is NOT No-guess in the app any more (GamePage sets _noGuess=false for it) --
-    /// measured 2026-10-21 at 99 mines/288 cells (34.4%) and found a reliable No-guess failure, 10/10
-    /// attempts even at the real 400-attempt budget. This test exists only to keep that measurement honest
-    /// (PRINT, not assert) in case Hard's own mine count ever changes again.</summary>
-    [Fact]
-    public void GenerateNoGuess_Hard_MeasuredNotAsserted()
-    {
-        var rng = new Random(123);
-        int cx = Difficulty.Hard.Width / 2, cy = Difficulty.Hard.Height / 2;
-
-        var sw = Stopwatch.StartNew();
-        Board? board = BoardGenerator.GenerateNoGuess(Difficulty.Hard, cx, cy, rng, maxAttempts: 100);
-        sw.Stop();
-
-        Console.WriteLine($"Hard: {sw.ElapsedMilliseconds} ms, solved: {board != null}");
     }
 
     /// <summary>Tutorial IS always No-guess (GamePage forces noGuess=true for every level), so unlike Hard
