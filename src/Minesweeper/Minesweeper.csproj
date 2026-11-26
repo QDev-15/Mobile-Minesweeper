@@ -84,6 +84,26 @@
 		     re-added together with real on-device repro testing of the exact crash scenario above. -->
 		<AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
 		<RunAOTCompilation>true</RunAOTCompilation>
+
+		<!-- R8 code shrinking for the Java/Kotlin side (AndroidX, Play Services, the Unity LevelPlay ads SDK,
+		     ...), same fix PdfReader/DocScanner already applied for Play Console's "DEX code optimization"
+		     check (shrinking/optimization/obfuscation must each be >= 25%, enforced from Feb 2027): this
+		     app's own Release .aab had NONE of the three until now (confirmed 2026-11-26: no proguard_xamarin.cfg
+		     was even generated, no mapping.txt). -->
+		<AndroidLinkTool>r8</AndroidLinkTool>
+
+		<!-- Obfuscation (the third score). Needs .NET Android SDK 36.1.118+ (older ones hard-code the
+		     dontobfuscate R8 flag regardless of this property, same finding as PdfReader/DocScanner); this
+		     machine's installed Microsoft.Android.Sdk.Windows is already 36.1.118, confirmed by this project's
+		     own plain `dotnet build` output, so no build-release.ps1 redirection is needed here. -->
+		<AndroidR8ObfuscationMode>private-members</AndroidR8ObfuscationMode>
+
+		<!-- AndroidLinkMode (C#/IL trimming, a DIFFERENT lever from AndroidLinkTool above) deliberately left at
+		     its default (None) for now, unlike PdfReader/DocScanner's Full: that setting can remove a type only
+		     ever reached through reflection, and both sibling repos needed a real on-device smoke test of every
+		     feature before trusting it (PdfReader.csproj's own comment has the full risk/reward writeup). This
+		     app has not had that pass yet (billing, ads, audio, save/load are the features that would need it).
+		     AndroidLinkTool=r8 alone already covers the shrink/optimize half of the score without that risk. -->
 	</PropertyGroup>
 
 	<!-- Release signing (Google Play upload key): keystore + passwords are NOT in this file. A new, separate
